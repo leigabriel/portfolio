@@ -46,7 +46,7 @@ export default function Home() {
       excerpt: 'Daily reminder for you',
       description: 'Always smile, theres a good in good day.',
       image: '/img/boost.png',
-      technologies: ['LavaLust', 'Mysql', 'Tailwind CSS'],
+      technologies: ['HTML', 'CSS', 'JS'],
       liveUrl: 'https://yourdailymotivation.netlify.app/',
       githubUrl: 'https://github.com/leigabriel/dental-booking-appointment-system',
       featured: false,
