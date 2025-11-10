@@ -10,8 +10,6 @@ export default function Header() {
       <nav className="container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2 text-xs sm:text-lg hover:opacity-80 transition-opacity">
           <span className="text-white">Lei Gabriel</span>
-          <span className="text-gray-500">/</span>
-          <span className="text-gray-400">Graphic Designer</span>
         </Link>
         
         <div className="flex items-center space-x-4 sm:space-x-8 text-xs sm:text-lg">

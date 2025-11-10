@@ -32,7 +32,7 @@ export default function Projects() {
       image: '/img/boost.png',
       technologies: ['HTML', 'CSS', 'JS'],
       liveUrl: 'https://yourdailymotivation.netlify.app/',
-      githubUrl: 'https://github.com/leigabriel/dental-booking-appointment-system',
+      githubUrl: 'https://github.com/leigabriel/your-daily-motivation',
       featured: false,
       status: <span className="text-green-400">Completed</span>
     }

@@ -25,7 +25,7 @@ export default function AboutHero() {
         <div className="flex justify-center lg:justify-end order-first lg:order-last">
           <div className="w-full max-w-md">
             <img 
-              src="https://avatars.githubusercontent.com/u/223958636?v=4" 
+              src="https://avatars.githubusercontent.com/u/223958636?v=4"
               alt="Profile"
               className="w-full h-auto rounded-lg"
             />
