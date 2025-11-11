@@ -7,25 +7,25 @@ export default function Contact() {
     { 
       name: 'Facebook', 
       icon: 'https://cdn.simpleicons.org/facebook/1877F2', 
-      url: 'https://facebook.com/yourusername',
+      url: 'https://facebook.com/malibiranlei',
       color: '#1877F2'
     },
     { 
       name: 'Instagram', 
       icon: 'https://cdn.simpleicons.org/instagram/E4405F', 
-      url: 'https://instagram.com/yourusername',
+      url: 'https://instagram.com/leigxbriel',
       color: '#E4405F'
     },
     { 
       name: 'TikTok', 
       icon: 'https://cdn.simpleicons.org/tiktok/000000', 
-      url: 'https://tiktok.com/@yourusername',
+      url: 'https://tiktok.com/@leigxbriel',
       color: '#000000'
     },
     { 
       name: 'Pinterest', 
       icon: 'https://cdn.simpleicons.org/pinterest/E60023', 
-      url: 'https://pinterest.com/yourusername',
+      url: 'https://pinterest.com/leigxbriel',
       color: '#E60023'
     },
     { 

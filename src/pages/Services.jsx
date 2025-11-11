@@ -11,7 +11,7 @@ export default function Services() {
     {
       title: 'UI Design',
       description: 'Designing intuitive and engaging user interfaces for web applications.',
-      icon: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg'
+      icon: 'https://media.licdn.com/dms/image/v2/D4E0BAQFklLEE6EKzsA/company-logo_200_200/B4EZo2FJptJgAI-/0/1761843911640/affinity_canva_logo?e=2147483647&v=beta&t=z4E-AA77FfzhjeF-Wro1_oitkSVqmyebEtsITE0iJCU'
     },
     {
       title: 'Frontend Development',
@@ -85,7 +85,7 @@ export default function Services() {
                 ))}
               </div>
               <p className="text-sm text-gray-400 text-center italic">
-                🌱 Currently learning and improving my skills in all these technologies
+                Currently learning and improving my skills in all these technologies
               </p>
             </div>
           </div>

@@ -10,7 +10,6 @@ export default function About() {
       
       <main>
         <AboutHero />
-        <ContactForm />
       </main>
       
       <Footer />

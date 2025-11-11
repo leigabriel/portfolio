@@ -5,10 +5,10 @@ export default function Footer() {
   const isActive = (path) => location.pathname === path;
   
   const socialLinks = [
-    { name: 'Facebook', icon: 'https://cdn.simpleicons.org/facebook/1877F2', url: 'https://facebook.com/yourusername' },
-    { name: 'Instagram', icon: 'https://cdn.simpleicons.org/instagram/E4405F', url: 'https://instagram.com/yourusername' },
-    { name: 'TikTok', icon: 'https://cdn.simpleicons.org/tiktok/000000', url: 'https://tiktok.com/@yourusername' },
-    { name: 'Pinterest', icon: 'https://cdn.simpleicons.org/pinterest/E60023', url: 'https://pinterest.com/yourusername' },
+    { name: 'Facebook', icon: 'https://cdn.simpleicons.org/facebook/1877F2', url: 'https://facebook.com/malibiranlei' },
+    { name: 'Instagram', icon: 'https://cdn.simpleicons.org/instagram/E4405F', url: 'https://instagram.com/leigxbriel' },
+    { name: 'TikTok', icon: 'https://cdn.simpleicons.org/tiktok/000000', url: 'https://tiktok.com/@leigxbriel' },
+    { name: 'Pinterest', icon: 'https://cdn.simpleicons.org/pinterest/E60023', url: 'https://pinterest.com/leigxbriel' },
     { name: 'GitHub', icon: 'https://cdn.simpleicons.org/github/181717', url: 'https://github.com/leigabriel' }
   ];
   
