@@ -42,7 +42,7 @@ export default function Projects() {
     <div className="min-h-screen bg-[#212631] text-white">
       <Header />
       
-      <main className="container mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-12 sm:pb-20">
+      <main className="container mx-auto max-w-7xl px-4 sm:px-6 pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="max-w-3xl mb-12 sm:mb-16">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight">
             Projects

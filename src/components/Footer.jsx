@@ -14,7 +14,7 @@ export default function Footer() {
   
   return (
     <footer className="border-t border-gray-800 mt-20">
-      <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
         {/* Navigation Links */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-6 md:space-y-0 mb-8 sm:mb-12">
           <nav className="flex items-center space-x-4 sm:space-x-8 text-xs sm:text-sm">

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Hero() {
   return (
-    <section className="container mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
+    <section className="container mx-auto max-w-7xl px-4 sm:px-6 pt-24 sm:pt-32 pb-16 sm:pb-24">
       <div className="max-w-3xl">
         <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 sm:mb-10 leading-tight">
         👋 Hi there!

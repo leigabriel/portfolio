@@ -42,7 +42,7 @@ export default function Contact() {
       
       <main className="pt-20 sm:pt-24">
         {/* Social Media Section */}
-        <section className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-4">
               Connect With Me

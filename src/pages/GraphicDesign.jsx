@@ -68,7 +68,7 @@ export default function GraphicDesign() {
       <Header />
       
       <main className="pt-20 sm:pt-24">
-        <section className="container mx-auto px-4 sm:px-6 py-12 sm:py-20">
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-20">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white text-center mb-4">
               Graphic Design Showcase

@@ -1,6 +1,6 @@
 export default function AboutHero() {
   return (
-    <section className="container mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-12 sm:pb-20">
+    <section className="container mx-auto max-w-7xl px-4 sm:px-6 pt-24 sm:pt-32 pb-12 sm:pb-20">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-start">
         <div className="max-w-2xl">
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 sm:mb-8 leading-tight">

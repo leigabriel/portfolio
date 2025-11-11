@@ -64,7 +64,7 @@ export default function Home() {
       <main>
         <Hero />
         
-        <section className="container mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <section className="container mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-12">
           <div className="max-w-2xl">
             <h1 className="text-lg sm:text-2xl md:text-2xl lg:text-2xl font-bold text-white mb-8 sm:mb-10 leading-tight">
               Featured Project

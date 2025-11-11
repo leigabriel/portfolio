@@ -11,8 +11,8 @@ export default function Header() {
   
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#212631]/30 backdrop-blur-sm">
-      <nav className="container mx-auto px-4 sm:px-6 py-4 sm:py-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2 text-base sm:text-2xl font-bold hover:opacity-80 transition-opacity">
+      <nav className="container mx-auto max-w-7xl px-4 sm:px-6 py-4 sm:py-3 flex items-center justify-between">
+        <Link to="/" className="flex items-center space-x-2 text-base sm:text-lg font-bold hover:opacity-80 transition-opacity">
           <span className="text-white">Lei Gabriel</span>
         </Link>
         
@@ -20,7 +20,7 @@ export default function Header() {
         <div className="hidden md:flex items-center space-x-6">
           <Link 
             to="/" 
-            className={`text-xl font-medium transition-colors ${
+            className={`text-sm font-medium transition-colors ${
               isActive('/') 
                 ? 'text-white' 
                 : 'text-gray-400 hover:text-white'
@@ -33,7 +33,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setIsWorksDropdownOpen(!isWorksDropdownOpen)}
-              className={`text-xl font-medium transition-colors flex items-center space-x-1 ${
+              className={`text-sm font-medium transition-colors flex items-center space-x-1 ${
                 isActive('/projects') || isActive('/graphic-design')
                   ? 'text-white' 
                   : 'text-gray-400 hover:text-white'
@@ -74,7 +74,7 @@ export default function Header() {
           <div className="relative">
             <button
               onClick={() => setIsAboutDropdownOpen(!isAboutDropdownOpen)}
-              className={`text-xl font-medium transition-colors flex items-center space-x-1 ${
+              className={`text-sm font-medium transition-colors flex items-center space-x-1 ${
                 isActive('/about') || isActive('/services') || isActive('/contact')
                   ? 'text-white' 
                   : 'text-gray-400 hover:text-white'
@@ -138,7 +138,7 @@ export default function Header() {
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-[#2a3142]/95 backdrop-blur-md border-t border-gray-700/50">
-          <div className="container mx-auto px-4 py-4 space-y-1">
+          <div className="container mx-auto max-w-7xl px-4 py-4 space-y-1">
             <Link 
               to="/" 
               onClick={() => setIsMobileMenuOpen(false)}
