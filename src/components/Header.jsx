@@ -11,7 +11,7 @@ export default function Header() {
   
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-[#212631]/30 backdrop-blur-sm">
-      <nav className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 flex items-center justify-between">
+      <nav className="container mx-auto px-4 sm:px-6 py-4 sm:py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center space-x-2 text-base sm:text-2xl font-bold hover:opacity-80 transition-opacity">
           <span className="text-white">Lei Gabriel</span>
         </Link>
