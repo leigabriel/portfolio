@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'Bonny';
+    src: url('/fonts/bonny.ttf') format('truetype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Tritopani';
+    src: url('/fonts/tritopani.otf') format('opentype');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+:root {
+    --font-body: 'JetBrains Mono', monospace;
+    --font-title: 'Bonny', serif;
+}
+
+html {
+    height: 100%;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overscroll-behavior: none;
+}
+
+html.lenis,
+html.lenis body {
+    height: auto;
+}
+
+.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+}
+
+body {
+    font-family: var(--font-body);
+    margin: 0;
+    min-height: 100%;
+    cursor: url('/cursors/pointer.svg') 2 0, auto;
+}
+
+.font-title {
+    font-family: var(--font-title);
+}
+
+.font-mono-custom {
+    font-family: var(--font-body);
+}
+
+a,
+button,
+[role="button"],
+input,
+select,
+.cursor-pointer {
+    cursor: url('/cursors/link.svg') 12 0, pointer !important;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span {
+    cursor: url('/cursors/text.svg') 16 16, text;
+}
+
+a *,
+button *,
+[role="button"] * {
+    cursor: url('/cursors/link.svg') 12 0, pointer !important;
+}
+
+[style*="cursor: grab"],
+.cursor-grab {
+    cursor: url('/cursors/grab.svg') 12 4, grab !important;
+}
+
+[style*="cursor: grabbing"],
+.cursor-grabbing,
+[style*="cursor: grab"]:active,
+.cursor-grab:active {
+    cursor: url('/cursors/grabbing.svg') 12 0, grabbing !important;
+}
+
+div {
+    cursor: url('/cursors/pointer.svg') 2 0, auto;
+}
+
+img {
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.folder-tab,
+.folder-tab *,
+.shop-folder,
+.shop-folder * {
+    cursor: url('/cursors/pointer.svg') 2 0, pointer !important;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+@media (pointer: coarse) {
+
+    body,
+    div,
+    a,
+    button,
+    [role="button"],
+    input,
+    select,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    span {
+        cursor: auto !important;
+    }
+}

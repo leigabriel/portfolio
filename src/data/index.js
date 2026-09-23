@@ -1,0 +1,4 @@
+export { posterProjects } from './posters'
+export { webProjects } from './web'
+export { motionProjects } from './motion'
+export { homeImages } from './home-img'
