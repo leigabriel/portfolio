@@ -12,7 +12,7 @@ export const homeImages = [
         alt: 'Dandadan poster',
     },
     {
-        src: '/images/poster_designs/rukia.jpg',
+        src: '/images/poster_designs/rukia-01.jpg',
         alt: 'Rukia poster',
         isOpen: true,
     },

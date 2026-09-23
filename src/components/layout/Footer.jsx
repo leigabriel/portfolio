@@ -163,16 +163,16 @@ export default function Footer() {
                         style={{ animationDelay: '0.45s' }}
                     >
                         <h1
-                            className="wordmark font-title text-left uppercase text-black font-normal w-full block"
+                            className="wordmark text-left text-black font-normal w-full block"
                             style={{
+                                fontFamily: 'Tritopani, serif',
                                 fontSize: 'clamp(2rem, 14.1vw, 24rem)',
                                 lineHeight: '1',
-                                letterSpacing: '0.27em',
                                 whiteSpace: 'nowrap',
                             }}
                             aria-label="LEI GABRIEL"
                         >
-                            {'lei gabriel'.split('').map((char, i) => (
+                            {'leigabrielmalibiran'.split('').map((char, i) => (
                                 <span key={i} className="wordmark-char">{char}</span>
                             ))}
                         </h1>

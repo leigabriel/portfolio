@@ -161,7 +161,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
         <>
             <style>{`
                 .menu-link-label {
-                    font-size: clamp(5rem, 5dvh, 3.5rem);
+                    font-size: clamp(4rem, 5dvh, 3.5rem);
                     padding-block: 0.18em;
                 }
 

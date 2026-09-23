@@ -32,11 +32,22 @@ export const posterProjects = [
         id: '04',
         title: 'Rukia',
         year: '2026',
-        img: '/images/poster_designs/rukia.jpg',
+        img: '/images/poster_designs/rukia-01.jpg',
         description: `A character poster inspired by Rukia Kuchiki from Bleach, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
 
         The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Rukia introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
 
         This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`,
+    },
+    {
+        id: '05',
+        title: 'Reze',
+        year: '2026',
+        img: '/images/poster_designs/reze-01.jpg',
+        description: `A character poster inspired by Reze from Chainsaw Man, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
+
+        The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Reze introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
+
+        This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`
     },
 ]

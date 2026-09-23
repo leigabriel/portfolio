@@ -235,7 +235,7 @@ export default function Projects({ setIsMenuOpen, navigate }) {
                                                     src={p.img}
                                                     alt={p.title}
                                                     draggable="false"
-                                                    className="w-full aspect-4/5 object-cover rounded border border-[#212631]/50"
+                                                    className="w-full aspect-3/4 object-cover rounded border border-[#212631]/50"
                                                 />
                                             </div>
                                         </div>

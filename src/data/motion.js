@@ -11,15 +11,26 @@ export const motionProjects = [
         This personal design project explores how an existing fictional property can be reinterpreted through graphic composition, typography, black-and-white image manipulation, and visual storytelling while maintaining a distinct personal design direction.`,
     },
 
-    // {
-    //     id: '02',
-    //     title: 'Rukia in TYBW',
-    //     year: '2026',
-    //     video: '/images/motion_posters/rukia.mp4',
-    //     description: `A character poster inspired by Rukia Kuchiki from Bleach, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
+    {
+        id: '02',
+        title: 'Rukia in TYBW',
+        year: '2026',
+        video: '/images/motion_posters/rukia-motion-poster-01.mp4',
+        description: `A character poster inspired by Rukia Kuchiki from Bleach, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
 
-    //     The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Rukia introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
+        The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Rukia introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
 
-    //     This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`,
-    // },
+        This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`,
+    },
+    {
+        id: '03',
+        title: 'Reze in Chainsaw Man',
+        year: '2026',
+        video: '/images/motion_posters/reze-motion-poster.mp4',
+        description: `A character poster inspired by Reze from Chainsaw Man, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
+
+        The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Reze introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
+
+        This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`
+    }
 ]
