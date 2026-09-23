@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from 'react'
 import { ReactLenis } from 'lenis/react'
 import Home from './pages/Home'
 import About from './pages/About'
-import Projects from './pages/Projects'
+import Works from './pages/Works'
 import Shop from './pages/Shop'
 import Archive from './pages/Archive'
 import PosterDetail from './components/details/PosterDetail'
@@ -66,7 +66,7 @@ export default function App() {
         >
             {page === 'home' && <Home setIsMenuOpen={setIsMenuOpen} contactRef={contactRef} navigate={navigate} />}
             {page === 'about' && <About setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
-            {page === 'projects' && <Projects setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
+            {page === 'projects' && <Works setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'shop' && <Shop setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'archive' && <Archive setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'poster-detail' && selectedProject && <PosterDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} poster={selectedProject} />}

@@ -22,7 +22,7 @@ export default function PosterDetail({ setIsMenuOpen, navigate, poster }) {
                     onClick={() => navigate('projects')}
                     className="text-xs sm:text-sm tracking-widest uppercase text-black/40 hover:text-black transition-colors cursor-pointer bg-transparent border-none mb-6 sm:mb-8"
                 >
-                    ← View All Projects
+                    ← View All Works
                 </button>
                 <h1 className="poster-detail-title font-title leading-none">
                     {poster.title}

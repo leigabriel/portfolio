@@ -292,7 +292,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                                             </div>
                                             <div onClick={() => navigate('projects')} className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5 cursor-pointer" style={{ borderBottom: '1px dotted #212631' }}>
                                                 <span className="font-title text-lg sm:text-xl uppercase tracking-widest">portfolio</span>
-                                                <span className="text-sm tracking-widest uppercase text-right">view projects</span>
+                                                <span className="text-sm tracking-widest uppercase text-right">view works</span>
                                             </div>
                                         </div>
                                     </div>

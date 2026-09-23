@@ -3,7 +3,7 @@ import { useState, useCallback } from 'react'
 const navLinks = [
     { label: 'Home', dest: 'home' },
     { label: 'About', dest: 'about' },
-    { label: 'Projects', dest: 'projects' },
+    { label: 'Works', dest: 'projects' },
     { label: 'Contact', dest: 'contact' },
 ]
 

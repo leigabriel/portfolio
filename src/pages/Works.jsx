@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import Header from '../components/layout/Header'
 import { posterProjects, webProjects, motionProjects } from '../data'
 
-export default function Projects({ setIsMenuOpen, navigate }) {
+export default function Works({ setIsMenuOpen, navigate }) {
     const [activeTab, setActiveTab] = useState(null)
     const [modal, setModal] = useState(null)
 
@@ -127,7 +127,7 @@ export default function Projects({ setIsMenuOpen, navigate }) {
 
             <header className="flex items-end justify-between px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-10 sm:pb-12">
                 <h1 className="projects-title font-title leading-none">
-                    Projects
+                    Works
                 </h1>
                 <div className="flex gap-4 pb-2">
                     <button onClick={() => navigate('archive')} className="font-title text-lg sm:text-4xl tracking-widest cursor-pointer bg-transparent border-none text-gray-500 hover:text-black transition-colors duration-300">
@@ -190,7 +190,7 @@ export default function Projects({ setIsMenuOpen, navigate }) {
                                 )}
 
                                 <div className="pt-6 flex justify-between items-center">
-                                    <span className="text-[9px] tracking-widest uppercase text-black/40">{webProjects.length} PROJECTS</span>
+                                    <span className="text-[9px] tracking-widest uppercase text-black/40">{webProjects.length} WORKS</span>
                                 </div>
                             </div>
                         </div>
@@ -244,7 +244,7 @@ export default function Projects({ setIsMenuOpen, navigate }) {
 
                                 <div className="pt-6 flex justify-between items-center">
                                     <span className="text-[9px] tracking-widest uppercase text-black/25">
-                                        {posterProjects.length} PROJECTS
+                                        {posterProjects.length} WORKS
                                     </span>
                                     <button
                                         onClick={() => navigate('about')}
@@ -308,7 +308,7 @@ export default function Projects({ setIsMenuOpen, navigate }) {
 
                                 <div className="pt-6 flex justify-between items-center">
                                     <span className="text-[9px] tracking-widest uppercase text-white/30">
-                                        {motionProjects.length} PROJECTS
+                                        {motionProjects.length} WORKS
                                     </span>
                                     <button
                                         onClick={() => navigate('about')}

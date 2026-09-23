@@ -1,5 +1,4 @@
 import Hero from '../components/home/Hero'
-import Video from '../components/home/Video'
 import Features from '../components/home/Features'
 import AboutSection from '../components/home/AboutSection'
 import Footer from '../components/layout/Footer'
@@ -13,10 +12,9 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
             </div>
             <div className="relative z-1">
                 <Hero />
-                <Video />
+                <AboutSection navigate={navigate} />
+                <Features />
             </div>
-            <AboutSection navigate={navigate} />
-            <Features />
             <div ref={contactRef} className="relative z-0 h-dvh min-h-125">
                 <div className="fixed inset-x-0 bottom-0 z-0 h-dvh min-h-125">
                     <Footer />

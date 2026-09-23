@@ -22,7 +22,7 @@ export default function WebDetail({ setIsMenuOpen, navigate, project }) {
                     onClick={() => navigate('projects')}
                     className="text-xs sm:text-sm tracking-widest uppercase text-black/40 hover:text-black transition-colors cursor-pointer bg-transparent border-none mb-6 sm:mb-8"
                 >
-                    ← View All Projects
+                    ← View All Works
                 </button>
                 <h1 className="web-detail-title font-title leading-none">
                     {project.title}

@@ -217,7 +217,7 @@ export default function Hero() {
 
             <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-6 p-4 sm:p-6 md:p-10 pointer-events-none">
                 <div className="spotlight-copy max-w-[48%] spotlight-title text-black tracking-widest leading-none">
-                    <span>leigabriel</span>
+                    <span>malibiran</span>
                     <br />
                 </div>
 

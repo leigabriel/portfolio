@@ -1,12 +1,12 @@
 export default function AboutSection({ navigate }) {
     return (
-        <section className="relative z-10 min-h-svh bg-white text-black">
+        <section className="relative z-10 min-h-svh bg-black text-white">
             <div className="flex min-h-svh flex-col px-5 py-7 sm:px-10 sm:py-10 md:px-16 md:py-14">
 
                 <div className="flex flex-1 items-center py-16 sm:py-20 md:py-28">
                     <h2 className="max-w-[14ch] font-body text-[clamp(3.1rem,8.4vw,9rem)] font-normal leading-[0.82] tracking-[-0.045em]">
                         I'm Lei Gabriel Malibiran,
-                        <span className="block pl-[8vw] text-black/45">a web developer</span>
+                        <span className="block pl-[8vw] text-white/45">a web developer</span>
                         <span className="block">and graphic designer.</span>
                     </h2>
                 </div>
@@ -23,10 +23,10 @@ export default function AboutSection({ navigate }) {
                     </div>
 
                     <div className="grid gap-5 sm:grid-cols-2 sm:gap-8">
-                        <p className="text-[10px] uppercase leading-[1.65] tracking-[0.08em] text-black/70 sm:text-xs">
+                        <p className="text-[10px] uppercase leading-[1.65] tracking-[0.08em] text-white/70 sm:text-xs">
                             I'm a web developer and graphic designer from Oriental Mindoro, Philippines.
                         </p>
-                        <p className="text-[10px] uppercase leading-[1.65] tracking-[0.08em] text-black/70 sm:text-xs">
+                        <p className="text-[10px] uppercase leading-[1.65] tracking-[0.08em] text-white/70 sm:text-xs">
                             I create visually clear, user-focused digital experiences with close attention to detail, structure, and usability.
                         </p>
                     </div>

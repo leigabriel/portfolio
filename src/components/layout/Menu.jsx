@@ -153,7 +153,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
     const links = [
         { label: 'Home', dest: 'home', image: '/images/poster_designs/queen_yunjin.png' },
         { label: 'About', dest: 'about', image: '/images/poster_designs/giselle.jpg' },
-        { label: 'Projects', dest: 'projects', image: '/images/poster_designs/call_me.png' },
+        { label: 'Works', dest: 'projects', image: '/images/poster_designs/call_me.png' },
         { label: 'Contact', dest: 'contact', image: '/images/poster_designs/ningning.png' },
     ]
 

@@ -12,17 +12,17 @@ export const homeImages = [
         alt: 'Dandadan poster',
     },
     {
-        src: '/images/poster_designs/rukia-01.jpg',
-        alt: 'Rukia poster',
-        isOpen: true,
-    },
-    {
         src: '/images/archive/althea.png',
         alt: 'Althea poster',
     },
     {
         src: '/images/archive/die_for_you.png',
         alt: 'Die For You poster',
+    },
+    {
+        src: '/images/poster_designs/rukia-01.jpg',
+        alt: 'Rukia poster',
+        isOpen: true,
     },
     {
         src: '/images/archive/ningning.png',
