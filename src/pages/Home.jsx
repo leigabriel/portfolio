@@ -12,7 +12,28 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
             </div>
             <div className="relative z-1">
                 <Hero />
-                <AboutSection navigate={navigate} />
+                <AboutSection
+                    src="/images/1000.png"
+                    alt="leimxnsquare print to crumple"
+                    width={1440}
+                    height={1080}
+                    sceneHeight={560}
+                    maxDisplayWidth={920}
+                    releaseBehavior="restore"
+                    crumpleAmount={0.85}
+                    crumpleDuration={0.55}
+                    releaseDuration={0.4}
+                    foldCount={6}
+                    foldSharpness={0.6}
+                    wrinkleDepth={0.65}
+                    creaseStrength={0.18}
+                    paperColor="#f4f0e8"
+                    paperTexture={0.08}
+                    draggable
+                    returnToOrigin
+                    className="min-h-screen bg-[#b3b3b3]"
+                    style={{ height: 'auto', minHeight: '100vh' }}
+                />
                 <Features />
             </div>
             <div ref={contactRef} className="relative z-0 h-dvh min-h-125">

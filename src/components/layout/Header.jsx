@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import useHoverHide from '../../hooks/useHoverHide'
 
 const navLinks = [
     { label: 'Home', dest: 'home' },
@@ -9,6 +10,7 @@ const navLinks = [
 
 export default function Header({ setIsMenuOpen, navigate, variant = 'light', className = '', style = {} }) {
     const [hovered, setHovered] = useState(null)
+    const headerVisible = useHoverHide()
 
     const isLight = variant === 'light'
     const textColor = isLight ? '#fff' : '#000'
@@ -26,7 +28,14 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
     }, [setIsMenuOpen])
 
     return (
-        <>
+        <div
+            style={{
+                transform: headerVisible ? 'translateY(0)' : 'translateY(calc(-100% - 5rem))',
+                transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                pointerEvents: headerVisible ? 'auto' : 'none',
+                willChange: 'transform',
+            }}
+        >
             <nav
                 className={`hidden md:flex items-center gap-6 lg:gap-70 pointer-events-auto ${className}`}
                 style={{ color: textColor, ...style }}
@@ -64,6 +73,6 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
                     MENU
                 </button>
             </div>
-        </>
+        </div>
     )
 }

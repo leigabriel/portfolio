@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
+import useHoverHide from '../../hooks/useHoverHide'
 const menuSound = new Audio('/sounds/folder_sfx.mp3')
 
 function playMenuSound(type) {
@@ -137,6 +138,7 @@ export function MenuButton({ setIsMenuOpen, className = '', style = {} }) {
 
 export default function Menu({ setIsMenuOpen, navigate }) {
     const [closing, setClosing] = useState(false)
+    const panelVisible = useHoverHide()
 
     const close = useCallback(() => {
         playMenuSound('close')
@@ -204,6 +206,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
                 }
 
                 @media (max-width: 768px) {
+                    .menu-shell,
                     .menu-panel {
                         width: 100% !important;
                     }
@@ -215,7 +218,15 @@ export default function Menu({ setIsMenuOpen, navigate }) {
                 onClick={close}
             />
 
-            <div className={`menu-panel fixed top-0 right-0 bottom-0 w-1/2 z-70 bg-[#FFEA00] flex flex-col justify-between overflow-y-auto p-5 sm:p-8 md:p-10${closing ? ' out' : ''}`}>
+            <div
+                className="menu-shell fixed top-0 right-0 bottom-0 w-1/2 z-70"
+                style={{
+                    transform: panelVisible ? 'translateY(0)' : 'translateY(-100%)',
+                    transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                    willChange: 'transform',
+                }}
+            >
+                <div className={`menu-panel h-full bg-[#FFEA00] flex flex-col justify-between overflow-y-auto p-5 sm:p-8 md:p-10${closing ? ' out' : ''}`}>
 
                 <div className="menu-item flex justify-between items-center w-full border-b border-black/10 pb-4">
                     <span className="text-black text-xs tracking-widest uppercase"></span>
@@ -242,6 +253,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
                     {/* <span className="text-black/40 text-[9px] tracking-widest uppercase">©2026</span> */}
                 </div>
 
+                </div>
             </div>
         </>
     )

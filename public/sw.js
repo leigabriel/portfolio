@@ -1,4 +1,4 @@
-const VERSION = 'v1'
+const VERSION = 'v2'
 const PRECACHE = `lei-precache-${VERSION}`
 const RUNTIME = `lei-runtime-${VERSION}`
 
@@ -17,6 +17,7 @@ const PRECACHE_URLS = [
     '/fonts/tritopani.otf',
 
     '/images/me.jpg',
+    '/images/1000.png',
 
     '/images/archive/althea.png',
     '/images/archive/call_me.png',

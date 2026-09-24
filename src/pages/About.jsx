@@ -274,19 +274,19 @@ export default function About({ setIsMenuOpen, navigate }) {
                                         <div className="flex flex-col mt-6">
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
                                                 <span className="font-title text-lg sm:text-xl uppercase tracking-widest">email</span>
-                                                <a href="mailto:malibiranleigabriel@gmail.com" className="text-sm tracking-widest lowercase break-all hover:opacity-60 text-right">
+                                                <a href="mailto:malibiranleigabriel@gmail.com" className="text-[6px] tracking-widest lowercase break-all hover:opacity-60 text-right">
                                                     malibiranleigabriel@gmail.com
                                                 </a>
                                             </div>
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
                                                 <span className="font-title text-lg sm:text-xl uppercase tracking-widest">instagram</span>
-                                                <a href="https://instagram.com/leimxnsquare" target="_blank" rel="noreferrer" className="text-sm tracking-widest lowercase hover:opacity-60 text-right">
+                                                <a href="https://instagram.com/leimxnsquare" target="_blank" rel="noreferrer" className="text-[6px] tracking-widest lowercase hover:opacity-60 text-right">
                                                     @leimxnsquare
                                                 </a>
                                             </div>
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
                                                 <span className="font-title text-lg sm:text-xl uppercase tracking-widest">github</span>
-                                                <a href="https://github.com/leigabriel" target="_blank" rel="noreferrer" className="text-sm tracking-widest lowercase hover:opacity-60 text-right">
+                                                <a href="https://github.com/leigabriel" target="_blank" rel="noreferrer" className="text-[6px] tracking-widest lowercase hover:opacity-60 text-right">
                                                     github.com/leigabriel
                                                 </a>
                                             </div>
