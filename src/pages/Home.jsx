@@ -13,10 +13,10 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
             <div className="relative z-1">
                 <Hero />
                 <AboutSection
-                    src="/images/1000.png"
+                    src="/images/1001.png"
                     alt="leimxnsquare print to crumple"
-                    width={1440}
-                    height={1080}
+                    width={2880}
+                    height={2160}
                     sceneHeight={560}
                     maxDisplayWidth={920}
                     releaseBehavior="restore"
@@ -31,7 +31,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                     paperTexture={0.08}
                     draggable
                     returnToOrigin
-                    className="min-h-screen bg-[#b3b3b3]"
+                    className="min-h-screen bg-[#212121]"
                     style={{ height: 'auto', minHeight: '100vh' }}
                 />
                 <Features />

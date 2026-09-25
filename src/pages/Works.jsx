@@ -1,10 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Header from '../components/layout/Header'
 import { posterProjects, webProjects, motionProjects } from '../data'
 
-export default function Works({ setIsMenuOpen, navigate }) {
-    const [activeTab, setActiveTab] = useState(null)
+export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab }) {
     const [modal, setModal] = useState(null)
+    const initialTab = useRef(activeTab)
+    const tabRefs = useRef([])
+
+    useEffect(() => {
+        const index = initialTab.current
+        const folder = index === null || index === undefined ? null : tabRefs.current[index]
+        if (!folder) return undefined
+        const top = index > 0 ? Math.max(0, folder.getBoundingClientRect().top + window.scrollY - 72) : 0
+        const timer = setTimeout(() => window.scrollTo({ top, behavior: 'smooth' }), 150)
+        return () => clearTimeout(timer)
+    }, [])
 
     useEffect(() => {
         if (!modal) return undefined
@@ -141,7 +151,7 @@ export default function Works({ setIsMenuOpen, navigate }) {
 
             <div className="w-full text-black mt-auto flex flex-col pt-6 sm:pt-12">
 
-                <div className={`folder-tab bg-[#b3b3b3] w-full relative z-10 ${activeTab === 0 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[0] = el }} className={`folder-tab bg-[#b3b3b3] w-full relative z-10 ${activeTab === 0 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(0)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 text-black transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
@@ -199,7 +209,7 @@ export default function Works({ setIsMenuOpen, navigate }) {
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div className={`folder-tab bg-[#ffff00] w-full relative z-20 -mt-18 md:-mt-20 ${activeTab === 1 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[1] = el }} className={`folder-tab bg-[#ffff00] w-full relative z-20 -mt-18 md:-mt-20 ${activeTab === 1 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(1)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
@@ -260,7 +270,7 @@ export default function Works({ setIsMenuOpen, navigate }) {
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div className={`folder-tab bg-[#212121] text-white w-full relative z-30 -mt-18 md:-mt-20 ${activeTab === 2 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[2] = el }} className={`folder-tab bg-[#212121] text-white w-full relative z-30 -mt-18 md:-mt-20 ${activeTab === 2 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(2)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">

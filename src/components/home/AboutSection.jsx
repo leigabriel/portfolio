@@ -3,6 +3,7 @@ import * as THREE from 'three';
 const spring = (value = 0) => ({ value, target: value, velocity: 0 });
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const finite = (value, fallback) => (Number.isFinite(value) ? value : fallback);
+const nativePixelRatio = () => Math.max(1, window.devicePixelRatio || 1);
 function advance(s, dt, duration, instant) {
     if (instant || duration <= 0) {
         s.value = s.target;
@@ -705,7 +706,7 @@ const AboutSection = ({
             camera.position.z = viewportHeight / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
             camera.updateProjectionMatrix();
             camera.updateMatrixWorld();
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setPixelRatio(nativePixelRatio());
             renderer.setSize(viewportWidth, viewportHeight, false);
             const reach = Math.max(viewportWidth, viewportHeight);
             const angle = THREE.MathUtils.degToRad(finite(lightAngle, -35));
@@ -942,6 +943,20 @@ const AboutSection = ({
         canvas.addEventListener('webglcontextrestored', restoreContext);
         const observer = new ResizeObserver(resize);
         observer.observe(root);
+        let dprQuery = null;
+        function unwatchPixelRatio() {
+            if (typeof dprQuery?.removeEventListener === 'function') dprQuery.removeEventListener('change', handlePixelRatio);
+        }
+        function watchPixelRatio() {
+            unwatchPixelRatio();
+            dprQuery = window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`);
+            if (typeof dprQuery.addEventListener === 'function') dprQuery.addEventListener('change', handlePixelRatio);
+        }
+        function handlePixelRatio() {
+            watchPixelRatio();
+            resize();
+        }
+        watchPixelRatio();
         const intersectionObserver = new IntersectionObserver(entries => {
             inView = entries[0].isIntersecting;
             lastTime = 0;
@@ -1020,6 +1035,7 @@ const AboutSection = ({
             resetRef.current = cancelRef.current = null;
             observer.disconnect();
             intersectionObserver.disconnect();
+            unwatchPixelRatio();
             hit.removeEventListener('pointerdown', pointerDown);
             hit.removeEventListener('pointermove', pointerMove);
             hit.removeEventListener('pointerup', pointerUp);

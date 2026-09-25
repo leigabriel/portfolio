@@ -273,20 +273,20 @@ export default function About({ setIsMenuOpen, navigate }) {
 
                                         <div className="flex flex-col mt-6">
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
-                                                <span className="font-title text-lg sm:text-xl uppercase tracking-widest">email</span>
-                                                <a href="mailto:malibiranleigabriel@gmail.com" className="text-[6px] tracking-widest lowercase break-all hover:opacity-60 text-right">
+                                                <span className="font-title text-md sm:text-lg uppercase tracking-widest">email</span>
+                                                <a href="mailto:malibiranleigabriel@gmail.com" className="text-sm tracking-widest lowercase break-all hover:opacity-60 text-right">
                                                     malibiranleigabriel@gmail.com
                                                 </a>
                                             </div>
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
-                                                <span className="font-title text-lg sm:text-xl uppercase tracking-widest">instagram</span>
-                                                <a href="https://instagram.com/leimxnsquare" target="_blank" rel="noreferrer" className="text-[6px] tracking-widest lowercase hover:opacity-60 text-right">
+                                                <span className="font-title text-md sm:text-lg uppercase tracking-widest">instagram</span>
+                                                <a href="https://instagram.com/leimxnsquare" target="_blank" rel="noreferrer" className="text-sm tracking-widest lowercase hover:opacity-60 text-right">
                                                     @leimxnsquare
                                                 </a>
                                             </div>
                                             <div className="grid grid-cols-[auto_1fr] gap-x-8 gap-y-4 py-3 hover:bg-black/5" style={{ borderBottom: '1px dotted #212631' }}>
-                                                <span className="font-title text-lg sm:text-xl uppercase tracking-widest">github</span>
-                                                <a href="https://github.com/leigabriel" target="_blank" rel="noreferrer" className="text-[6px] tracking-widest lowercase hover:opacity-60 text-right">
+                                                <span className="font-title text-md sm:text-lg uppercase tracking-widest">github</span>
+                                                <a href="https://github.com/leigabriel" target="_blank" rel="noreferrer" className="text-sm tracking-widest lowercase hover:opacity-60 text-right">
                                                     github.com/leigabriel
                                                 </a>
                                             </div>
@@ -306,10 +306,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div className={`folder-tab bg-[#a39f9f] w-full relative z-40 -mt-18 md:-mt-20 ${activeTab === 3 ? 'drop-shadow-2xl' : ''}`}>
+                <div className={`folder-tab bg-[#212121] text-white w-full relative z-40 -mt-18 md:-mt-20 ${activeTab === 3 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(3)} className="w-full group h-18 md:h-20 flex flex-col justify-end text-left cursor-pointer">
                         <div className="pb-3 md:pb-4">
-                            <div className="folder-title about-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
+                            <div className="folder-title about-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3 text-white">
                                 Achievements
                             </div>
                         </div>
@@ -320,23 +320,23 @@ export default function About({ setIsMenuOpen, navigate }) {
                         <div className="overflow-hidden">
                             <div className="about-content pt-6 sm:pt-8 pb-8 sm:pb-10">
                                 {achievements.length === 0 ? (
-                                    <div className="flex flex-col items-start gap-3 py-10 border-b-2 border-dotted border-black/40">
-                                        <span className="font-title text-5xl text-black/20">—</span>
-                                        <p className="text-xs tracking-widest uppercase text-black/40">Coming soon</p>
+                                    <div className="flex flex-col items-start gap-3 py-10 border-b-2 border-dotted border-white/40">
+                                        <span className="font-title text-5xl text-white/20">—</span>
+                                        <p className="text-xs tracking-widest uppercase text-white/40">Nothing to see here for now</p>
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="hidden md:grid grid-cols-3 gap-8 pb-4 border-b-2 border-dotted border-black/40 text-xs tracking-widest uppercase">
+                                        <div className="hidden md:grid grid-cols-3 gap-8 pb-4 border-b-2 border-dotted border-white/40 text-xs tracking-widest uppercase text-white/70">
                                             <span>Year</span>
                                             <span>Achievement</span>
                                             <span>Event</span>
                                         </div>
 
                                         {achievements.map((item, i) => (
-                                            <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-8 py-6 border-b-2 border-dotted border-black/40 hover:bg-black/5 transition-colors">
-                                                <span className="text-xs sm:text-sm tracking-widest uppercase text-black/70">{item.year}</span>
-                                                <span className="text-xs sm:text-sm tracking-widest uppercase">{item.title}</span>
-                                                <span className="text-xs sm:text-sm tracking-widest uppercase">{item.event}</span>
+                                            <div key={i} className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-8 py-6 border-b-2 border-dotted border-white/40 hover:bg-white/5 transition-colors">
+                                                <span className="text-xs sm:text-sm tracking-widest uppercase text-white/70">{item.year}</span>
+                                                <span className="text-xs sm:text-sm tracking-widest uppercase text-white">{item.title}</span>
+                                                <span className="text-xs sm:text-sm tracking-widest uppercase text-white">{item.event}</span>
                                             </div>
                                         ))}
                                     </>
