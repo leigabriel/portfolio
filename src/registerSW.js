@@ -1,5 +1,6 @@
 export function registerSW() {
     if (!('serviceWorker' in navigator)) return
+    if (import.meta.env.DEV) return
 
     navigator.serviceWorker
         .register('/sw.js', { scope: '/', updateViaCache: 'none' })

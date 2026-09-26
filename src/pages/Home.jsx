@@ -1,5 +1,5 @@
 import Hero from '../components/home/Hero'
-import Features from '../components/home/Features'
+import Featured from '../components/home/Featured'
 import AboutSection from '../components/home/AboutSection'
 import Footer from '../components/layout/Footer'
 import Header from '../components/layout/Header'
@@ -34,7 +34,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                     className="min-h-screen bg-[#212121]"
                     style={{ height: 'auto', minHeight: '100vh' }}
                 />
-                <Features />
+                <Featured navigate={navigate} />
             </div>
             <div ref={contactRef} className="relative z-0 h-dvh min-h-125">
                 <div className="fixed inset-x-0 bottom-0 z-0 h-dvh min-h-125">

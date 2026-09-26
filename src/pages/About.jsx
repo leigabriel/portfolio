@@ -16,7 +16,6 @@ const skillGroups = [
         items: [
             { label: 'React.js', icon: 'https://svgl.app/library/react_light.svg' },
             { label: 'Tailwind CSS', icon: 'https://svgl.app/library/tailwindcss.svg' },
-            { label: 'Node.js', icon: 'https://svgl.app/library/nodejs.svg' },
             { label: 'Three.js', icon: '/svg/threejs.svg' },
         ],
     },

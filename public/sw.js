@@ -1,6 +1,9 @@
-const VERSION = 'v2'
+const VERSION = 'v3'
 const PRECACHE = `lei-precache-${VERSION}`
 const RUNTIME = `lei-runtime-${VERSION}`
+
+const DEV_HOSTNAMES = ['localhost', '127.0.0.1', '[::1]']
+const IS_DEV_HOST = DEV_HOSTNAMES.includes(self.location.hostname)
 
 const PRECACHE_URLS = [
     '/',
@@ -36,7 +39,8 @@ const PRECACHE_URLS = [
     '/images/poster_designs/dandadan.jpg',
     '/images/poster_designs/kanibalismo.png',
     '/images/poster_designs/multo.png',
-    '/images/poster_designs/rukia.jpg',
+    '/images/poster_designs/reze-01.jpg',
+    '/images/poster_designs/rukia-01.jpg',
 
     '/images/web_projects/bulusanzoo.png',
     '/images/web_projects/gamebulusanzoo.png',
@@ -54,6 +58,10 @@ const PRECACHE_URLS = [
 const CACHEABLE_ASSET_RE = /\.(js|css|png|jpg|jpeg|gif|webp|avif|svg|ico|ttf|woff|woff2|otf|mp3)$/i
 
 self.addEventListener('install', (event) => {
+    if (IS_DEV_HOST) {
+        self.skipWaiting()
+        return
+    }
     event.waitUntil(
         caches.open(PRECACHE).then((cache) =>
             Promise.all(
@@ -81,6 +89,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
     const { request } = event
+    if (IS_DEV_HOST) return
     if (request.method !== 'GET') return
 
     const url = new URL(request.url)
