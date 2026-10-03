@@ -1,3 +1,7 @@
+import { useRef, useEffect } from 'react'
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+
 const navLinks = [
     { index: '01', label: 'Web Projects', tab: 0 },
     { index: '02', label: 'Poster Designs', tab: 1 },
@@ -11,13 +15,146 @@ const socialLinks = [
     { label: 'github', href: 'https://github.com/leigabriel' },
 ]
 
-export default function Footer({ navigate }) {
+export default function Footer({ navigate, modelOpacity = 1 }) {
+    const canvasRef = useRef(null)
+    const sectionRef = useRef(null)
+
     const openWorksTab = (tab) => {
         navigate?.('projects', { tab })
     }
 
+    useEffect(() => {
+        const canvas = canvasRef.current
+        const section = sectionRef.current
+        if (!canvas || !section) return
+
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            alpha: true,
+            antialias: true,
+            powerPreference: 'low-power',
+        })
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setClearColor(0x000000, 0)
+        renderer.outputColorSpace = THREE.SRGBColorSpace
+        renderer.toneMapping = THREE.ACESFilmicToneMapping
+        renderer.toneMappingExposure = 1.2
+
+        // Scene
+        const scene = new THREE.Scene()
+
+        // Camera
+        const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
+        camera.position.set(0, 0, 5)
+
+        // Lighting — strong enough to show the model's true colors
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.0)
+        scene.add(ambientLight)
+
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8)
+        hemiLight.position.set(0, 10, 0)
+        scene.add(hemiLight)
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.8)
+        dirLight.position.set(3, 5, 5)
+        scene.add(dirLight)
+
+        const fillLight = new THREE.DirectionalLight(0xffffff, 0.6)
+        fillLight.position.set(-3, -2, 3)
+        scene.add(fillLight)
+
+        const rimLight = new THREE.DirectionalLight(0xffffff, 0.5)
+        rimLight.position.set(0, 0, -5)
+        scene.add(rimLight)
+
+        // Sizing
+        const resize = () => {
+            const rect = section.getBoundingClientRect()
+            const w = Math.max(1, rect.width)
+            const h = Math.max(1, rect.height)
+            renderer.setSize(w, h)
+            camera.aspect = w / h
+            camera.updateProjectionMatrix()
+        }
+        resize()
+
+        // Load model
+        let model = null
+        const loader = new GLTFLoader()
+        loader.load(
+            '/asterisk-1.glb',
+            (gltf) => {
+                model = gltf.scene
+
+                // Compute bounding box to center & scale
+                const box = new THREE.Box3().setFromObject(model)
+                const center = box.getCenter(new THREE.Vector3())
+                const size = box.getSize(new THREE.Vector3())
+                model.position.sub(center)
+
+                // Scale to fit nicely – aim for ~2.8 units tall
+                const maxDim = Math.max(size.x, size.y, size.z)
+                const targetSize = 2.8
+                const s = targetSize / maxDim
+                model.scale.setScalar(s)
+
+                // Keep original materials — apply opacity control
+                model.traverse((child) => {
+                    if (child.isMesh) {
+                        child.material.side = THREE.DoubleSide
+                        child.material.transparent = modelOpacity < 1
+                        child.material.opacity = modelOpacity
+                        child.material.needsUpdate = true
+                        child.castShadow = true
+                        child.receiveShadow = true
+                    }
+                })
+
+                scene.add(model)
+            },
+            undefined,
+            (err) => console.warn('Failed to load asterisk.glb:', err)
+        )
+
+        // Animation loop
+        const clock = new THREE.Clock()
+        let frameId = null
+
+        const animate = () => {
+            frameId = requestAnimationFrame(animate)
+            const elapsed = clock.getElapsedTime()
+
+            if (model) {
+                model.rotation.y = elapsed * 0.3
+                model.rotation.x = Math.sin(elapsed * 0.15) * 0.15
+                model.rotation.z = Math.cos(elapsed * 0.1) * 0.1
+            }
+
+            renderer.render(scene, camera)
+        }
+        animate()
+
+        // Resize observer
+        const ro = new ResizeObserver(resize)
+        ro.observe(section)
+
+        return () => {
+            cancelAnimationFrame(frameId)
+            ro.disconnect()
+            renderer.dispose()
+            scene.traverse((obj) => {
+                if (obj.isMesh) {
+                    obj.geometry?.dispose()
+                    if (Array.isArray(obj.material)) obj.material.forEach((m) => m.dispose())
+                    else obj.material?.dispose()
+                }
+            })
+        }
+    }, [modelOpacity])
+
     return (
-        <section className="relative z-0 bg-[#ffea00] w-full h-dvh min-h-125 flex flex-col overflow-hidden text-black">
+        <section ref={sectionRef} className="relative z-0 bg-[#ffea00] w-full h-dvh min-h-125 flex flex-col overflow-hidden text-black">
             <style>{`
     @keyframes fadeSlideIn {
         from { opacity: 0; transform: translateY(20px); }
@@ -104,6 +241,13 @@ export default function Footer({ navigate }) {
     }
 
 `}</style>
+
+            {/* 3D Asterisk Backdrop */}
+            <canvas
+                ref={canvasRef}
+                className="absolute inset-0 w-full h-full z-1 pointer-events-none"
+                aria-hidden="true"
+            />
 
             <div className="relative z-10 flex flex-col h-full min-h-125 is-mounted">
 
