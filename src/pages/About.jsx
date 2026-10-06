@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/layout/Header'
+import AboutKeychain from '../components/about/AboutKeychain'
 
 const skillGroups = [
     {
@@ -94,12 +95,28 @@ export default function About({ setIsMenuOpen, navigate }) {
                     padding-right: clamp(1.25rem, 3vw, 3rem);
                 }
 
+                .about-keychain {
+                    top: 3rem;
+                    right: clamp(0rem, 2vw, 2rem);
+                    width: min(42vw, 36rem);
+                    height: min(42vw, 36rem);
+                }
+
                 .folder-tab {
                     clip-path: polygon(0 0, min(540px, calc(100% - 5rem)) 0, min(590px, calc(100% - 1rem)) 5rem, 100% 5rem, 100% 100%, 0 100%);
                     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
                 }
 
                 @media (max-width: 768px) {
+                    .about-keychain {
+                        top: 7.5rem;
+                        left: 50%;
+                        right: auto;
+                        width: min(92vw, 26rem);
+                        height: min(92vw, 26rem);
+                        transform: translateX(-50%);
+                    }
+
                     .folder-tab {
                         clip-path: polygon(0 0, min(540px, calc(100% - 2.75rem)) 0, calc(100% - 0.75rem) 4.5rem, 100% 4.5rem, 100% 100%, 0 100%);
                     }
@@ -133,6 +150,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                     About me
                 </h1>
             </header>
+
+            <AboutKeychain />
 
             <div className="w-full text-black mt-auto flex flex-col pt-6 sm:pt-12">
 
