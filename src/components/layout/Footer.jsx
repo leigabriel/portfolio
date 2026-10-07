@@ -83,7 +83,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
         let model = null
         const loader = new GLTFLoader()
         loader.load(
-            '/asterisk-1.glb',
+            'models/footerchain.glb',
             (gltf) => {
                 model = gltf.scene
 

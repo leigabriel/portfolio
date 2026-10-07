@@ -2,6 +2,11 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
+// The model ships three authored clips: Mocha_Swing, Mocha_Spin_360 and
+// Mocha_Spin_Swing. Each is a 4s LINEAR loop driving MasterSplitRing plus the
+// CharmBranch/CharmPivot rig.
+const KEYCHAIN_CLIP = 'Mocha_Spin_Swing'
+
 export default function AboutKeychain() {
     const canvasRef = useRef(null)
     const containerRef = useRef(null)
@@ -52,6 +57,7 @@ export default function AboutKeychain() {
         resize()
 
         let model = null
+        let mixer = null
         const loader = new GLTFLoader()
         loader.load(
             '/models/aboutkeychain.gltf',
@@ -79,6 +85,19 @@ export default function AboutKeychain() {
                 })
 
                 scene.add(model)
+
+                // Play the authored spin + swing clip rather than rotating the
+                // whole model by hand. The clip only animates descendant nodes,
+                // so the centring applied above is preserved.
+                const clip = gltf.animations?.find((item) => item.name === KEYCHAIN_CLIP)
+                if (clip) {
+                    mixer = new THREE.AnimationMixer(model)
+                    const action = mixer.clipAction(clip)
+                    action.setLoop(THREE.LoopRepeat, Infinity)
+                    action.play()
+                } else {
+                    console.warn(`Clip "${KEYCHAIN_CLIP}" not found in about keychain model.`)
+                }
             },
             undefined,
             (error) => {
@@ -93,7 +112,7 @@ export default function AboutKeychain() {
             const currentTime = performance.now()
             const delta = Math.min((currentTime - previousTime) / 1000, 0.1)
             previousTime = currentTime
-            if (model) model.rotation.y += delta * 1.2
+            if (mixer) mixer.update(delta)
             renderer.render(scene, camera)
         }
         animate()
@@ -104,6 +123,10 @@ export default function AboutKeychain() {
         return () => {
             cancelAnimationFrame(frameId)
             resizeObserver.disconnect()
+            if (mixer && model) {
+                mixer.stopAllAction()
+                mixer.uncacheRoot(model)
+            }
             renderer.dispose()
             scene.traverse((object) => {
                 if (!object.isMesh) return
