@@ -83,6 +83,11 @@ button *,
     cursor: url('/cursors/link.svg') 12 0, pointer !important;
 }
 
+.nav-hover-btn,
+.nav-hover-btn * {
+    cursor: url('/cursors/pointer.svg') 2 0, auto !important;
+}
+
 [style*="cursor: grab"],
 .cursor-grab {
     cursor: url('/cursors/grab.svg') 12 4, grab !important;
@@ -130,6 +135,11 @@ video::-webkit-media-controls-picture-in-picture {
     display: none;
 }
 
+main.home-cursor,
+main.home-cursor * {
+    cursor: url('/cursors/pointer.svg') 2 0, auto !important;
+}
+
 @media (pointer: coarse) {
 
     body,
@@ -146,7 +156,11 @@ video::-webkit-media-controls-picture-in-picture {
     h4,
     h5,
     h6,
-    span {
+    span,
+    .nav-hover-btn,
+    .nav-hover-btn *,
+    main.home-cursor,
+    main.home-cursor * {
         cursor: auto !important;
     }
 }

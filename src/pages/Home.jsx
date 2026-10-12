@@ -6,7 +6,7 @@ import Header from '../components/layout/Header'
 
 export default function Home({ setIsMenuOpen, contactRef, navigate }) {
     return (
-        <main className="relative bg-black min-h-screen">
+        <main className="home-cursor relative bg-black min-h-screen">
             <div className="fixed top-0 left-0 z-50 w-full p-4 sm:p-6 md:p-10 pointer-events-none">
                 <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" className="w-full" />
             </div>

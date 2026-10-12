@@ -8,6 +8,17 @@ const navLinks = [
     { index: '03', label: 'Motion Posters', tab: 2 },
 ]
 
+// The keychain model ships three authored clips: Mocha_Swing,
+// Mocha_Spin_360 and Mocha_Spin_Swing.
+const FOOTER_CLIP = 'Mocha_Spin_360'
+
+// Half speed keeps the backdrop turn calm behind the wordmark.
+const FOOTER_PLAYBACK_RATE = 0.5
+
+// Lift the centred chain so it reads above the wordmark instead of sitting
+// on top of it. World units match the targetSize scale below.
+const FOOTER_Y_OFFSET = 0.1
+
 const socialLinks = [
     { label: 'email', href: 'mailto:malibiranleigabriel@gmail.com' },
     { label: 'instagram', href: 'https://instagram.com/leimxnsquare' },
@@ -81,23 +92,39 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
         // Load model
         let model = null
+        let mixer = null
+        let cancelled = false
         const loader = new GLTFLoader()
         loader.load(
-            'models/footerchain.glb',
+            '/models/workchain.gltf',
             (gltf) => {
+                if (cancelled) {
+                    gltf.scene.traverse((object) => {
+                        if (!object.isMesh) return
+                        object.geometry?.dispose()
+                        if (Array.isArray(object.material)) object.material.forEach((material) => material.dispose())
+                        else object.material?.dispose()
+                    })
+                    return
+                }
+
                 model = gltf.scene
 
-                // Compute bounding box to center & scale
+                // Scale first, aim for ~2.8 units tall
                 const box = new THREE.Box3().setFromObject(model)
-                const center = box.getCenter(new THREE.Vector3())
                 const size = box.getSize(new THREE.Vector3())
-                model.position.sub(center)
-
-                // Scale to fit nicely – aim for ~2.8 units tall
                 const maxDim = Math.max(size.x, size.y, size.z)
                 const targetSize = 2.8
-                const s = targetSize / maxDim
-                model.scale.setScalar(s)
+                model.scale.setScalar(targetSize / maxDim)
+
+                // Then centre the transformed geometry. model.position is not
+                // affected by the object's own scale, so subtracting the
+                // pre-scale centre would leave the chain off-axis.
+                const scaledCenter = new THREE.Box3()
+                    .setFromObject(model)
+                    .getCenter(new THREE.Vector3())
+                model.position.sub(scaledCenter)
+                model.position.y += FOOTER_Y_OFFSET
 
                 // Keep original materials — apply opacity control
                 model.traverse((child) => {
@@ -112,9 +139,22 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                 })
 
                 scene.add(model)
+
+                // The clip owns the motion — no hand-rolled rotation. Scaling the
+                // mixer action keeps the authored loop boundaries intact.
+                const clip = gltf.animations?.find((item) => item.name === FOOTER_CLIP)
+                if (clip) {
+                    mixer = new THREE.AnimationMixer(model)
+                    const action = mixer.clipAction(clip)
+                    action.setLoop(THREE.LoopRepeat, Infinity)
+                    action.setEffectiveTimeScale(FOOTER_PLAYBACK_RATE)
+                    action.play()
+                } else {
+                    console.warn(`Clip "${FOOTER_CLIP}" not found in workchain.gltf.`)
+                }
             },
             undefined,
-            (err) => console.warn('Failed to load asterisk.glb:', err)
+            (err) => console.warn('Failed to load workchain.gltf:', err)
         )
 
         // Animation loop
@@ -123,13 +163,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
         const animate = () => {
             frameId = requestAnimationFrame(animate)
-            const elapsed = clock.getElapsedTime()
-
-            if (model) {
-                model.rotation.y = elapsed * 0.3
-                model.rotation.x = Math.sin(elapsed * 0.15) * 0.15
-                model.rotation.z = Math.cos(elapsed * 0.1) * 0.1
-            }
+            if (mixer) mixer.update(clock.getDelta())
 
             renderer.render(scene, camera)
         }
@@ -140,8 +174,13 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
         ro.observe(section)
 
         return () => {
+            cancelled = true
             cancelAnimationFrame(frameId)
             ro.disconnect()
+            if (mixer && model) {
+                mixer.stopAllAction()
+                mixer.uncacheRoot(model)
+            }
             renderer.dispose()
             scene.traverse((obj) => {
                 if (obj.isMesh) {

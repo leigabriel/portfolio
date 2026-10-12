@@ -2,12 +2,16 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
 
-// The model ships three authored clips: Mocha_Swing, Mocha_Spin_360 and
-// Mocha_Spin_Swing. Each is a 4s LINEAR loop driving MasterSplitRing plus the
-// CharmBranch/CharmPivot rig.
-const KEYCHAIN_CLIP = 'Mocha_Spin_Swing'
+// Every keychain model ships the same three authored clips: Mocha_Swing,
+// Mocha_Spin_360 and Mocha_Spin_Swing. Each is a LINEAR loop driving
+// MasterSplitRing plus the CharmBranch/CharmPivot rig.
+const SPIN_CLIP = 'Mocha_Spin_360'
 
-export default function AboutKeychain() {
+// Half speed keeps the turn calm behind the folder copy. Scaling the mixer
+// action rather than the delta time keeps the clip's own loop boundaries.
+const PLAYBACK_RATE = 0.5
+
+export default function WorksKeychain({ src, targetSize = 3.4, className = '' }) {
     const canvasRef = useRef(null)
     const containerRef = useRef(null)
 
@@ -46,8 +50,8 @@ export default function AboutKeychain() {
             const verticalFov = THREE.MathUtils.degToRad(camera.fov)
             const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect)
             const limitingFov = Math.min(verticalFov, horizontalFov)
-            // The bounding sphere covers every orientation during the spin.
-            // Keep only a small safety margin so the model remains large.
+            // The bounding sphere covers every orientation during the spin, so
+            // the camera only has to clear that sphere plus a small margin.
             const cameraDistance = (modelRadius / Math.tan(limitingFov / 2)) * 1.06
             camera.position.set(0, 0, cameraDistance)
             camera.lookAt(0, 0, 0)
@@ -58,19 +62,29 @@ export default function AboutKeychain() {
 
         let model = null
         let mixer = null
+        let cancelled = false
         const loader = new GLTFLoader()
         loader.load(
-            '/models/aboutkeychain.gltf',
+            src,
             (gltf) => {
+                if (cancelled) {
+                    gltf.scene.traverse((object) => {
+                        if (!object.isMesh) return
+                        object.geometry?.dispose()
+                        if (Array.isArray(object.material)) object.material.forEach((material) => material.dispose())
+                        else object.material?.dispose()
+                    })
+                    return
+                }
+
                 model = gltf.scene
                 const sourceBox = new THREE.Box3().setFromObject(model)
                 const sourceSize = sourceBox.getSize(new THREE.Vector3())
                 const maxDimension = Math.max(sourceSize.x, sourceSize.y, sourceSize.z)
-                const modelScale = 4.6 / maxDimension
-                model.scale.setScalar(modelScale)
+                model.scale.setScalar(targetSize / maxDimension)
 
-                // Scale first, then center the transformed geometry. The source
-                // scene has an offset origin, so centering before scaling shifts it.
+                // Scale first, then centre the transformed geometry. The source
+                // scene has an offset origin, so centring before scaling shifts it.
                 const scaledBox = new THREE.Box3().setFromObject(model)
                 const scaledCenter = scaledBox.getCenter(new THREE.Vector3())
                 model.position.sub(scaledCenter)
@@ -86,22 +100,23 @@ export default function AboutKeychain() {
 
                 scene.add(model)
 
-                // Play the authored spin + swing clip rather than rotating the
-                // whole model by hand. The clip only animates descendant nodes,
-                // so the centring applied above is preserved.
-                const clip = gltf.animations?.find((item) => item.name === KEYCHAIN_CLIP)
+                // Play the authored spin rather than rotating the whole model by
+                // hand. The clip only animates descendant nodes, so the centring
+                // applied above is preserved.
+                const clip = gltf.animations?.find((item) => item.name === SPIN_CLIP)
                 if (clip) {
                     mixer = new THREE.AnimationMixer(model)
                     const action = mixer.clipAction(clip)
                     action.setLoop(THREE.LoopRepeat, Infinity)
+                    action.setEffectiveTimeScale(PLAYBACK_RATE)
                     action.play()
                 } else {
-                    console.warn(`Clip "${KEYCHAIN_CLIP}" not found in about keychain model.`)
+                    console.warn(`Clip "${SPIN_CLIP}" not found in ${src}.`)
                 }
             },
             undefined,
             (error) => {
-                console.warn('Failed to load about keychain model:', error)
+                console.warn(`Failed to load ${src}:`, error)
             },
         )
 
@@ -121,6 +136,7 @@ export default function AboutKeychain() {
         resizeObserver.observe(container)
 
         return () => {
+            cancelled = true
             cancelAnimationFrame(frameId)
             resizeObserver.disconnect()
             if (mixer && model) {
@@ -135,12 +151,12 @@ export default function AboutKeychain() {
                 else object.material?.dispose()
             })
         }
-    }, [])
+    }, [src, targetSize])
 
     return (
         <div
             ref={containerRef}
-            className="about-keychain pointer-events-none absolute z-60"
+            className={`works-keychain pointer-events-none absolute ${className}`}
             aria-hidden="true"
         >
             <canvas ref={canvasRef} className="block h-full w-full bg-transparent" />

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Header from '../components/layout/Header'
 import { posterProjects, webProjects, motionProjects } from '../data'
+import WorksKeychain from '../components/works/WorksKeychain'
 
 export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab }) {
     const [modal, setModal] = useState(null)
@@ -82,6 +83,21 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     }
                 }
 
+                .works-keychain {
+                    top: clamp(0.5rem, 1.5vw, 1.25rem);
+                    left: clamp(0.5rem, 1.5vw, 1.25rem);
+                    width: min(34vw, 20rem);
+                    height: min(34vw, 20rem);
+                }
+
+                @media (max-width: 768px) {
+                    .works-keychain {
+                        top: 3.5rem;
+                        width: min(58vw, 16rem);
+                        height: min(58vw, 16rem);
+                    }
+                }
+
                 .dotted-line {
                     background-image: radial-gradient(circle, rgba(0,0,0,0.5) 1.5px, transparent 1.5px);
                     background-size: 8px 8px;
@@ -159,6 +175,8 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
 
+                    {activeTab === 0 && <WorksKeychain src="/models/web-01.gltf" />}
+
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 0 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
                             <div className="projects-content pt-6 sm:pt-8 pb-8 sm:pb-10">
@@ -207,20 +225,22 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[1] = el }} className={`folder-tab bg-[#ffff00] w-full relative z-20 -mt-18 md:-mt-20 ${activeTab === 1 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[1] = el }} className={`folder-tab bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20 ${activeTab === 1 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(1)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
                                 02 Poster Design
                             </h2>
                         </div>
-                        <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
+                        <div className="dotted-line-white transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
+
+                    {activeTab === 1 && <WorksKeychain src="/models/poster-02.gltf" />}
 
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 1 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
                             <div className="projects-content pt-6 sm:pt-8 pb-8 sm:pb-10">
-                                <div className="hidden md:flex items-center justify-between pb-4 border-b-2 border-dotted border-black/20 text-xs tracking-widest uppercase text-black/50">
+                                <div className="hidden md:flex items-center justify-between pb-4 border-b-2 border-dotted border-white/20 text-xs tracking-widest uppercase text-white/50">
                                     <div className="flex-1">Title & About</div>
                                     <div className="w-40 lg:w-52 shrink-0 text-center">Poster</div>
                                 </div>
@@ -229,13 +249,13 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                     {posterProjects.map((p) => (
                                         <div
                                             key={p.id}
-                                            className="project-row flex flex-col md:flex-row items-start gap-4 md:gap-6 border-b-2 border-dotted border-black/15 hover:bg-black/5"
+                                            className="project-row flex flex-col md:flex-row items-start gap-4 md:gap-6 border-b-2 border-dotted border-white/15 hover:bg-white/5"
                                             onClick={() => navigate('poster-detail', { ...p, type: 'poster' })}
                                         >
                                             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-xs sm:text-sm tracking-widest uppercase text-black">{p.title}</span>
-                                                    <span className="text-[9px] tracking-widest uppercase text-black/40">{p.year}</span>
+                                                    <span className="text-xs sm:text-sm tracking-widest uppercase text-white">{p.title}</span>
+                                                    <span className="text-[9px] tracking-widest uppercase text-white/40">{p.year}</span>
                                                 </div>
                                             </div>
                                             <div className="w-40 lg:w-52 shrink-0 self-end md:self-auto">
@@ -243,7 +263,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                                     src={p.img}
                                                     alt={p.title}
                                                     draggable="false"
-                                                    className="w-full aspect-3/4 object-cover rounded border border-[#212631]/50"
+                                                    className="w-full aspect-3/4 object-cover rounded border border-white/20"
                                                 />
                                             </div>
                                         </div>
@@ -251,12 +271,12 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                 </div>
 
                                 <div className="pt-6 flex justify-between items-center">
-                                    <span className="text-[9px] tracking-widest uppercase text-black/25">
+                                    <span className="text-[9px] tracking-widest uppercase text-white/30">
                                         {posterProjects.length} WORKS
                                     </span>
                                     <button
                                         onClick={() => navigate('about')}
-                                        className="text-[9px] tracking-widest uppercase text-black/40 hover:text-black transition-colors cursor-pointer"
+                                        className="text-[9px] tracking-widest uppercase text-white/40 hover:text-white transition-colors cursor-pointer"
                                     >
                                         ABOUT ME →
                                     </button>
@@ -268,20 +288,22 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[2] = el }} className={`folder-tab bg-[#212121] text-white w-full relative z-30 -mt-18 md:-mt-20 ${activeTab === 2 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[2] = el }} className={`folder-tab bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20 ${activeTab === 2 ? 'drop-shadow-2xl' : ''}`}>
                     <button onClick={() => handleTabClick(2)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
                                 03 Motion Design
                             </h2>
                         </div>
-                        <div className="dotted-line-white transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
+                        <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
+
+                    {activeTab === 2 && <WorksKeychain src="/models/motion-03.gltf" />}
 
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 2 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
                             <div className="projects-content pt-6 sm:pt-8 pb-8 sm:pb-10">
-                                <div className="hidden md:flex items-center justify-between pb-4 border-b-2 border-dotted border-white/20 text-xs tracking-widest uppercase text-white/50">
+                                <div className="hidden md:flex items-center justify-between pb-4 border-b-2 border-dotted border-black/20 text-xs tracking-widest uppercase text-black/50">
                                     <div className="flex-1">Title & About</div>
                                     <div className="w-40 lg:w-52 shrink-0 text-center">Motion</div>
                                 </div>
@@ -290,13 +312,13 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                     {motionProjects.map((project) => (
                                         <div
                                             key={project.id}
-                                            className="project-row flex flex-col md:flex-row items-start gap-4 md:gap-6 border-b-2 border-dotted border-white/15 hover:bg-white/5"
+                                            className="project-row flex flex-col md:flex-row items-start gap-4 md:gap-6 border-b-2 border-dotted border-black/15 hover:bg-black/5"
                                             onClick={() => navigate('motion-detail', { ...project, type: 'motion' })}
                                         >
                                             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
                                                 <div className="flex items-center gap-3">
-                                                    <span className="text-xs sm:text-sm tracking-widest uppercase text-white">{project.title}</span>
-                                                    <span className="text-[9px] tracking-widest uppercase text-white/40">{project.year}</span>
+                                                    <span className="text-xs sm:text-sm tracking-widest uppercase text-black">{project.title}</span>
+                                                    <span className="text-[9px] tracking-widest uppercase text-black/40">{project.year}</span>
                                                 </div>
                                             </div>
                                             <div className="w-40 lg:w-52 shrink-0 self-end md:self-auto">
@@ -315,12 +337,12 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                 </div>
 
                                 <div className="pt-6 flex justify-between items-center">
-                                    <span className="text-[9px] tracking-widest uppercase text-white/30">
+                                    <span className="text-[9px] tracking-widest uppercase text-black/25">
                                         {motionProjects.length} WORKS
                                     </span>
                                     <button
                                         onClick={() => navigate('about')}
-                                        className="text-[9px] tracking-widest uppercase text-white/40 hover:text-white transition-colors cursor-pointer"
+                                        className="text-[9px] tracking-widest uppercase text-black/40 hover:text-black transition-colors cursor-pointer"
                                     >
                                         ABOUT ME →
                                     </button>
