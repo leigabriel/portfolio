@@ -292,10 +292,8 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
                 <div className="reveal flex items-start justify-between px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-8 md:pt-12" style={{ animationDelay: '0s' }}>
                     <span className="font-mono-custom text-[10px] sm:text-xs md:text-sm tracking-[0.25em] uppercase text-black/45">
-                        Portfolio
                     </span>
                     <span className="font-mono-custom text-[10px] sm:text-xs md:text-sm tracking-[0.25em] uppercase text-black/45">
-                        2026
                     </span>
                 </div>
 
