@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://leigabriel.vercel.app/sitemap.xml
