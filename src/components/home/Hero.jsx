@@ -313,7 +313,7 @@ export default function Hero() {
                     <span>malibiran</span>
                 </div>
 
-                <div className="spotlight-copy max-w-[48%] text-right text-black text-[10px] sm:text-xs tracking-widest uppercase leading-none">
+                <div className="spotlight-copy max-w-[48%] text-right text-black text-[10px] sm:text-xl tracking-widest uppercase leading-none">
                     <span>GRAPHIC DESIGNER</span>
                     <br />
                     <span>WEB DEVELOPER</span>

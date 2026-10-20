@@ -46,7 +46,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
                         onClick={() => navigate(dest)}
                         onMouseEnter={() => setHovered(idx)}
                         onMouseLeave={() => setHovered(null)}
-                        className="nav-hover-btn text-xs sm:text-sm tracking-widest uppercase cursor-pointer border-none px-1 py-1 relative isolate"
+                        className="nav-hover-btn text-xs sm:text-xl tracking-widest uppercase cursor-pointer border-none px-1 py-1 relative isolate"
                         style={{ color: hovered === idx ? hoverText : 'inherit', transition: 'color 0.3s ease' }}
                     >
                         <span
