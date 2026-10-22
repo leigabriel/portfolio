@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react'
 import useHoverHide from '../../hooks/useHoverHide'
+import useScrolled from '../../hooks/useScrolled'
 
 const navLinks = [
     { label: 'Home', dest: 'home' },
@@ -9,19 +10,23 @@ const navLinks = [
     { label: 'Contact', dest: 'contact' },
 ]
 
+// The header owns its fixed positioning. It is transparent at the top of a page
+// and gains a translucent backing once content scrolls underneath, so the
+// links never print over text or images. `variant` sets the text colour for
+// both the desktop nav and the mobile bar.
 export default function Header({ setIsMenuOpen, navigate, variant = 'light', className = '', style = {} }) {
     const [hovered, setHovered] = useState(null)
     const headerVisible = useHoverHide()
+    const scrolled = useScrolled()
 
     const isLight = variant === 'light'
     const textColor = isLight ? '#fff' : '#000'
-    const hoverBg = '#000'
-    const hoverText = '#fff'
+    const barBackground = isLight ? 'bg-[#212121]/85' : 'bg-white/85'
+    const hoverBg = isLight ? '#fff' : '#000'
+    const hoverText = isLight ? '#000' : '#fff'
 
     const handleOpen = useCallback(() => {
         const menuSound = new Audio('/sounds/folder_sfx.mp3')
-        menuSound.pause()
-        menuSound.currentTime = 0
         menuSound.volume = 0.7
         menuSound.playbackRate = 1.15
         menuSound.play().catch(() => {})
@@ -29,51 +34,68 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
     }, [setIsMenuOpen])
 
     return (
-        <div
+        <header
+            className="fixed top-0 left-0 z-50 w-full"
             style={{
-                transform: headerVisible ? 'translateY(0)' : 'translateY(calc(-100% - 5rem))',
+                transform: headerVisible ? 'translateY(0)' : 'translateY(-110%)',
                 transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                 pointerEvents: headerVisible ? 'auto' : 'none',
                 willChange: 'transform',
+                paddingTop: 'env(safe-area-inset-top)',
             }}
         >
-            <nav
-                className={`hidden md:flex items-center gap-6 lg:gap-[clamp(2rem,8vw,8rem)] pointer-events-auto ${className}`}
-                style={{ color: textColor, ...style }}
+            <div
+                className={`px-4 sm:px-6 md:px-10 transition-[padding,background-color] duration-300 ${
+                    scrolled
+                        ? `${barBackground} backdrop-blur-md py-1 sm:py-2 md:py-3`
+                        : 'py-4 sm:py-6 md:py-9'
+                }`}
+                style={{ color: textColor }}
             >
-                {navLinks.map(({ label, dest }, idx) => (
-                    <button
-                        key={dest}
-                        onClick={() => navigate(dest)}
-                        onMouseEnter={() => setHovered(idx)}
-                        onMouseLeave={() => setHovered(null)}
-                        className="nav-hover-btn text-xs sm:text-xl tracking-widest uppercase cursor-pointer border-none px-1 py-1 relative isolate"
-                        style={{ color: hovered === idx ? hoverText : 'inherit', transition: 'color 0.3s ease' }}
-                    >
-                        <span
-                            className="absolute inset-0 w-full h-full transition-transform duration-300 ease-out -z-10"
-                            style={{
-                                background: hoverBg,
-                                transform: hovered === idx ? 'scaleY(1)' : 'scaleY(0)',
-                                transformOrigin: 'bottom',
-                            }}
-                        />
-                        {label}
-                    </button>
-                ))}
-            </nav>
-
-            <div className="md:hidden flex items-center justify-between w-full pointer-events-auto">
-                <span className="text-xs sm:text-sm tracking-widest uppercase">
-                    LEI GABRIEL
-                </span>
-                <button
-                    onClick={handleOpen}
-                    className="text-xs sm:text-sm tracking-widest uppercase cursor-pointer transition-all duration-300 ease-out hover:bg-white hover:text-black hover:-translate-y-1"
+                <nav
+                    className={`hidden md:flex items-center gap-6 lg:gap-[clamp(2rem,8vw,8rem)] ${className}`}
+                    style={style}
+                    aria-label="Primary"
                 >
-                    MENU
-                </button>
+                    {navLinks.map(({ label, dest }, idx) => (
+                        <button
+                            key={dest}
+                            type="button"
+                            onClick={() => navigate(dest)}
+                            onMouseEnter={() => setHovered(idx)}
+                            onMouseLeave={() => setHovered(null)}
+                            onFocus={() => setHovered(idx)}
+                            onBlur={() => setHovered(null)}
+                            className="nav-hover-btn text-xl tracking-widest uppercase cursor-pointer border-none px-2 py-2 relative isolate"
+                            style={{ color: hovered === idx ? hoverText : 'inherit', transition: 'color 0.3s ease' }}
+                        >
+                            <span
+                                className="absolute inset-0 w-full h-full transition-transform duration-300 ease-out -z-10"
+                                style={{
+                                    background: hoverBg,
+                                    transform: hovered === idx ? 'scaleY(1)' : 'scaleY(0)',
+                                    transformOrigin: 'bottom',
+                                }}
+                            />
+                            {label}
+                        </button>
+                    ))}
+                </nav>
+
+                <div className="md:hidden flex items-center justify-between w-full">
+                    <span className="text-xs sm:text-sm tracking-widest uppercase">
+                        LEI GABRIEL
+                    </span>
+                    <button
+                        type="button"
+                        onClick={handleOpen}
+                        aria-haspopup="dialog"
+                        className="-mr-3 min-h-11 min-w-11 px-3 text-xs sm:text-sm tracking-widest uppercase cursor-pointer transition-opacity duration-300 ease-out hover:opacity-60"
+                    >
+                        MENU
+                    </button>
+                </div>
             </div>
-        </div>
+        </header>
     )
 }
