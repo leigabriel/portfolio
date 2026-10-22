@@ -121,7 +121,7 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
         )
 
         let previousTime = performance.now()
-        let frameId
+        let frameId = null
         const animate = () => {
             frameId = requestAnimationFrame(animate)
             const currentTime = performance.now()
@@ -130,14 +130,36 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
             if (mixer) mixer.update(delta)
             renderer.render(scene, camera)
         }
-        animate()
+
+        const start = () => {
+            if (frameId !== null) return
+            previousTime = performance.now()
+            frameId = requestAnimationFrame(animate)
+        }
+
+        const stop = () => {
+            if (frameId === null) return
+            cancelAnimationFrame(frameId)
+            frameId = null
+        }
+
+        start()
+
+        // Stop drawing the charm once it scrolls out of view instead of
+        // keeping the WebGL loop and mixer alive behind the rest of the page.
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) start()
+            else stop()
+        })
+        visibilityObserver.observe(container)
 
         const resizeObserver = new ResizeObserver(resize)
         resizeObserver.observe(container)
 
         return () => {
             cancelled = true
-            cancelAnimationFrame(frameId)
+            stop()
+            visibilityObserver.disconnect()
             resizeObserver.disconnect()
             if (mixer && model) {
                 mixer.stopAllAction()

@@ -3,10 +3,59 @@ import Header from '../components/layout/Header'
 import { posterProjects, webProjects, motionProjects } from '../data'
 import WorksKeychain from '../components/works/WorksKeychain'
 
+// Matches the folder open transition. The decorative keychain and the motion
+// films are mounted after it completes so they cannot stall the animation.
+const FOLDER_SETTLE_MS = 520
+
+function MotionPreview({ src, title, className = '' }) {
+    const videoRef = useRef(null)
+    const [inView, setInView] = useState(false)
+
+    useEffect(() => {
+        const video = videoRef.current
+        if (!video) return undefined
+
+        const observer = new IntersectionObserver(
+            ([entry]) => setInView(entry.isIntersecting),
+            { rootMargin: '200px 0px' },
+        )
+        observer.observe(video)
+        return () => observer.disconnect()
+    }, [])
+
+    useEffect(() => {
+        const video = videoRef.current
+        if (!video) return
+        if (inView) video.play().catch(() => {})
+        else video.pause()
+    }, [inView])
+
+    return (
+        <video
+            ref={videoRef}
+            src={inView ? src : undefined}
+            muted
+            loop
+            playsInline
+            preload="none"
+            aria-label={title}
+            className={className}
+        />
+    )
+}
+
 export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab }) {
     const [modal, setModal] = useState(null)
+    const [settledTab, setSettledTab] = useState(null)
     const initialTab = useRef(activeTab)
     const tabRefs = useRef([])
+    const readyTab = settledTab === activeTab ? activeTab : null
+
+    useEffect(() => {
+        if (!Number.isInteger(activeTab)) return undefined
+        const timer = setTimeout(() => setSettledTab(activeTab), FOLDER_SETTLE_MS)
+        return () => clearTimeout(timer)
+    }, [activeTab])
 
     useEffect(() => {
         const index = initialTab.current
@@ -34,6 +83,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
             audio.volume = 0.5
             audio.play().catch(() => { })
         }
+        setSettledTab(null)
         setActiveTab(activeTab === index ? null : index)
     }
 
@@ -61,9 +111,12 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     padding-right: clamp(1.25rem, 3vw, 3rem);
                 }
 
+                /* No filter on the folder: the live WebGL keychain repaints
+                   every frame, and a filter would re-rasterise the entire
+                   folder along with it during the open transition. */
                 .folder-tab {
                     clip-path: polygon(0 0, min(540px, calc(100% - 5rem)) 0, min(590px, calc(100% - 1rem)) 5rem, 100% 5rem, 100% 100%, 0 100%);
-                    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+                    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
                 }
 
                 @media (max-width: 768px) {
@@ -79,7 +132,6 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                 @media (hover: hover) {
                     .folder-tab:hover {
                         transform: translateY(-8px);
-                        filter: brightness(1.03);
                     }
                 }
 
@@ -153,19 +205,11 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                 <h1 className="projects-title font-title leading-none">
                     Works
                 </h1>
-                <div className="flex gap-4 pb-2">
-                    <button onClick={() => navigate('archive')} className="font-title text-lg sm:text-4xl tracking-widest cursor-pointer bg-transparent border-none text-gray-500 hover:text-black transition-colors duration-300">
-                        Archive
-                    </button>
-                    <button onClick={() => navigate('shop')} className="font-title text-lg sm:text-4xl tracking-widest cursor-pointer bg-transparent border-none text-gray-500 hover:text-black transition-colors duration-300">
-                        Shop
-                    </button>
-                </div>
             </header>
 
             <div className="w-full text-black mt-auto flex flex-col pt-6 sm:pt-12">
 
-                <div ref={(el) => { tabRefs.current[0] = el }} className={`folder-tab bg-[#b3b3b3] w-full relative z-10 ${activeTab === 0 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[0] = el }} className="folder-tab bg-[#b3b3b3] w-full relative z-10">
                     <button onClick={() => handleTabClick(0)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 text-black transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
@@ -175,7 +219,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
 
-                    {activeTab === 0 && <WorksKeychain src="/models/web-01.gltf" />}
+                    {readyTab === 0 && <WorksKeychain src="/models/web-01.gltf" />}
 
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 0 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
@@ -208,7 +252,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                                     <p className="text-xs sm:text-[13px] md:text-sm lg:text-base text-black/40 leading-relaxed line-clamp-2 md:line-clamp-none">{p.description}</p>
                                                 </div>
                                                 <div className="w-72 lg:w-md shrink-0 self-end md:self-auto">
-                                                    <img src={p.img} alt={p.title} className="project-row-thumb w-full h-auto object-contain rounded border border-[#212631]/50" />
+                                                    <img src={p.img} alt={p.title} decoding="async" className="project-row-thumb w-full h-auto object-contain rounded border border-[#212631]/50" />
                                                 </div>
                                             </div>
                                         ))}
@@ -225,7 +269,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[1] = el }} className={`folder-tab bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20 ${activeTab === 1 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[1] = el }} className="folder-tab bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20">
                     <button onClick={() => handleTabClick(1)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
@@ -235,7 +279,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         <div className="dotted-line-white transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
 
-                    {activeTab === 1 && <WorksKeychain src="/models/poster-02.gltf" />}
+                    {readyTab === 1 && <WorksKeychain src="/models/poster-02.gltf" />}
 
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 1 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
@@ -263,6 +307,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                                     src={p.img}
                                                     alt={p.title}
                                                     draggable="false"
+                                                    decoding="async"
                                                     className="w-full aspect-3/4 object-cover rounded border border-white/20"
                                                 />
                                             </div>
@@ -288,7 +333,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                     <div className="h-18 md:h-20"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[2] = el }} className={`folder-tab bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20 ${activeTab === 2 ? 'drop-shadow-2xl' : ''}`}>
+                <div ref={(el) => { tabRefs.current[2] = el }} className="folder-tab bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20">
                     <button onClick={() => handleTabClick(2)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
                         <div className="pb-3 md:pb-4">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
@@ -298,7 +343,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
                     </button>
 
-                    {activeTab === 2 && <WorksKeychain src="/models/motion-03.gltf" />}
+                    {readyTab === 2 && <WorksKeychain src="/models/motion-03.gltf" />}
 
                     <div className="grid transition-all duration-500" style={{ gridTemplateRows: activeTab === 2 ? '1fr' : '0fr' }}>
                         <div className="overflow-hidden">
@@ -322,15 +367,15 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                                 </div>
                                             </div>
                                             <div className="w-40 lg:w-52 shrink-0 self-end md:self-auto">
-                                                <video
-                                                    src={activeTab === 2 ? project.video : undefined}
-                                                    autoPlay
-                                                    muted
-                                                    loop
-                                                    playsInline
-                                                    preload="metadata"
-                                                    className="w-full aspect-3/4 object-cover rounded"
-                                                />
+                                                {readyTab === 2 ? (
+                                                    <MotionPreview
+                                                        src={project.video}
+                                                        title={project.title}
+                                                        className="w-full aspect-3/4 object-cover rounded bg-black/10"
+                                                    />
+                                                ) : (
+                                                    <div className="w-full aspect-3/4 rounded bg-black/10" aria-hidden="true" />
+                                                )}
                                             </div>
                                         </div>
                                     ))}
