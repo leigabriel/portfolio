@@ -3,7 +3,6 @@ import { ReactLenis } from 'lenis/react'
 import Home from './pages/Home'
 import About from './pages/About'
 import Works from './pages/Works'
-import Shop from './pages/Shop'
 import Archive from './pages/Archive'
 import NotFound from './pages/NotFound'
 import PosterDetail from './components/details/PosterDetail'
@@ -12,7 +11,7 @@ import MotionDetail from './components/details/MotionDetail'
 import Menu from './components/layout/Menu'
 import { posterProjects, webProjects, motionProjects } from './data'
 
-const PAGE_DESTINATIONS = ['home', 'about', 'projects', 'shop', 'archive']
+const PAGE_DESTINATIONS = ['home', 'about', 'projects', 'archive']
 const DETAIL_DESTINATIONS = ['poster-detail', 'web-detail', 'motion-detail']
 const COLLECTIONS = { web: webProjects, poster: posterProjects, motion: motionProjects }
 const DETAIL_TAB = { web: 0, poster: 1, motion: 2 }
@@ -37,7 +36,6 @@ function parseRoute() {
     const [section, type, id] = window.location.hash.replace(/^#\/?/, '').split('/').filter(Boolean)
     if (!section) return { page: 'home', project: null }
     if (section === 'about') return { page: 'about', project: null }
-    if (section === 'shop') return { page: 'shop', project: null }
     if (section === 'archive') return { page: 'archive', project: null }
     if (section === 'contact') return { page: 'home', project: null, contact: true }
     if (section === '404') return { page: 'notfound', project: null }
@@ -59,7 +57,6 @@ function hashForRoute(route) {
     }
     if (route.page === 'about') return '#/about'
     if (route.page === 'projects') return '#/works'
-    if (route.page === 'shop') return '#/shop'
     if (route.page === 'archive') return '#/archive'
     return '#/'
 }
@@ -163,7 +160,6 @@ export default function App() {
             {page === 'projects' && (
                 <Works setIsMenuOpen={setIsMenuOpen} navigate={navigate} activeTab={worksTab} setActiveTab={setWorksTab} />
             )}
-            {page === 'shop' && <Shop setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'archive' && <Archive setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'poster-detail' && selectedProject && <PosterDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} poster={selectedProject} />}
             {page === 'web-detail' && selectedProject && <WebDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} project={selectedProject} />}

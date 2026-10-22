@@ -153,10 +153,11 @@ export default function Menu({ setIsMenuOpen, navigate }) {
     }, [navigate])
 
     const links = [
-        { label: 'Home', dest: 'home', image: '/images/poster_designs/queen_yunjin.png' },
-        { label: 'About', dest: 'about', image: '/images/poster_designs/giselle.jpg' },
-        { label: 'Works', dest: 'projects', image: '/images/poster_designs/call_me.png' },
-        { label: 'Contact', dest: 'contact', image: '/images/poster_designs/ningning.png' },
+        { label: 'Home', dest: 'home', image: '/images/archive/queen_yunjin.png' },
+        { label: 'About', dest: 'about', image: '/images/archive/giselle.jpg' },
+        { label: 'Works', dest: 'projects', image: '/images/archive/call_me.png' },
+        { label: 'Archive', dest: 'archive', image: '/images/archive/rockstar.png' },
+        { label: 'Contact', dest: 'contact', image: '/images/archive/ningning.png' },
     ]
 
     return (
@@ -193,6 +194,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
                 .menu-item:nth-child(2) { animation-delay: 0.22s; }
                 .menu-item:nth-child(3) { animation-delay: 0.29s; }
                 .menu-item:nth-child(4) { animation-delay: 0.36s; }
+                .menu-item:nth-child(5) { animation-delay: 0.43s; }
 
                 @media (max-height: 600px) {
                     .menu-link-label {

@@ -5,6 +5,7 @@ const navLinks = [
     { label: 'Home', dest: 'home' },
     { label: 'About', dest: 'about' },
     { label: 'Works', dest: 'projects' },
+    { label: 'Archive', dest: 'archive' },
     { label: 'Contact', dest: 'contact' },
 ]
 
@@ -37,7 +38,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
             }}
         >
             <nav
-                className={`hidden md:flex items-center gap-6 lg:gap-70 pointer-events-auto ${className}`}
+                className={`hidden md:flex items-center gap-6 lg:gap-[clamp(2rem,8vw,8rem)] pointer-events-auto ${className}`}
                 style={{ color: textColor, ...style }}
             >
                 {navLinks.map(({ label, dest }, idx) => (

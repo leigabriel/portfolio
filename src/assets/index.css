@@ -120,9 +120,7 @@ video::-webkit-media-controls-picture-in-picture {
 }
 
 .folder-tab,
-.folder-tab *,
-.shop-folder,
-.shop-folder * {
+.folder-tab * {
     cursor: url('/cursors/pointer.svg') 2 0, pointer !important;
 }
 
