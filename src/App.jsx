@@ -1,15 +1,24 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { ReactLenis } from 'lenis/react'
 import Home from './pages/Home'
-import About from './pages/About'
-import Works from './pages/Works'
-import Archive from './pages/Archive'
-import NotFound from './pages/NotFound'
-import PosterDetail from './components/details/PosterDetail'
-import WebDetail from './components/details/WebDetail'
-import MotionDetail from './components/details/MotionDetail'
-import Menu from './components/layout/Menu'
 import { posterProjects, webProjects, motionProjects } from './data'
+
+// Everything except the home page is split into its own chunk.
+const About = lazy(() => import('./pages/About'))
+const Works = lazy(() => import('./pages/Works'))
+const Archive = lazy(() => import('./pages/Archive'))
+const NotFound = lazy(() => import('./pages/NotFound'))
+const PosterDetail = lazy(() => import('./components/details/PosterDetail'))
+const WebDetail = lazy(() => import('./components/details/WebDetail'))
+const MotionDetail = lazy(() => import('./components/details/MotionDetail'))
+const Menu = lazy(() => import('./components/layout/Menu'))
+
+const SITE_TITLE = 'Lei Gabriel | Web Developer & Graphic Designer'
+const PAGE_TITLES = {
+    about: 'About | Lei Gabriel',
+    projects: 'Works | Lei Gabriel',
+    archive: 'Archive | Lei Gabriel',
+}
 
 const PAGE_DESTINATIONS = ['home', 'about', 'projects', 'archive']
 const DETAIL_DESTINATIONS = ['poster-detail', 'web-detail', 'motion-detail']
@@ -146,16 +155,26 @@ export default function App() {
 
     const { page, project: selectedProject } = route
 
+    // Keep the tab title in step with the route (the 404 page sets its own).
+    useEffect(() => {
+        if (page === 'notfound') return
+        document.title = selectedProject
+            ? `${selectedProject.title} | Lei Gabriel`
+            : PAGE_TITLES[page] ?? SITE_TITLE
+    }, [page, selectedProject])
+
+    const lenisOptions = useMemo(() => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        return { lerp: 0.08, smoothWheel: !reduceMotion }
+    }, [])
+
     return (
         <ReactLenis
             root
-            options={{
-                lerp: 0.08,
-                smoothWheel: true,
-                smoothTouch: false,
-            }}
+            options={lenisOptions}
         >
             {page === 'home' && <Home setIsMenuOpen={setIsMenuOpen} contactRef={contactRef} navigate={navigate} />}
+            <Suspense fallback={null}>
             {page === 'about' && <About setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
             {page === 'projects' && (
                 <Works setIsMenuOpen={setIsMenuOpen} navigate={navigate} activeTab={worksTab} setActiveTab={setWorksTab} />
@@ -165,7 +184,12 @@ export default function App() {
             {page === 'web-detail' && selectedProject && <WebDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} project={selectedProject} />}
             {page === 'motion-detail' && selectedProject && <MotionDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} project={selectedProject} />}
             {page === 'notfound' && <NotFound navigate={navigate} />}
-            {isMenuOpen && <Menu setIsMenuOpen={setIsMenuOpen} navigate={navigate} />}
+            </Suspense>
+            {isMenuOpen && (
+                <Suspense fallback={null}>
+                    <Menu setIsMenuOpen={setIsMenuOpen} navigate={navigate} />
+                </Suspense>
+            )}
         </ReactLenis>
     )
 }
