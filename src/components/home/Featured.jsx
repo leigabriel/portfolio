@@ -96,13 +96,10 @@ export default function Featured({ navigate }) {
             style={{ '--featured-pad': 'clamp(1rem, 4vw, 3rem)' }}
         >
             <header className="px-(--featured-pad) pt-[clamp(5rem,13vh,8.5rem)] pb-[clamp(1.25rem,3vh,2.25rem)]">
-                <div
-                    data-featured-head
-                    className="grid grid-cols-1 items-end gap-x-[clamp(1.5rem,4vw,4rem)] gap-y-3 md:grid-cols-3"
-                >
-                    <h2 className="font-title text-[clamp(2.25rem,7.5vw,5.75rem)] leading-[0.92] font-bold tracking-[-0.03em] uppercase">
+                <div data-featured-head>
+                    <h2 className="font-title text-[clamp(2.25rem,7.5vw,5.75rem)] leading-[0.92] tracking-[-0.03em] uppercase">
                         Selected Projects
-                        <sup className="ml-[0.12em] align-super text-[0.3em] font-semibold tracking-[-0.01em]">
+                        <sup className="ml-[0.12em] align-super text-[0.3em] tracking-[-0.01em]">
                             ({total})
                         </sup>
                     </h2>
@@ -135,7 +132,7 @@ export default function Featured({ navigate }) {
                                 </div>
 
                                 <div
-                                    className="mt-[clamp(0.4rem,0.8vw,0.6rem)] flex border border-black text-[10px] sm:text-[11px] md:text-xs lg:text-sm uppercase"
+                                    className="mt-[clamp(0.4rem,0.8vw,0.6rem)] flex border border-black text-[11px] sm:text-[11px] md:text-xs lg:text-sm uppercase"
                                     data-reveal
                                 >
                                     <span className="min-w-0 flex-1 truncate px-2.5 py-2 tracking-[0.16em] transition-colors duration-300 group-hover:bg-black group-hover:text-white">
@@ -147,7 +144,7 @@ export default function Featured({ navigate }) {
                                 </div>
 
                                 <span
-                                    className="mt-[clamp(0.5rem,1vw,0.75rem)] inline-block text-[9px] sm:text-[10px] md:text-[11px] lg:text-[13px] tracking-[0.22em] text-black/45 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
+                                    className="mt-[clamp(0.5rem,1vw,0.75rem)] inline-block text-[11px] sm:text-[11px] md:text-[11px] lg:text-[13px] tracking-[0.22em] text-black/60 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
                                     data-reveal
                                 >
                                     View Project

@@ -5,22 +5,14 @@ export default function MotionDetail({ setIsMenuOpen, navigate, project }) {
 
     return (
         <main className="bg-[#212121] min-h-screen text-white flex flex-col overflow-x-hidden">
-            <style>{`
-                .motion-detail-title {
-                    font-size: clamp(2rem, 6vw, 5rem);
-                    letter-spacing: -0.035em;
-                    line-height: 0.95;
-                }
-            `}</style>
 
-            <div className="fixed top-0 left-0 z-50 w-full p-4 sm:p-6 md:p-10 pointer-events-none">
-                <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="light" />
-            </div>
+            <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="light" />
 
             <header className="px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-6 sm:pb-8">
                 <button
+                    type="button"
                     onClick={() => navigate('projects')}
-                    className="text-xs sm:text-sm tracking-widest uppercase text-white/40 hover:text-white transition-colors cursor-pointer bg-transparent border-none mb-6 sm:mb-8"
+                    className="text-xs sm:text-sm tracking-widest uppercase text-white/65 hover:text-white transition-colors cursor-pointer bg-transparent border-none -ml-2 px-2 py-3 mb-3 sm:mb-5"
                 >
                     ← View All Works
                 </button>
@@ -32,10 +24,10 @@ export default function MotionDetail({ setIsMenuOpen, navigate, project }) {
             <div className="flex-1 px-5 sm:px-8 md:px-12 pb-12 sm:pb-16">
                 <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-start">
                     <div className="flex-1 min-w-0 flex flex-col gap-4">
-                        <span className="text-[9px] tracking-[0.2em] uppercase text-white/40">{project.year}</span>
+                        <span className="text-[11px] tracking-[0.2em] uppercase text-white/65">{project.year}</span>
                         <div className="w-16 h-px bg-white/10"></div>
                         <div>
-                            <h3 className="text-[10px] tracking-[0.2em] uppercase text-white/30 mb-3">About</h3>
+                            <h3 className="text-[11px] tracking-[0.2em] uppercase text-white/65 mb-3">About</h3>
                             <div className="flex flex-col gap-3">
                                 {project.description.split('\n\n').map((paragraph, i) => (
                                     <p key={i} className="text-sm leading-relaxed text-white/70">{paragraph}</p>

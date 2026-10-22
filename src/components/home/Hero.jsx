@@ -33,10 +33,10 @@ const NARROW_BREAKPOINT = 640
 const LOAD_CONCURRENCY = 3
 
 // The ring divides its height between however many cards it carries, so the
-// card count sets how large each card reads. The reference uses eight.
+// card count sets how large each card reads. The reference uses eight; narrow
+// screens use fewer, larger cards (and download fewer of the ~2.5 MB posters).
 const CARD_LIMIT = 8
-const heroCards = homeImages.slice(0, CARD_LIMIT)
-const CARD_COUNT = heroCards.length
+const NARROW_CARD_LIMIT = 5
 
 function computeSlices(count, width) {
     const budget = width < NARROW_BREAKPOINT ? SLICE_BUDGET_NARROW : SLICE_BUDGET
@@ -87,7 +87,8 @@ export default function Hero() {
             return { src, canvas, ctx: canvas.getContext('2d'), ready: false }
         }
 
-        const cards = heroCards.map(createCard)
+        const cardCount = window.innerWidth < NARROW_BREAKPOINT ? NARROW_CARD_LIMIT : CARD_LIMIT
+        const cards = homeImages.slice(0, cardCount).map(createCard)
         let nextCard = 0
 
         function paintCard(card, image) {
@@ -131,9 +132,12 @@ export default function Hero() {
         // tracks angle, not depth. Painting the back faces first guarantees every
         // front slice lands on top of them.
         function drawRing(side) {
-            const radius = Math.min(viewport.width * 0.4, viewport.height * 0.5)
+            // Portrait screens have spare height, so the ring may use a little
+            // more of the width (its edges can slightly bleed off-screen).
+            const widthShare = viewport.height > viewport.width ? 0.44 : 0.4
+            const radius = Math.min(viewport.width * widthShare, viewport.height * 0.5)
             const slices = viewport.slices
-            const slotAngle = (Math.PI * 2) / CARD_COUNT
+            const slotAngle = (Math.PI * 2) / cards.length
             const cardAngle = slotAngle * (1 - GAP)
             const sliceAngle = cardAngle / slices
             const cardHeight = radius * cardAngle * 1.33
@@ -212,7 +216,7 @@ export default function Hero() {
             viewport.width = width
             viewport.height = height
             viewport.dpr = dpr
-            viewport.slices = computeSlices(CARD_COUNT, width)
+            viewport.slices = computeSlices(cards.length, width)
 
             canvas.width = Math.round(width * dpr)
             canvas.height = Math.round(height * dpr)
@@ -328,15 +332,17 @@ export default function Hero() {
                 ref={canvasRef}
                 className="spotlight-canvas cursor-grab"
                 role="img"
-                aria-label={`Rotating gallery of ${CARD_COUNT} poster designs`}
+                aria-label="Rotating gallery of poster designs"
             />
 
             <div className="absolute inset-x-0 bottom-0 z-10 flex items-end justify-between gap-6 p-4 sm:p-6 md:p-10 pointer-events-none">
-                <div className="spotlight-copy max-w-[48%] spotlight-title text-black tracking-widest leading-none">
+                <h1 className="sr-only">Lei Gabriel Malibiran, graphic designer and web developer</h1>
+
+                <div className="spotlight-copy max-w-[48%] spotlight-title text-black tracking-widest leading-none" aria-hidden="true">
                     <span>malibiran</span>
                 </div>
 
-                <div className="spotlight-copy max-w-[48%] text-right text-black text-[10px] sm:text-xl tracking-widest uppercase leading-none">
+                <div className="spotlight-copy max-w-[48%] text-right text-black text-xs sm:text-base md:text-xl tracking-widest uppercase leading-none" aria-hidden="true">
                     <span>GRAPHIC DESIGNER</span>
                     <br />
                     <span>WEB DEVELOPER</span>
