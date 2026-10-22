@@ -13,8 +13,15 @@ const CARD_WIDTH = 1200
 const CARD_HEIGHT = 1600
 const GAP = 0.18
 const NORMAL_SPEED = 0.01
-const SPIN_FACTOR = 0.002
-const SPIN_DECAY_DURATION = 2
+const SPIN_FACTOR = 0.0004
+// Scrolling adds to the idle speed at most this much, so a fast flick tops out
+// around a third of a turn per second instead of whipping the ring around.
+const MAX_SPIN_BOOST = 0.02
+// Per-60fps-frame decay of the scroll impulse; it settles in about a second.
+const SPIN_DECAY = 0.94
+// How quickly the applied spin catches up to the impulse, so a single wheel
+// notch accelerates the ring smoothly instead of kicking it.
+const SPIN_EASE = 0.2
 const MAX_DPR = 2
 const BACK_FILL = '#d8d4ce'
 
@@ -49,6 +56,10 @@ export default function Hero() {
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
         const ring = { angle: 0, speed: NORMAL_SPEED, tilt: -0.28 }
+        // Scroll and drag feed this impulse rather than the ring speed itself,
+        // so input magnitude can never exceed a gentle, capped velocity.
+        const spinImpulse = { value: 0 }
+        let appliedBoost = 0
         const viewport = { width: 0, height: 0, dpr: 0, slices: SLICES_MAX }
 
         let wheelObserver
@@ -164,16 +175,28 @@ export default function Hero() {
 
         function tick() {
             if (!isVisible) return
-            ring.angle += ring.speed * gsap.ticker.deltaRatio()
+
+            const delta = gsap.ticker.deltaRatio()
+
+            // Frame-rate independent easing, so the ring always drifts back to
+            // its idle speed at the same pace regardless of display refresh.
+            spinImpulse.value *= Math.pow(SPIN_DECAY, delta)
+            appliedBoost +=
+                (spinImpulse.value - appliedBoost) * Math.min(1, SPIN_EASE * delta)
+            ring.angle += (ring.speed + appliedBoost) * delta
             render()
         }
 
+        // A wheel notch or drag distance nudges the ring instead of setting its
+        // speed directly. The nudge is clamped, so piling up wheel events while
+        // scrolling fast cannot stack into a runaway spin.
         function spin(amount) {
             if (!amount) return
-            gsap.fromTo(
-                ring,
-                { speed: amount * SPIN_FACTOR },
-                { speed: NORMAL_SPEED, duration: SPIN_DECAY_DURATION, overwrite: 'auto' }
+
+            spinImpulse.value = gsap.utils.clamp(
+                -MAX_SPIN_BOOST,
+                MAX_SPIN_BOOST,
+                spinImpulse.value + amount * SPIN_FACTOR
             )
         }
 

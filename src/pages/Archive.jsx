@@ -52,7 +52,7 @@ export default function Archive({ setIsMenuOpen, navigate }) {
                     {archiveItems.map((item, index) => (
                         <button key={item.title} onClick={() => setSelected(item)} className="text-left group cursor-pointer">
                             <div className="aspect-4/5 overflow-hidden bg-black/10">
-                                <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-[1.025] transition-all duration-500" />
+                                <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-[1.025] transition-all duration-500" />
                             </div>
                             <div className="grid grid-cols-[auto_1fr] gap-4 pt-3 border-b-2 border-dotted border-black/25 pb-3 text-[9px] sm:text-[10px] tracking-widest uppercase">
                                 <span className="text-black/35">{String(index + 1).padStart(2, '0')}</span>

@@ -17,7 +17,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                     alt="leimxnsquare print to crumple"
                     width={2880}
                     height={2160}
-                    sceneHeight={560}
+                    sceneHeight="auto"
                     maxDisplayWidth={920}
                     releaseBehavior="restore"
                     crumpleAmount={0.85}
@@ -31,8 +31,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                     paperTexture={0.08}
                     draggable
                     returnToOrigin
-                    className="min-h-screen bg-[#212121]"
-                    style={{ height: 'auto', minHeight: '100vh' }}
+                    className="aspect-4/3 bg-[#212121] sm:aspect-auto sm:min-h-screen"
                 />
                 <Featured navigate={navigate} />
             </div>

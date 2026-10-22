@@ -15,6 +15,12 @@ const FOOTER_CLIP = 'Mocha_Spin_360'
 // Half speed keeps the backdrop turn calm behind the wordmark.
 const FOOTER_PLAYBACK_RATE = 0.5
 
+// Wide screens keep the original framing. On portrait screens the horizontal
+// field of view is much narrower, so the camera pulls back until the chain fits
+// instead of cropping it into an oversized-looking backdrop.
+const BASE_CAMERA_DISTANCE = 5
+const FIT_MARGIN = 1.06
+
 // Lift the centred chain so it reads above the wordmark instead of sitting
 // on top of it. World units match the targetSize scale below.
 const FOOTER_Y_OFFSET = 0.1
@@ -57,7 +63,8 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
         // Camera
         const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
-        camera.position.set(0, 0, 5)
+        camera.position.set(0, 0, BASE_CAMERA_DISTANCE)
+        const modelSize = new THREE.Vector3()
 
         // Lighting — strong enough to show the model's true colors
         const ambientLight = new THREE.AmbientLight(0xffffff, 1.0)
@@ -86,6 +93,17 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
             const h = Math.max(1, rect.height)
             renderer.setSize(w, h)
             camera.aspect = w / h
+
+            // Fit the chain's widest spin orientation inside the horizontal
+            // field of view. On wide screens the base distance is already
+            // enough, so they keep the original composition.
+            const verticalFov = THREE.MathUtils.degToRad(camera.fov)
+            const horizontalFov = 2 * Math.atan(Math.tan(verticalFov / 2) * camera.aspect)
+            const horizontalSpan = Math.hypot(modelSize.x, modelSize.z)
+            const fitDistance =
+                (horizontalSpan / 2 / Math.tan(horizontalFov / 2)) * FIT_MARGIN
+            camera.position.z = Math.max(BASE_CAMERA_DISTANCE, fitDistance)
+
             camera.updateProjectionMatrix()
         }
         resize()
@@ -119,10 +137,11 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
                 // Then centre the transformed geometry. model.position is not
                 // affected by the object's own scale, so subtracting the
-                // pre-scale centre would leave the chain off-axis.
-                const scaledCenter = new THREE.Box3()
-                    .setFromObject(model)
-                    .getCenter(new THREE.Vector3())
+                // pre-scale centre would leave the chain off-axis. The box also
+                // records the footprint the camera has to fit while it spins.
+                const scaledBox = new THREE.Box3().setFromObject(model)
+                const scaledCenter = scaledBox.getCenter(new THREE.Vector3())
+                scaledBox.getSize(modelSize)
                 model.position.sub(scaledCenter)
                 model.position.y += FOOTER_Y_OFFSET
 
@@ -139,6 +158,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                 })
 
                 scene.add(model)
+                resize()
 
                 // The clip owns the motion — no hand-rolled rotation. Scaling the
                 // mixer action keeps the authored loop boundaries intact.

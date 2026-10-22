@@ -106,12 +106,6 @@ export default function Featured({ navigate }) {
                             ({total})
                         </sup>
                     </h2>
-                    <p className="text-[10px] leading-[1.9] tracking-[0.14em] uppercase text-black/50 md:pb-[0.35em]">
-                        IN: Poster Design, Editorial, Manga, Monochrome
-                    </p>
-                    <p className="text-[10px] leading-[1.9] font-medium tracking-[0.14em] uppercase text-black md:pb-[0.35em]">
-                        Overview
-                    </p>
                 </div>
             </header>
 
@@ -141,7 +135,7 @@ export default function Featured({ navigate }) {
                                 </div>
 
                                 <div
-                                    className="mt-[clamp(0.4rem,0.8vw,0.6rem)] flex border border-black text-[10px] uppercase"
+                                    className="mt-[clamp(0.4rem,0.8vw,0.6rem)] flex border border-black text-[10px] sm:text-[11px] md:text-xs lg:text-sm uppercase"
                                     data-reveal
                                 >
                                     <span className="min-w-0 flex-1 truncate px-2.5 py-2 tracking-[0.16em] transition-colors duration-300 group-hover:bg-black group-hover:text-white">
@@ -153,7 +147,7 @@ export default function Featured({ navigate }) {
                                 </div>
 
                                 <span
-                                    className="mt-[clamp(0.5rem,1vw,0.75rem)] inline-block text-[9px] tracking-[0.22em] text-black/45 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
+                                    className="mt-[clamp(0.5rem,1vw,0.75rem)] inline-block text-[9px] sm:text-[10px] md:text-[11px] lg:text-[13px] tracking-[0.22em] text-black/45 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
                                     data-reveal
                                 >
                                     View Project
