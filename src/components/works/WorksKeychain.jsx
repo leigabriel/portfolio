@@ -20,12 +20,21 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
         const container = containerRef.current
         if (!canvas || !container) return undefined
 
-        const renderer = new THREE.WebGLRenderer({
-            canvas,
-            alpha: true,
-            antialias: true,
-            powerPreference: 'low-power',
-        })
+        // The keychain is decorative: if WebGL is unavailable, skip it quietly
+        // instead of letting the error unmount the whole page.
+        let renderer
+        try {
+            renderer = new THREE.WebGLRenderer({
+                canvas,
+                alpha: true,
+                antialias: true,
+                powerPreference: 'low-power',
+            })
+        } catch (error) {
+            console.warn('Keychain 3D disabled:', error)
+            return undefined
+        }
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         renderer.setClearColor(0x000000, 0)
         renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -110,6 +119,7 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
                     action.setLoop(THREE.LoopRepeat, Infinity)
                     action.setEffectiveTimeScale(PLAYBACK_RATE)
                     action.play()
+                    if (reduceMotion) action.paused = true
                 } else {
                     console.warn(`Clip "${SPIN_CLIP}" not found in ${src}.`)
                 }

@@ -25,6 +25,13 @@ const FIT_MARGIN = 1.06
 // on top of it. World units match the targetSize scale below.
 const FOOTER_Y_OFFSET = 0.1
 
+// On tall, narrow screens the chain would sit directly behind the navigation
+// labels. Below this aspect ratio it is scaled down and moved into the empty
+// space above them instead.
+const PORTRAIT_ASPECT = 0.8
+const PORTRAIT_SCALE = 0.6
+const PORTRAIT_LIFT = 0.3
+
 const socialLinks = [
     { label: 'email', href: 'mailto:malibiranleigabriel@gmail.com' },
     { label: 'instagram', href: 'https://instagram.com/leimxnsquare' },
@@ -32,7 +39,10 @@ const socialLinks = [
     { label: 'github', href: 'https://github.com/leigabriel' },
 ]
 
-export default function Footer({ navigate, modelOpacity = 1 }) {
+// `watchRef` is the element whose visibility decides whether the 3D scene needs
+// to render. On the home page the footer is fixed behind the content, so the
+// footer itself is always "on screen"; the spacer that reveals it is what scrolls.
+export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
     const canvasRef = useRef(null)
     const sectionRef = useRef(null)
 
@@ -43,15 +53,23 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
     useEffect(() => {
         const canvas = canvasRef.current
         const section = sectionRef.current
-        if (!canvas || !section) return
+        if (!canvas || !section) return undefined
 
-        // Renderer
-        const renderer = new THREE.WebGLRenderer({
-            canvas,
-            alpha: true,
-            antialias: true,
-            powerPreference: 'low-power',
-        })
+        // Renderer. WebGL can be unavailable (blocked, disabled, exhausted
+        // contexts); the footer is decorative, so fail quietly and keep the page.
+        let renderer
+        try {
+            renderer = new THREE.WebGLRenderer({
+                canvas,
+                alpha: true,
+                antialias: true,
+                powerPreference: 'low-power',
+            })
+        } catch (error) {
+            console.warn('Footer 3D backdrop disabled:', error)
+            return undefined
+        }
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         renderer.setClearColor(0x000000, 0)
         renderer.outputColorSpace = THREE.SRGBColorSpace
@@ -86,6 +104,23 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
         rimLight.position.set(0, 0, -5)
         scene.add(rimLight)
 
+        let model = null
+        let mixer = null
+        let cancelled = false
+        let loadStarted = false
+        let frameId = null
+        let modelBaseScale = 1
+        let modelBaseY = 0
+
+        // Places the chain for the current aspect ratio.
+        const placeModel = () => {
+            if (!model) return
+            const portrait = camera.aspect < PORTRAIT_ASPECT
+            const visibleHeight = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.position.z
+            model.scale.setScalar(modelBaseScale * (portrait ? PORTRAIT_SCALE : 1))
+            model.position.y = modelBaseY + (portrait ? visibleHeight * PORTRAIT_LIFT : 0)
+        }
+
         // Sizing
         const resize = () => {
             const rect = section.getBoundingClientRect()
@@ -105,89 +140,120 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
             camera.position.z = Math.max(BASE_CAMERA_DISTANCE, fitDistance)
 
             camera.updateProjectionMatrix()
+            placeModel()
+            if (!frameId) renderer.render(scene, camera)
         }
         resize()
 
-        // Load model
-        let model = null
-        let mixer = null
-        let cancelled = false
-        const loader = new GLTFLoader()
-        loader.load(
-            '/models/workchain.gltf',
-            (gltf) => {
-                if (cancelled) {
-                    gltf.scene.traverse((object) => {
-                        if (!object.isMesh) return
-                        object.geometry?.dispose()
-                        if (Array.isArray(object.material)) object.material.forEach((material) => material.dispose())
-                        else object.material?.dispose()
-                    })
-                    return
-                }
+        // The 4 MB model is only fetched once the footer is about to be seen.
+        const loadModel = () => {
+            if (loadStarted) return
+            loadStarted = true
 
-                model = gltf.scene
-
-                // Scale first, aim for ~2.8 units tall
-                const box = new THREE.Box3().setFromObject(model)
-                const size = box.getSize(new THREE.Vector3())
-                const maxDim = Math.max(size.x, size.y, size.z)
-                const targetSize = 2.8
-                model.scale.setScalar(targetSize / maxDim)
-
-                // Then centre the transformed geometry. model.position is not
-                // affected by the object's own scale, so subtracting the
-                // pre-scale centre would leave the chain off-axis. The box also
-                // records the footprint the camera has to fit while it spins.
-                const scaledBox = new THREE.Box3().setFromObject(model)
-                const scaledCenter = scaledBox.getCenter(new THREE.Vector3())
-                scaledBox.getSize(modelSize)
-                model.position.sub(scaledCenter)
-                model.position.y += FOOTER_Y_OFFSET
-
-                // Keep original materials — apply opacity control
-                model.traverse((child) => {
-                    if (child.isMesh) {
-                        child.material.side = THREE.DoubleSide
-                        child.material.transparent = modelOpacity < 1
-                        child.material.opacity = modelOpacity
-                        child.material.needsUpdate = true
-                        child.castShadow = true
-                        child.receiveShadow = true
+            const loader = new GLTFLoader()
+            loader.load(
+                '/models/workchain.gltf',
+                (gltf) => {
+                    if (cancelled) {
+                        gltf.scene.traverse((object) => {
+                            if (!object.isMesh) return
+                            object.geometry?.dispose()
+                            if (Array.isArray(object.material)) object.material.forEach((material) => material.dispose())
+                            else object.material?.dispose()
+                        })
+                        return
                     }
-                })
 
-                scene.add(model)
-                resize()
+                    model = gltf.scene
 
-                // The clip owns the motion — no hand-rolled rotation. Scaling the
-                // mixer action keeps the authored loop boundaries intact.
-                const clip = gltf.animations?.find((item) => item.name === FOOTER_CLIP)
-                if (clip) {
-                    mixer = new THREE.AnimationMixer(model)
-                    const action = mixer.clipAction(clip)
-                    action.setLoop(THREE.LoopRepeat, Infinity)
-                    action.setEffectiveTimeScale(FOOTER_PLAYBACK_RATE)
-                    action.play()
-                } else {
-                    console.warn(`Clip "${FOOTER_CLIP}" not found in workchain.gltf.`)
-                }
-            },
-            undefined,
-            (err) => console.warn('Failed to load workchain.gltf:', err)
-        )
+                    // Scale first, aim for ~2.8 units tall
+                    const box = new THREE.Box3().setFromObject(model)
+                    const size = box.getSize(new THREE.Vector3())
+                    const maxDim = Math.max(size.x, size.y, size.z)
+                    const targetSize = 2.8
+                    model.scale.setScalar(targetSize / maxDim)
 
-        // Animation loop
+                    // Then centre the transformed geometry. model.position is not
+                    // affected by the object's own scale, so subtracting the
+                    // pre-scale centre would leave the chain off-axis. The box also
+                    // records the footprint the camera has to fit while it spins.
+                    const scaledBox = new THREE.Box3().setFromObject(model)
+                    const scaledCenter = scaledBox.getCenter(new THREE.Vector3())
+                    scaledBox.getSize(modelSize)
+                    model.position.sub(scaledCenter)
+                    model.position.y += FOOTER_Y_OFFSET
+                    modelBaseScale = model.scale.x
+                    modelBaseY = model.position.y
+
+                    // Keep original materials — apply opacity control
+                    model.traverse((child) => {
+                        if (child.isMesh) {
+                            child.material.side = THREE.DoubleSide
+                            child.material.transparent = modelOpacity < 1
+                            child.material.opacity = modelOpacity
+                            child.material.needsUpdate = true
+                            child.castShadow = true
+                            child.receiveShadow = true
+                        }
+                    })
+
+                    scene.add(model)
+                    resize()
+
+                    // The clip owns the motion — no hand-rolled rotation. Scaling the
+                    // mixer action keeps the authored loop boundaries intact.
+                    const clip = gltf.animations?.find((item) => item.name === FOOTER_CLIP)
+                    if (clip) {
+                        mixer = new THREE.AnimationMixer(model)
+                        const action = mixer.clipAction(clip)
+                        action.setLoop(THREE.LoopRepeat, Infinity)
+                        action.setEffectiveTimeScale(FOOTER_PLAYBACK_RATE)
+                        action.play()
+                        // Reduced motion: hold the first frame instead of spinning.
+                        if (reduceMotion) action.paused = true
+                    } else {
+                        console.warn(`Clip "${FOOTER_CLIP}" not found in workchain.gltf.`)
+                    }
+                    if (!frameId) renderer.render(scene, camera)
+                },
+                undefined,
+                (err) => console.warn('Failed to load workchain.gltf:', err)
+            )
+        }
+
+        // Animation loop. It only runs while the footer can actually be seen.
         const clock = new THREE.Clock()
-        let frameId = null
-
         const animate = () => {
             frameId = requestAnimationFrame(animate)
             if (mixer) mixer.update(clock.getDelta())
 
             renderer.render(scene, camera)
         }
-        animate()
+
+        const startLoop = () => {
+            if (frameId !== null) return
+            clock.getDelta()
+            frameId = requestAnimationFrame(animate)
+        }
+
+        const stopLoop = () => {
+            if (frameId === null) return
+            cancelAnimationFrame(frameId)
+            frameId = null
+        }
+
+        const visibilityObserver = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    loadModel()
+                    startLoop()
+                } else {
+                    stopLoop()
+                }
+            },
+            { rootMargin: '300px 0px' }
+        )
+        visibilityObserver.observe(watchRef?.current ?? section)
 
         // Resize observer
         const ro = new ResizeObserver(resize)
@@ -195,7 +261,8 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
         return () => {
             cancelled = true
-            cancelAnimationFrame(frameId)
+            stopLoop()
+            visibilityObserver.disconnect()
             ro.disconnect()
             if (mixer && model) {
                 mixer.stopAllAction()
@@ -210,7 +277,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                 }
             })
         }
-    }, [modelOpacity])
+    }, [modelOpacity, watchRef])
 
     return (
         <section ref={sectionRef} className="relative z-0 bg-[#ffea00] w-full h-dvh min-h-125 flex flex-col overflow-hidden text-black">
@@ -226,6 +293,14 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
     .is-mounted .reveal {
         animation: fadeSlideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .reveal,
+        .is-mounted .reveal {
+            opacity: 1;
+            animation: none;
+        }
     }
 
     .footer-nav-link {
@@ -264,11 +339,13 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
     .social-link {
         position: relative;
         display: inline-block;
+        padding-block: 0.4rem;
         transition: background-color 0.3s ease, color 0.3s ease;
         cursor: url('/cursors/link.svg') 12 0, pointer !important;
     }
 
-    .social-link:hover {
+    .social-link:hover,
+    .social-link:focus-visible {
         background-color: black;
         color: white !important;
     }
@@ -310,13 +387,6 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
             <div className="relative z-10 flex flex-col h-full min-h-125 is-mounted">
 
-                <div className="reveal flex items-start justify-between px-5 sm:px-8 md:px-12 lg:px-16 pt-5 sm:pt-8 md:pt-12" style={{ animationDelay: '0s' }}>
-                    <span className="font-mono-custom text-[10px] sm:text-xs md:text-sm tracking-[0.25em] uppercase text-black/45">
-                    </span>
-                    <span className="font-mono-custom text-[10px] sm:text-xs md:text-sm tracking-[0.25em] uppercase text-black/45">
-                    </span>
-                </div>
-
                 <div className="flex flex-1 items-center px-5 sm:px-8 md:px-12 lg:px-16 pt-6 sm:pt-10">
                     <nav className="w-full" aria-label="Works categories">
                         {navLinks.map(({ index, label, tab }, i) => (
@@ -324,17 +394,17 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                                 key={index}
                                 type="button"
                                 onClick={() => openWorksTab(tab)}
-                                className="footer-nav-link reveal group flex w-full items-baseline gap-3 sm:gap-5 py-[clamp(0.45rem,1.4vh,0.9rem)] text-left text-black"
+                                className="footer-nav-link reveal group flex w-full items-baseline gap-3 sm:gap-5 py-[clamp(0.6rem,1.6vh,0.9rem)] text-left text-black"
                                 style={{ animationDelay: `${0.12 + i * 0.08}s` }}
                                 aria-label={`${index} ${label}`}
                             >
-                                <span className="footer-nav-index font-mono-custom text-[9px] sm:text-[10px] tracking-[0.25em] text-black/45 pt-[0.7em] shrink-0">
+                                <span className="footer-nav-index font-mono-custom text-[11px] sm:text-xs tracking-[0.25em] text-black/60 pt-[0.7em] shrink-0">
                                     {index}
                                 </span>
                                 <span className="footer-nav-label font-title text-[clamp(1.35rem,5.2vw,3.5rem)] leading-[1.1]">
                                     {label}
                                 </span>
-                                <span className="footer-nav-hint ml-auto font-mono-custom text-[9px] sm:text-[10px] tracking-[0.25em] uppercase text-black/35 pt-[0.7em] shrink-0">
+                                <span className="footer-nav-hint ml-auto font-mono-custom text-[11px] sm:text-xs tracking-[0.25em] uppercase text-black/60 pt-[0.7em] shrink-0">
                                     View
                                 </span>
                             </button>
@@ -344,7 +414,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
 
                 <div className="px-5 sm:px-8 md:px-12 lg:px-16 pb-0">
                     <div
-                        className="reveal flex flex-col items-start gap-1.5 sm:gap-2 md:flex-row md:items-end md:justify-between w-full pb-2 sm:pb-3"
+                        className="reveal flex flex-col items-start gap-0.5 sm:gap-1 md:flex-row md:items-end md:justify-between w-full pb-2 sm:pb-3"
                         style={{ animationDelay: '0.4s' }}
                     >
                         {socialLinks.map(({ label, href }) => (
@@ -368,7 +438,7 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                         className="reveal w-full overflow-hidden"
                         style={{ animationDelay: '0.45s' }}
                     >
-                        <h1
+                        <div
                             className="wordmark text-left text-black font-normal w-full block"
                             style={{
                                 fontFamily: 'Tritopani, serif',
@@ -376,12 +446,13 @@ export default function Footer({ navigate, modelOpacity = 1 }) {
                                 lineHeight: '1',
                                 whiteSpace: 'nowrap',
                             }}
-                            aria-label="LEI GABRIEL"
+                            role="img"
+                            aria-label="Lei Gabriel Malibiran"
                         >
                             {'leigabrielmalibiran'.split('').map((char, i) => (
-                                <span key={i} className="wordmark-char">{char}</span>
+                                <span key={i} className="wordmark-char" aria-hidden="true">{char}</span>
                             ))}
-                        </h1>
+                        </div>
                     </div>
                 </div>
             </div>
