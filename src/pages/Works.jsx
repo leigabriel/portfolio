@@ -165,8 +165,17 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         text-align: center;
                     }
 
+                    /* The keychain hangs in its own left gutter so it never
+                       sits behind the project rows. */
                     .works-keychain {
                         top: var(--tab-slant);
+                        left: 1rem;
+                        width: 12rem;
+                        height: 12rem;
+                    }
+
+                    .projects-content {
+                        padding-left: 12rem;
                     }
                 }
 
