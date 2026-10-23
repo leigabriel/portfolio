@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import useHoverHide from '../../hooks/useHoverHide'
-import useScrolled from '../../hooks/useScrolled'
 
 const navLinks = [
     { label: 'Home', dest: 'home' },
@@ -10,18 +9,15 @@ const navLinks = [
     { label: 'Contact', dest: 'contact' },
 ]
 
-// The header owns its fixed positioning. It is transparent at the top of a page
-// and gains a translucent backing once content scrolls underneath, so the
-// links never print over text or images. `variant` sets the text colour for
-// both the desktop nav and the mobile bar.
+// The header owns its fixed positioning and stays transparent (no backing bar
+// or blur). `variant` sets the text colour for both the desktop nav and the
+// mobile bar.
 export default function Header({ setIsMenuOpen, navigate, variant = 'light', className = '', style = {} }) {
     const [hovered, setHovered] = useState(null)
     const headerVisible = useHoverHide()
-    const scrolled = useScrolled()
 
     const isLight = variant === 'light'
     const textColor = isLight ? '#fff' : '#000'
-    const barBackground = isLight ? 'bg-[#212121]/85' : 'bg-white/85'
     const hoverBg = isLight ? '#fff' : '#000'
     const hoverText = isLight ? '#000' : '#fff'
 
@@ -45,11 +41,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
             }}
         >
             <div
-                className={`px-4 sm:px-6 md:px-10 transition-[padding,background-color] duration-300 ${
-                    scrolled
-                        ? `${barBackground} backdrop-blur-md py-1 sm:py-2 md:py-3`
-                        : 'py-4 sm:py-6 md:py-9'
-                }`}
+                className="px-4 sm:px-6 md:px-10 py-4 sm:py-6 md:py-9"
                 style={{ color: textColor }}
             >
                 <nav
