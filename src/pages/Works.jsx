@@ -115,8 +115,20 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                    every frame, and a filter would re-rasterise the entire
                    folder along with it during the open transition. */
                 .folder-tab {
+                    --tab-step: min(22.5rem, 18.75vw);
+                    --tab-offset: 0rem;
+                    --tab-width: 29rem;
+                    --tab-slant: 4.6875rem;
                     clip-path: polygon(0 0, min(540px, calc(100% - 5rem)) 0, min(590px, calc(100% - 1rem)) 5rem, 100% 5rem, 100% 100%, 0 100%);
                     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+
+                .folder-tab--2 {
+                    --tab-offset: var(--tab-step);
+                }
+
+                .folder-tab--3 {
+                    --tab-offset: calc(var(--tab-step) * 2);
                 }
 
                 @media (max-width: 768px) {
@@ -147,6 +159,35 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         top: 3.5rem;
                         width: min(58vw, 16rem);
                         height: min(58vw, 16rem);
+                    }
+                }
+
+                @media (min-width: 1024px) {
+                    .folder-tab {
+                        clip-path: polygon(
+                            var(--tab-offset) 0,
+                            min(calc(var(--tab-offset) + var(--tab-width)), calc(100% - var(--tab-slant))) 0,
+                            min(calc(var(--tab-offset) + var(--tab-width) + var(--tab-slant)), 100%) var(--tab-slant),
+                            100% var(--tab-slant),
+                            100% 100%,
+                            0 100%,
+                            0 var(--tab-slant),
+                            var(--tab-offset) var(--tab-slant)
+                        );
+                    }
+
+                    .folder-title {
+                        width: var(--tab-width);
+                        max-width: var(--tab-width);
+                        margin-left: var(--tab-offset);
+                        padding-left: 0;
+                        padding-right: 0;
+                        text-align: center;
+                    }
+
+                    .works-keychain {
+                        top: var(--tab-slant);
+                        left: clamp(0.5rem, 1.5vw, 1.25rem);
                     }
                 }
 
@@ -210,10 +251,10 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
             <div className="w-full text-black mt-auto flex flex-col pt-6 sm:pt-12">
 
                 <div ref={(el) => { tabRefs.current[0] = el }} className="folder-tab bg-[#b3b3b3] w-full relative z-10">
-                    <button onClick={() => handleTabClick(0)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4">
+                    <button onClick={() => handleTabClick(0)} className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
+                        <div className="pb-3 md:pb-4 lg:pb-3">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 text-black transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                01 Web Projects
+                                01. Web Projects
                             </h2>
                         </div>
                         <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
@@ -266,14 +307,14 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20"></div>
+                    <div className="h-18 md:h-20 lg:h-37.5"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[1] = el }} className="folder-tab bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20">
-                    <button onClick={() => handleTabClick(1)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4">
+                <div ref={(el) => { tabRefs.current[1] = el }} className="folder-tab folder-tab--2 bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20 lg:-mt-18.75">
+                    <button onClick={() => handleTabClick(1)} className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
+                        <div className="pb-3 md:pb-4 lg:pb-3">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                02 Poster Design
+                                02. Poster Design
                             </h2>
                         </div>
                         <div className="dotted-line-white transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
@@ -330,14 +371,14 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20"></div>
+                    <div className="h-18 md:h-20 lg:h-37.5"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[2] = el }} className="folder-tab bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20">
-                    <button onClick={() => handleTabClick(2)} className="tab-btn w-full group h-18 md:h-20 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4">
+                <div ref={(el) => { tabRefs.current[2] = el }} className="folder-tab folder-tab--3 bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20 lg:-mt-18.75">
+                    <button onClick={() => handleTabClick(2)} className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
+                        <div className="pb-3 md:pb-4 lg:pb-3">
                             <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                03 Motion Design
+                                03. Motion Design
                             </h2>
                         </div>
                         <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
@@ -396,7 +437,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20"></div>
+                    <div className="h-18 md:h-20 lg:h-37.5"></div>
                 </div>
 
             </div>
