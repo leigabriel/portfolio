@@ -1,9 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
+
+/* Fonts are self-hosted (woff2) so no third-party stylesheet blocks rendering. */
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/jetbrains-mono-400.woff2') format('woff2');
+    font-weight: 400;
+    font-display: swap;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JetBrains Mono';
+    src: url('/fonts/jetbrains-mono-500.woff2') format('woff2');
+    font-weight: 500;
+    font-display: swap;
+    font-style: normal;
+}
 
 @font-face {
     font-family: 'Bonny';
-    src: url('/fonts/bonny.ttf') format('truetype');
+    src: url('/fonts/bonny.woff2') format('woff2'), url('/fonts/bonny.ttf') format('truetype');
     font-weight: 400;
     font-display: swap;
     font-style: normal;
@@ -11,7 +27,7 @@
 
 @font-face {
     font-family: 'Tritopani';
-    src: url('/fonts/tritopani.otf') format('opentype');
+    src: url('/fonts/tritopani.woff2') format('woff2'), url('/fonts/tritopani.otf') format('opentype');
     font-weight: 400;
     font-display: swap;
     font-style: normal;
@@ -124,13 +140,91 @@ video::-webkit-media-controls-picture-in-picture {
     cursor: url('/cursors/pointer.svg') 2 0, pointer !important;
 }
 
-* {
+/* Only the page scrollbar is hidden; inner scroll areas keep theirs. */
+html {
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
-*::-webkit-scrollbar {
+html::-webkit-scrollbar {
     display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ---- Shared type scale -------------------------------------------------- */
+.about-title,
+.projects-title,
+.archive-title {
+    font-size: clamp(2.75rem, 8vw, 8rem);
+    letter-spacing: -0.035em;
+}
+
+.web-detail-title,
+.poster-detail-title,
+.motion-detail-title {
+    font-size: clamp(2rem, 6vw, 5rem);
+    letter-spacing: -0.035em;
+    line-height: 0.95;
+}
+
+.about-section-title,
+.projects-section-title {
+    font-size: clamp(1.6rem, 5.5vw, 3rem);
+    line-height: 0.95;
+}
+
+/* ---- Folder tabs (About + Works) ---------------------------------------- */
+/* No filter or drop-shadow here: clip-path would cut the shadow off anyway,
+   and a filter re-rasterises the folder (and any WebGL canvas inside it). */
+.folder-title {
+    max-width: min(540px, calc(100% - 5rem));
+    padding-right: 1rem;
+    white-space: nowrap;
+}
+
+.folder-tab {
+    clip-path: polygon(0 0, min(540px, calc(100% - 5rem)) 0, min(590px, calc(100% - 1rem)) 5rem, 100% 5rem, 100% 100%, 0 100%);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+    .folder-tab {
+        clip-path: polygon(0 0, min(540px, calc(100% - 2.75rem)) 0, calc(100% - 0.75rem) 4.5rem, 100% 4.5rem, 100% 100%, 0 100%);
+    }
+
+    .folder-title {
+        max-width: min(540px, calc(100% - 2.75rem));
+    }
+}
+
+@media (hover: hover) {
+    .folder-tab:hover {
+        transform: translateY(-8px);
+    }
+}
+
+.dotted-line {
+    background-image: radial-gradient(circle, rgba(0, 0, 0, 0.5) 1.5px, transparent 1.5px);
+    background-size: 8px 8px;
+    height: 3px;
+    width: 100%;
+}
+
+.dotted-line-white {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1.5px, transparent 1.5px);
+    background-size: 8px 8px;
+    height: 3px;
+    width: 100%;
 }
 
 main.home-cursor,

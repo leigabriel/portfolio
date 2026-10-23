@@ -30,11 +30,11 @@ export default function NotFound({ navigate }) {
                     <button
                         type="button"
                         onClick={() => navigate('home')}
-                        className="text-xs sm:text-sm tracking-widest uppercase text-black/45 hover:text-black transition-colors duration-300 cursor-pointer"
+                        className="text-xs sm:text-sm tracking-widest uppercase text-black/60 hover:text-black transition-colors duration-300 cursor-pointer"
                     >
                         Lei Gabriel
                     </button>
-                    <span className="font-mono-custom text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/25">
+                    <span className="font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
                         Error 404
                     </span>
                 </div>
@@ -47,17 +47,17 @@ export default function NotFound({ navigate }) {
                         <button
                             type="button"
                             onClick={() => navigate('home')}
-                            className="font-mono-custom text-[10px] sm:text-xs tracking-[0.2em] uppercase px-5 py-3 bg-black text-white hover:bg-black/80 transition-colors duration-300 cursor-pointer"
+                            className="font-mono-custom text-[11px] sm:text-xs tracking-[0.2em] uppercase px-5 py-3 bg-black text-white hover:bg-black/80 transition-colors duration-300 cursor-pointer"
                         >
                             Back to home
                         </button>
-                        <span className="font-mono-custom text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/35">
+                        <span className="font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
                             The page you are looking for does not exist.
                         </span>
                     </div>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-dotted border-black/20 pt-4 font-mono-custom text-[9px] sm:text-[10px] tracking-[0.2em] uppercase text-black/30">
+                <div className="flex items-center justify-between border-t border-dotted border-black/20 pt-4 font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
                     <span>leigabriel.vercel.app</span>
                     <span>404</span>
                 </div>

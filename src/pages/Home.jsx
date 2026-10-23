@@ -1,17 +1,21 @@
+import { lazy, Suspense } from 'react'
 import Hero from '../components/home/Hero'
 import Featured from '../components/home/Featured'
-import AboutSection from '../components/home/AboutSection'
-import Footer from '../components/layout/Footer'
 import Header from '../components/layout/Header'
+
+// Both pull in three.js, so they load as a separate chunk after first paint.
+const AboutSection = lazy(() => import('../components/home/AboutSection'))
+const Footer = lazy(() => import('../components/layout/Footer'))
+
+const PAPER_CLASS = 'aspect-4/3 bg-[#212121] sm:aspect-auto sm:min-h-screen'
 
 export default function Home({ setIsMenuOpen, contactRef, navigate }) {
     return (
         <main className="home-cursor relative bg-black min-h-screen">
-            <div className="fixed top-0 left-0 z-50 w-full p-4 sm:p-6 md:p-10 pointer-events-none">
-                <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" className="w-full" />
-            </div>
+            <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" className="w-full" />
             <div className="relative z-1">
                 <Hero />
+                <Suspense fallback={<div className={`w-full ${PAPER_CLASS}`} />}>
                 <AboutSection
                     src="/images/1001.png"
                     alt="leimxnsquare print to crumple"
@@ -31,13 +35,16 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                     paperTexture={0.08}
                     draggable
                     returnToOrigin
-                    className="aspect-4/3 bg-[#212121] sm:aspect-auto sm:min-h-screen"
+                    className={PAPER_CLASS}
                 />
+                </Suspense>
                 <Featured navigate={navigate} />
             </div>
             <div ref={contactRef} className="relative z-0 h-dvh min-h-125">
                 <div className="fixed inset-x-0 bottom-0 z-0 h-dvh min-h-125">
-                    <Footer navigate={navigate} />
+                    <Suspense fallback={<div className="h-dvh min-h-125 w-full bg-[#ffea00]" />}>
+                        <Footer navigate={navigate} watchRef={contactRef} />
+                    </Suspense>
                 </div>
             </div>
         </main>

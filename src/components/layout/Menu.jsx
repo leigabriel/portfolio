@@ -1,9 +1,12 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import useHoverHide from '../../hooks/useHoverHide'
-const menuSound = new Audio('/sounds/folder_sfx.mp3')
+import { useLenis } from 'lenis/react'
+
+// Created lazily so the mp3 is not requested until the menu is first used.
+let menuSound = null
 
 function playMenuSound(type) {
+    if (!menuSound) menuSound = new Audio('/sounds/folder_sfx.mp3')
     menuSound.pause()
     menuSound.currentTime = 0
     menuSound.volume = 0.7
@@ -138,13 +141,27 @@ export function MenuButton({ setIsMenuOpen, className = '', style = {} }) {
 
 export default function Menu({ setIsMenuOpen, navigate }) {
     const [closing, setClosing] = useState(false)
-    const panelVisible = useHoverHide()
+    const lenis = useLenis()
 
     const close = useCallback(() => {
         playMenuSound('close')
         setClosing(true)
         setTimeout(() => setIsMenuOpen(false), 400)
     }, [setIsMenuOpen])
+
+    // The page behind the menu must not scroll while it is open.
+    useEffect(() => {
+        lenis?.stop()
+        return () => lenis?.start()
+    }, [lenis])
+
+    useEffect(() => {
+        const closeOnEscape = (event) => {
+            if (event.key === 'Escape') close()
+        }
+        document.addEventListener('keydown', closeOnEscape)
+        return () => document.removeEventListener('keydown', closeOnEscape)
+    }, [close])
 
     const handleNav = useCallback((dest) => {
         playMenuSound('close')
@@ -153,18 +170,18 @@ export default function Menu({ setIsMenuOpen, navigate }) {
     }, [navigate])
 
     const links = [
-        { label: 'Home', dest: 'home', image: '/images/archive/queen_yunjin.png' },
-        { label: 'About', dest: 'about', image: '/images/archive/giselle.jpg' },
-        { label: 'Works', dest: 'projects', image: '/images/archive/call_me.png' },
-        { label: 'Archive', dest: 'archive', image: '/images/archive/rockstar.png' },
-        { label: 'Contact', dest: 'contact', image: '/images/archive/ningning.png' },
+        { label: 'Home', dest: 'home', image: '/images/archive/queen_yunjin.webp' },
+        { label: 'About', dest: 'about', image: '/images/archive/giselle.webp' },
+        { label: 'Works', dest: 'projects', image: '/images/archive/call_me.webp' },
+        { label: 'Archive', dest: 'archive', image: '/images/archive/rockstar.webp' },
+        { label: 'Contact', dest: 'contact', image: '/images/archive/ningning.webp' },
     ]
 
     return (
         <>
             <style>{`
                 .menu-link-label {
-                    font-size: clamp(4rem, 5dvh, 3.5rem);
+                    font-size: clamp(2.75rem, 7.5dvh, 4rem);
                     padding-block: 0.18em;
                 }
 
@@ -216,30 +233,29 @@ export default function Menu({ setIsMenuOpen, navigate }) {
             `}</style>
 
             <div
-                className={`menu-overlay fixed inset-0 z-60 bg-black/20 cursor-pointer${closing ? ' out' : ''}`}
+                className={`menu-overlay fixed inset-0 z-60 cursor-pointer${closing ? ' out' : ''}`}
                 onClick={close}
             />
 
             <div
                 className="menu-shell fixed top-0 right-0 bottom-0 w-1/2 z-70"
-                style={{
-                    transform: panelVisible ? 'translateY(0)' : 'translateY(-100%)',
-                    transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
-                    willChange: 'transform',
-                }}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Site menu"
             >
                 <div className={`menu-panel h-full bg-[#FFEA00] flex flex-col justify-between overflow-y-auto p-5 sm:p-8 md:p-10${closing ? ' out' : ''}`}>
 
                 <div className="menu-item flex justify-between items-center w-full border-b border-black/10 pb-4">
                     <button
                         onClick={() => handleNav('home')}
-                        className="text-black font-title text-lg sm:text-2xl uppercase tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-60"
+                        className="min-h-11 text-black font-title text-lg sm:text-2xl uppercase tracking-wider cursor-pointer transition-opacity duration-300 hover:opacity-60"
                     >
                         Lei Gabriel
                     </button>
                     <button
                         onClick={close}
-                        className="text-black text-xs tracking-widest uppercase cursor-pointer transition-all duration-300 ease-out hover:bg-white hover:text-black hover:-translate-y-1"
+                        autoFocus
+                        className="-mr-3 min-h-11 min-w-11 px-3 text-black text-xs tracking-widest uppercase cursor-pointer transition-opacity duration-300 ease-out hover:opacity-60"
                     >
                         CLOSE
                     </button>
@@ -255,9 +271,9 @@ export default function Menu({ setIsMenuOpen, navigate }) {
 
                 <div className="menu-panel-footer menu-item flex justify-between items-end w-full border-t border-black/10 pt-4">
                     <div className="flex flex-col gap-0.5">
-                        <span className="text-black/40 text-[9px] tracking-widest uppercase">MENU</span>
+                        <span className="text-black/60 text-[11px] tracking-widest uppercase">MENU</span>
                     </div>
-                    {/* <span className="text-black/40 text-[9px] tracking-widest uppercase">©2026</span> */}
+                    {/* <span className="text-black/60 text-[11px] tracking-widest uppercase">©2026</span> */}
                 </div>
 
                 </div>
