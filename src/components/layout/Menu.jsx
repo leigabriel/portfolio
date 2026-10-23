@@ -233,7 +233,7 @@ export default function Menu({ setIsMenuOpen, navigate }) {
             `}</style>
 
             <div
-                className={`menu-overlay fixed inset-0 z-60 bg-black/20 cursor-pointer${closing ? ' out' : ''}`}
+                className={`menu-overlay fixed inset-0 z-60 cursor-pointer${closing ? ' out' : ''}`}
                 onClick={close}
             />
 
