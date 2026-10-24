@@ -327,11 +327,11 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .profile-photo { width: calc(var(--col) - 44px); aspect-ratio: 4 / 3; margin-top: 24px; object-fit: cover; object-position: center 8%; filter: grayscale(1); display: block; }
                 .profile-bio {
                     padding: 18px 24px 24px 0;
-                    font-family: 'Tritopani', var(--font-title);
-                    font-size: clamp(1.9rem, 2.5vw, 2.6rem);
-                    line-height: 1.3;
+                    font-family: var(--font-body);
+                    font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+                    line-height: 1.7;
                 }
-                .profile-bio p + p { margin-top: 0.7em; }
+                .profile-bio p + p { margin-top: 1.2em; }
                 .profile-role { font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; margin-top: 0.75rem; font-family: var(--font-body); }
                 .prow {
                     display: grid;
@@ -341,8 +341,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                     border-bottom: 1px dotted #212121;
                 }
                 .prow:last-child { border-bottom: 0; }
-                .prow-label { padding-left: 12px; font-family: var(--font-title); font-size: clamp(2.25rem, 3.4vw, 3rem); line-height: 1; }
-                .prow-value { font-family: var(--font-title); font-size: clamp(1.25rem, 1.75vw, 1.6rem); overflow-wrap: anywhere; }
+                .prow-label { padding-left: 12px; font-family: var(--font-body); font-size: clamp(1.1rem, 1.6vw, 1.5rem); line-height: 1; letter-spacing: 0.02em; }
+                .prow-value { font-family: var(--font-body); font-size: clamp(0.9rem, 1.2vw, 1.1rem); overflow-wrap: anywhere; }
                 .prow a:hover, button.prow:hover .prow-value { text-decoration: underline; text-underline-offset: 4px; }
                 button.prow { width: 100%; background: none; border: 0; text-align: left; cursor: pointer; color: inherit; font: inherit; border-bottom: 0; }
 
@@ -374,9 +374,9 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .profile-top { grid-template-columns: 1fr; }
                     .profile-left { padding-right: 12px; }
                     .profile-photo { width: 100%; max-width: 22rem; }
-                    .profile-bio { padding: 0 12px 24px; font-size: 1.9rem; line-height: 1.3; }
+                    .profile-bio { padding: 0 12px 24px; font-size: 1rem; line-height: 1.7; }
                     .prow { grid-template-columns: 1fr; padding: 12px 0; min-height: 0; gap: 2px; }
-                    .prow-label { font-size: 2rem; }
+                    .prow-label { font-size: 1.25rem; }
                     .prow-value { padding-left: 12px; }
                     .xbar { grid-template-columns: 1fr; }
                     .xbar > span:first-child { display: none; }
