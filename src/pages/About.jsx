@@ -62,45 +62,53 @@ const contactRows = [
 ]
 
 // The label strip that sits at the top (and bottom) of every sheet.
-function SheetBar({ label, front, onFront, children, hidden = false }) {
+function SheetBar({ label, children, hidden = false }) {
     return (
         <div className="sheet-bar" aria-hidden={hidden || undefined}>
             {children}
-            <button
-                type="button"
-                className="bar-label"
-                aria-pressed={front}
-                tabIndex={hidden ? -1 : undefined}
-                onClick={onFront}
-            >
-                {label}
-            </button>
+            <span className="bar-label">{label}</span>
         </div>
     )
 }
 
-// One sheet of paper. On wide screens the three sheets overlap, each a column
-// wider than the last, and the chosen one is brought to the front. On narrow
-// screens they stack and only the chosen sheet is open.
-function Sheet({ id, label, className, front, rank, onFront, tabs, title, children }) {
+// "Tap to view" on touch screens, "Click to view" with a pointer.
+function TapHint() {
+    return (
+        <span className="tap-hint" aria-hidden="true">
+            <span className="hint-touch">Tap to view</span>
+            <span className="hint-pointer">Click to view</span>
+            <span className="hint-arrow">&rarr;</span>
+        </span>
+    )
+}
+
+// One sheet of paper. Exactly one is open ("front"). Sheets before it stay put
+// behind it, sheets after it slide to the right edge and leave a tab you can
+// click, so every sheet is always reachable.
+function Sheet({ id, label, className, index, state, onOpen, tabs, title, children }) {
+    const open = state === 'front'
+    const zIndex = open ? 10 : state === 'before' ? index + 1 : 20 + index
     return (
         <article
-            className={`sheet ${className}${front ? ' is-front' : ''}`}
-            style={{ zIndex: front ? 10 : rank }}
+            className={`sheet ${className} is-${state}`}
+            style={{ zIndex, '--i': index }}
             aria-labelledby={`sheet-${id}-label`}
         >
             <div className="sheet-inner">
-                <SheetBar label={label} front={front} onFront={onFront}>
-                    {tabs}
-                </SheetBar>
+                <SheetBar label={label}>{tabs}</SheetBar>
                 {title}
-                <div className="sheet-body" inert={!front && id === 'profile' ? true : undefined}>
+                <div className="sheet-body" inert={!open ? true : undefined}>
                     {children}
                 </div>
-                <SheetBar label={label} front={front} onFront={onFront} hidden>
+                <SheetBar label={label} hidden>
                     {tabs && <span className="bar-tabs" />}
                 </SheetBar>
             </div>
+            {!open && (
+                <button type="button" className="sheet-hit" onClick={onOpen}>
+                    <span className="sr-only">Open {label}</span>
+                </button>
+            )}
             <span id={`sheet-${id}-label`} className="sr-only">{label}</span>
         </article>
     )
@@ -140,12 +148,20 @@ function ExperienceTable({ columns, rows, emptyText }) {
     )
 }
 
+const sheetOrder = ['experiences', 'skillsets', 'profile']
+
 export default function About({ setIsMenuOpen, navigate }) {
     const [front, setFront] = useState('profile')
 
     const bringToFront = (id) => {
         if (id !== front) playFolderSound()
         setFront(id)
+    }
+
+    const frontIndex = sheetOrder.indexOf(front)
+    const stateOf = (id) => {
+        const i = sheetOrder.indexOf(id)
+        return i === frontIndex ? 'front' : i < frontIndex ? 'before' : 'after'
     }
 
     return (
@@ -167,8 +183,12 @@ export default function About({ setIsMenuOpen, navigate }) {
                 /* Four equal columns with a 32px margin, like the page grid. */
                 .about-stack {
                     --col: calc((100cqw - 64px) / 4);
+                    --step: 112px;
+                    --sliver: 64px;
                     container-type: inline-size;
                     display: grid;
+                    grid-template-columns: minmax(0, 1fr);
+                    overflow-x: clip;
                     padding-bottom: 8rem;
                 }
 
@@ -176,14 +196,43 @@ export default function About({ setIsMenuOpen, navigate }) {
                     grid-area: 1 / 1;
                     align-self: start;
                     position: relative;
+                    margin-top: calc(var(--i, 0) * var(--step));
                     padding: 0 32px;
                     border-radius: 12px 12px 0 0;
                     box-shadow: 0 0 22px rgba(0, 0, 0, 0.14);
+                    translate: 0 var(--lift, 0px);
+                    transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
                     animation: sheetIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
                 }
                 .sheet--experiences { width: calc(100cqw - 32px); background: #f5f5f5; }
-                .sheet--skillsets  { width: calc(32px + 2 * var(--col)); margin-top: 112px; background: #ffe430; animation-delay: 0.08s; }
-                .sheet--profile    { width: calc(32px + 3 * var(--col)); margin-top: 224px; background: #fff; animation-delay: 0.16s; }
+                .sheet--skillsets  { width: calc(32px + 2 * var(--col)); background: #ffe430; animation-delay: 0.08s; }
+                .sheet--profile    { width: calc(32px + 3 * var(--col)); background: #fff; animation-delay: 0.16s; }
+
+                /* Sheets after the open one slide to the right edge and leave a tab. */
+                .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; align-self: stretch; }
+                .sheet.is-after .sheet-inner { visibility: hidden; }
+                .sheet.is-after .sheet-body,
+                .sheet.is-after .sheet-body + .sheet-bar { display: none; }
+
+                /* Whole closed sheet is one big click target. */
+                .sheet-hit {
+                    position: absolute; inset: 0; z-index: 5;
+                    width: 100%; height: 100%;
+                    background: transparent; border: 0; border-radius: inherit;
+                    cursor: pointer; -webkit-tap-highlight-color: transparent;
+                }
+                .sheet-hit:focus-visible { outline: 2px solid #212121; outline-offset: -6px; }
+
+                /* Pop up on hover: tabs rise, side tabs slide out a little. */
+                @media (hover: hover) {
+                    .sheet.is-before:hover { --lift: -10px; box-shadow: 0 -4px 28px rgba(0, 0, 0, 0.22); }
+                    .sheet.is-after:hover { translate: calc(100cqw - var(--sliver) - 16px) 0; box-shadow: -6px 0 28px rgba(0, 0, 0, 0.22); }
+                    .sheet:not(.is-front):hover .hint-arrow { transform: translateX(5px); }
+                }
+                .sheet.is-before:active { --lift: -4px; }
+                @media (prefers-reduced-motion: reduce) {
+                    .sheet { transition: none; animation: none; }
+                }
 
                 @keyframes sheetIn {
                     from { opacity: 0; transform: translateX(-24px); }
@@ -228,7 +277,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     padding: 0 12px;
                     height: 100%;
                 }
-                .bar-tabs button, .bar-label {
+                .bar-tabs button {
                     font: inherit;
                     letter-spacing: inherit;
                     text-transform: inherit;
@@ -238,7 +287,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     cursor: pointer;
                 }
                 .bar-tabs button { min-height: 32px; padding: 0 2px; }
-                .bar-tabs button:hover, .bar-label:hover { text-decoration: underline; text-underline-offset: 3px; }
+                .bar-tabs button:hover { text-decoration: underline; text-underline-offset: 3px; }
 
                 .bar-label {
                     position: relative;
@@ -248,7 +297,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     width: 100%;
                     height: 100%;
                 }
-                .bar-label[aria-pressed='true'] { font-weight: 500; }
+                .is-front .bar-label { font-weight: 500; }
                 .bar-label::before, .bar-label::after {
                     content: '';
                     position: absolute;
@@ -268,9 +317,20 @@ export default function About({ setIsMenuOpen, navigate }) {
                     display: flex;
                     align-items: center;
                     border-bottom: 1px dotted #212121;
-                    padding-left: 12px;
+                    padding: 0 12px;
                     white-space: nowrap;
                 }
+                .sheet .sheet-title--none { height: 0 !important; padding: 0; overflow: hidden; border-bottom: 0; }
+                .xtitle { min-height: 80px; }
+                .xtitle .sheet-title { border-bottom: 0; padding-left: 11px; }
+                .tap-hint {
+                    margin-left: auto;
+                    display: inline-flex; align-items: center; gap: 8px;
+                    font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+                }
+                .hint-touch { display: none; }
+                .hint-arrow { display: inline-block; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+                .is-front .tap-hint { display: none; }
 
                 /* ---- experiences table ---- */
                 .xrow {
@@ -346,38 +406,34 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .prow a:hover, button.prow:hover .prow-value { text-decoration: underline; text-underline-offset: 4px; }
                 button.prow { width: 100%; background: none; border: 0; text-align: left; cursor: pointer; color: inherit; font: inherit; border-bottom: 0; }
 
-                /* ---- narrow screens: a stack of sheets, one open at a time ---- */
+                /* ---- narrow screens: same stack, tighter, dotted rules edge to edge ---- */
                 @media (max-width: 1023px) {
                     .about-head { padding: 6rem 16px 0; }
-                    .about-head h1 { display: block; }
-                    .about-stack { display: flex; flex-direction: column; gap: 12px; padding: 0 10px 5rem; --col: 100cqw; }
-                    .sheet { width: auto !important; margin-top: 0 !important; align-self: stretch; animation-name: sheetInUp; padding: 0 10px 0 22px; }
-                    .sheet::before {
-                        width: 22px;
-                        background: radial-gradient(circle at 11px 16px, #fff 4.5px, rgba(0, 0, 0, 0.22) 5px, rgba(0, 0, 0, 0.22) 5.5px, transparent 6px) 0 0 / 22px 204px repeat-y;
-                    }
-                    .sheet--profile { order: 1; }
-                    .sheet--skillsets { order: 2; }
-                    .sheet--experiences { order: 3; }
-                    .sheet:not(.is-front) .sheet-body,
-                    .sheet:not(.is-front) .sheet-body + .sheet-bar { display: none; }
-                    .sheet:not(.is-front) .sheet-title { border-bottom: 0; }
+                    .about-stack { --step: 92px; --sliver: 45px; --col: 100cqw; padding-bottom: 5rem; }
+                    .sheet { width: auto !important; border-radius: 8px 8px 0 0; animation-name: sheetInUp; }
+                    .sheet.is-before .sheet-body,
+                    .sheet.is-before .sheet-body + .sheet-bar { display: none; }
                     .sheet-bar, .sheet--experiences .sheet-bar { grid-template-columns: 1fr; }
                     .bar-tabs { display: none; }
                     .sheet--experiences .sheet-bar > .bar-label { border-left: 0; }
-                    .sheet-title { height: 56px; font-size: 2rem; }
+                    .sheet-title { height: 60px; font-size: 1.75rem; }
+                    .xtitle { min-height: 60px; height: 60px; }
+                    .hint-touch { display: inline; }
+                    .hint-pointer, .hint-arrow { display: none; }
                     .xhead { display: none; }
                     .xrow { grid-template-columns: 1fr; }
                     .xgutter { display: none; }
                     .xrow > .xcell { border-left: 0; padding-left: 12px; }
+                    .xtitle .sheet-title { padding-left: 12px; }
                     .xcols { grid-template-columns: 1fr; gap: 4px; }
                     .xdata .xcell { padding: 14px 12px; }
-                    .skill-row { grid-template-columns: 56px 1fr; font-size: 1.6rem; height: 60px; }
+                    .skill-row { grid-template-columns: 53px 1fr; font-size: 1.75rem; height: 60px; }
                     .skill-grid { grid-template-columns: 1fr; }
                     .skill-cell:nth-child(odd) { border-right: 0; }
                     .profile-top { grid-template-columns: 1fr; }
                     .profile-left { padding: 14px 12px 12px; }
-                    .profile-photo { width: 100%; max-width: 20rem; margin-top: 16px; }
+                    .profile-name { font-size: 1.75rem; }
+                    .profile-photo { width: 100%; margin-top: 16px; }
                     .profile-bio { padding: 4px 12px 18px; font-size: 0.9rem; line-height: 1.65; }
                     .profile-bio p + p { margin-top: 1em; }
                     .prow { grid-template-columns: 1fr; padding: 10px 0; min-height: 0; gap: 2px; }
@@ -386,6 +442,16 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .xbar { grid-template-columns: 1fr; }
                     .xbar > span:first-child { display: none; }
                     .xbar > span:last-child { border-left: 0; }
+
+                    .sheet-bar, .sheet-title, .xrow, .xbar, .skill-row, .skill-label, .skill-cell, .profile-top, .prow { position: relative; border-bottom: 0; }
+                    .sheet-bar::after, .sheet-title::after, .xrow::after, .xbar::after, .skill-row::after,
+                    .skill-label::after, .skill-cell::after, .profile-top::after, .prow::after {
+                        content: ''; position: absolute; left: -33px; right: -33px; bottom: 0;
+                        border-bottom: 1px dotted #212121; pointer-events: none;
+                    }
+                    .sheet-body + .sheet-bar { border-top: 0; }
+                    .sheet-body + .sheet-bar::after { top: 0; bottom: auto; border-bottom: 0; border-top: 1px dotted #212121; }
+                    .xtitle .sheet-title::after, .sheet-title--none::after, .prow:last-child::after { display: none; }
                 }
 
                 @keyframes sheetInUp {
@@ -398,8 +464,8 @@ export default function About({ setIsMenuOpen, navigate }) {
 
             <header className="about-head">
                 <h1>
-                    <span className="about-title font-title lg:col-start-1">About</span>{' '}
-                    <span className="about-title font-title lg:col-start-2">me</span>
+                    <span className="about-title font-title col-start-1">About</span>{' '}
+                    <span className="about-title font-title col-start-3 lg:col-start-2">me</span>
                 </h1>
             </header>
 
@@ -408,19 +474,19 @@ export default function About({ setIsMenuOpen, navigate }) {
                     id="experiences"
                     label="Experiences"
                     className="sheet--experiences"
-                    front={front === 'experiences'}
-                    rank={1}
-                    onFront={() => bringToFront('experiences')}
+                    index={0}
+                    state={stateOf('experiences')}
+                    onOpen={() => bringToFront('experiences')}
                     tabs={
-                        <span className="bar-tabs">
+                        <span className="bar-tabs" inert={front !== 'experiences' ? true : undefined}>
                             <button type="button" aria-pressed={front === 'profile'} onClick={() => bringToFront('profile')}>About</button>
                             <button type="button" aria-pressed={front === 'skillsets'} onClick={() => bringToFront('skillsets')}>Details</button>
                         </span>
                     }
                     title={
-                        <div className="xrow" style={{ minHeight: 80 }}>
+                        <div className="xrow xtitle">
                             <span className="xgutter" />
-                            <div className="xcell sheet-title" style={{ borderBottom: 0, paddingLeft: 11 }}>Experiences</div>
+                            <div className="xcell sheet-title">Experiences<TapHint /></div>
                         </div>
                     }
                 >
@@ -450,10 +516,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     id="skillsets"
                     label="Skillsets"
                     className="sheet--skillsets"
-                    front={front === 'skillsets'}
-                    rank={2}
-                    onFront={() => bringToFront('skillsets')}
-                    title={<div className="sheet-title">Skillsets</div>}
+                    index={1}
+                    state={stateOf('skillsets')}
+                    onOpen={() => bringToFront('skillsets')}
+                    title={<div className="sheet-title">Skillsets<TapHint /></div>}
                 >
                     {skills.map((label, i) => (
                         <div key={label} className="skill-row">
@@ -489,10 +555,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     id="profile"
                     label="Profile"
                     className="sheet--profile"
-                    front={front === 'profile'}
-                    rank={3}
-                    onFront={() => bringToFront('profile')}
-                    title={<div className="sheet-title" style={{ borderBottom: 0, height: 0, padding: 0, overflow: 'hidden' }} aria-hidden="true" />}
+                    index={2}
+                    state={stateOf('profile')}
+                    onOpen={() => bringToFront('profile')}
+                    title={<div className="sheet-title sheet-title--none" aria-hidden="true" />}
                 >
                     <div className="profile-top">
                         <div className="profile-left">
