@@ -9,10 +9,11 @@ const navLinks = [
 ]
 
 // The keychain model ships three authored clips: Mocha_Swing,
-// Mocha_Spin_360 and Mocha_Spin_Swing.
-const FOOTER_CLIP = 'Mocha_Spin_360'
+// Mocha_Spin_360 and Mocha_Spin_Swing. The footer uses the gentle pendulum.
+const FOOTER_CLIP = 'Mocha_Swing'
 
-// Half speed keeps the backdrop turn calm behind the wordmark.
+// Half speed stretches the 3.2s authored sway into a slow ~6.4s loop so the
+// chain drifts calmly behind the wordmark.
 const FOOTER_PLAYBACK_RATE = 0.5
 
 // Wide screens keep the original framing. On portrait screens the horizontal
