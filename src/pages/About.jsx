@@ -324,7 +324,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .profile-top { display: grid; grid-template-columns: var(--col) 1fr; border-bottom: 1px dotted #212121; }
                 .profile-left { padding: 18px 0 24px 12px; }
                 .profile-name { font-family: var(--font-title); font-size: clamp(2.5rem, 4.4vw, 4rem); line-height: 1; }
-                .profile-photo { width: calc(var(--col) - 44px); aspect-ratio: 4 / 3; margin-top: 24px; object-fit: cover; object-position: center 8%; filter: grayscale(1); display: block; }
+                .profile-photo { width: calc(var(--col) - 44px); aspect-ratio: 1 / 1; margin-top: 24px; object-fit: cover; object-position: center; filter: grayscale(1); display: block; }
                 .profile-bio {
                     padding: 18px 24px 24px 0;
                     font-family: var(--font-body);
@@ -350,8 +350,12 @@ export default function About({ setIsMenuOpen, navigate }) {
                 @media (max-width: 1023px) {
                     .about-head { padding: 6rem 16px 0; }
                     .about-head h1 { display: block; }
-                    .about-stack { display: flex; flex-direction: column; gap: 16px; padding: 0 16px 6rem; --col: 100cqw; }
-                    .sheet { width: auto !important; margin-top: 0 !important; align-self: stretch; animation-name: sheetInUp; }
+                    .about-stack { display: flex; flex-direction: column; gap: 12px; padding: 0 10px 5rem; --col: 100cqw; }
+                    .sheet { width: auto !important; margin-top: 0 !important; align-self: stretch; animation-name: sheetInUp; padding: 0 10px 0 22px; }
+                    .sheet::before {
+                        width: 22px;
+                        background: radial-gradient(circle at 11px 16px, #fff 4.5px, rgba(0, 0, 0, 0.22) 5px, rgba(0, 0, 0, 0.22) 5.5px, transparent 6px) 0 0 / 22px 204px repeat-y;
+                    }
                     .sheet--profile { order: 1; }
                     .sheet--skillsets { order: 2; }
                     .sheet--experiences { order: 3; }
@@ -361,21 +365,22 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .sheet-bar, .sheet--experiences .sheet-bar { grid-template-columns: 1fr; }
                     .bar-tabs { display: none; }
                     .sheet--experiences .sheet-bar > .bar-label { border-left: 0; }
-                    .sheet-title { height: 64px; font-size: 2.25rem; }
+                    .sheet-title { height: 56px; font-size: 2rem; }
                     .xhead { display: none; }
                     .xrow { grid-template-columns: 1fr; }
                     .xgutter { display: none; }
                     .xrow > .xcell { border-left: 0; padding-left: 12px; }
                     .xcols { grid-template-columns: 1fr; gap: 4px; }
                     .xdata .xcell { padding: 14px 12px; }
-                    .skill-row { grid-template-columns: 64px 1fr; font-size: 1.75rem; height: 64px; }
+                    .skill-row { grid-template-columns: 56px 1fr; font-size: 1.6rem; height: 60px; }
                     .skill-grid { grid-template-columns: 1fr; }
                     .skill-cell:nth-child(odd) { border-right: 0; }
                     .profile-top { grid-template-columns: 1fr; }
-                    .profile-left { padding-right: 12px; }
-                    .profile-photo { width: 100%; max-width: 22rem; }
-                    .profile-bio { padding: 0 12px 24px; font-size: 1rem; line-height: 1.7; }
-                    .prow { grid-template-columns: 1fr; padding: 12px 0; min-height: 0; gap: 2px; }
+                    .profile-left { padding: 14px 12px 12px; }
+                    .profile-photo { width: 100%; max-width: 20rem; margin-top: 16px; }
+                    .profile-bio { padding: 4px 12px 18px; font-size: 0.9rem; line-height: 1.65; }
+                    .profile-bio p + p { margin-top: 1em; }
+                    .prow { grid-template-columns: 1fr; padding: 10px 0; min-height: 0; gap: 2px; }
                     .prow-label { font-size: 1.25rem; }
                     .prow-value { padding-left: 12px; }
                     .xbar { grid-template-columns: 1fr; }
