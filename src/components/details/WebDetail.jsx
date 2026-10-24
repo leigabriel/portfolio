@@ -56,17 +56,19 @@ export default function WebDetail({ setIsMenuOpen, navigate, project }) {
                             </ul>
                         </div>
 
-                        <div className="pt-2">
-                            <a
-                                href={project.link}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black text-white text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-black/80 transition-colors"
-                            >
-                                Visit Live Site
-                                <span>→</span>
-                            </a>
-                        </div>
+                        {project.link && (
+                            <div className="pt-2">
+                                <a
+                                    href={project.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-black text-white text-[11px] tracking-[0.15em] uppercase font-medium hover:bg-black/80 transition-colors"
+                                >
+                                    Visit Live Site
+                                    <span>→</span>
+                                </a>
+                            </div>
+                        )}
                     </div>
 
                     <div className="w-full lg:w-[55%] shrink-0 self-end lg:self-auto">
