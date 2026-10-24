@@ -199,14 +199,14 @@ export default function About({ setIsMenuOpen, navigate }) {
                     margin-top: calc(var(--i, 0) * var(--step));
                     padding: 0 32px;
                     border-radius: 12px 12px 0 0;
-                    box-shadow: 0 0 22px rgba(0, 0, 0, 0.14);
+                    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
                     translate: 0 var(--lift, 0px);
-                    transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+                    transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
                     animation: sheetIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
                 }
-                .sheet--experiences { width: calc(100cqw - 32px); background: #f5f5f5; }
-                .sheet--skillsets  { width: calc(32px + 2 * var(--col)); background: #ffe430; animation-delay: 0.08s; }
-                .sheet--profile    { width: calc(32px + 3 * var(--col)); background: #fff; animation-delay: 0.16s; }
+                .sheet--experiences { width: calc(100cqw - 32px); --paper: #f5f5f5; }
+                .sheet--skillsets  { width: calc(32px + 2 * var(--col)); --paper: #ffe430; animation-delay: 0.08s; }
+                .sheet--profile    { width: calc(32px + 3 * var(--col)); --paper: #fff; animation-delay: 0.16s; }
 
                 /* Sheets after the open one slide to the right edge and leave a tab. */
                 .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; align-self: stretch; }
@@ -225,8 +225,8 @@ export default function About({ setIsMenuOpen, navigate }) {
 
                 /* Pop up on hover: tabs rise, side tabs slide out a little. */
                 @media (hover: hover) {
-                    .sheet.is-before:hover { --lift: -10px; box-shadow: 0 -4px 28px rgba(0, 0, 0, 0.22); }
-                    .sheet.is-after:hover { translate: calc(100cqw - var(--sliver) - 16px) 0; box-shadow: -6px 0 28px rgba(0, 0, 0, 0.22); }
+                    .sheet.is-before:hover { --lift: -10px; filter: drop-shadow(0 -4px 14px rgba(0, 0, 0, 0.24)); }
+                    .sheet.is-after:hover { translate: calc(100cqw - var(--sliver) - 16px) 0; filter: drop-shadow(-6px 0 14px rgba(0, 0, 0, 0.24)); }
                     .sheet:not(.is-front):hover .hint-arrow { transform: translateX(5px); }
                 }
                 .sheet.is-before:active { --lift: -4px; }
@@ -239,14 +239,21 @@ export default function About({ setIsMenuOpen, navigate }) {
                     to { opacity: 1; transform: translateX(0); }
                 }
 
-                /* Binder holes down the left margin. */
+                /* The paper itself: punched with real see-through binder holes. */
                 .sheet::before {
                     content: '';
                     position: absolute;
-                    top: 0; bottom: 0; left: 0;
-                    width: 32px;
-                    background: radial-gradient(circle at 16px 16px, #fff 4.5px, rgba(0, 0, 0, 0.22) 5px, rgba(0, 0, 0, 0.22) 5.5px, transparent 6px) 0 0 / 32px 204px repeat-y;
+                    inset: 0;
+                    z-index: -1;
+                    border-radius: inherit;
+                    background: var(--paper);
                     pointer-events: none;
+                    -webkit-mask:
+                        radial-gradient(circle at 16px 16px, transparent 6px, #000 6.5px) 0 0 / 32px 204px repeat-y,
+                        linear-gradient(#000, #000) 32px 0 / calc(100% - 32px) 100% no-repeat;
+                    mask:
+                        radial-gradient(circle at 16px 16px, transparent 6px, #000 6.5px) 0 0 / 32px 204px repeat-y,
+                        linear-gradient(#000, #000) 32px 0 / calc(100% - 32px) 100% no-repeat;
                 }
 
                 .sheet-inner {
