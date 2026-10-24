@@ -199,9 +199,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                     margin-top: calc(var(--i, 0) * var(--step));
                     padding: 0 32px;
                     border-radius: 12px 12px 0 0;
-                    filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
-                    translate: 0 var(--lift, 0px);
-                    transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+                                        translate: 0 var(--lift, 0px);
+                    transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
                     animation: sheetIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
                 }
                 .sheet--experiences { width: calc(100cqw - 32px); --paper: #f5f5f5; }
@@ -225,8 +224,8 @@ export default function About({ setIsMenuOpen, navigate }) {
 
                 /* Pop up on hover: tabs rise, side tabs slide out a little. */
                 @media (hover: hover) {
-                    .sheet.is-before:hover { --lift: -10px; filter: drop-shadow(0 -4px 14px rgba(0, 0, 0, 0.24)); }
-                    .sheet.is-after:hover { translate: calc(100cqw - var(--sliver) - 16px) 0; filter: drop-shadow(-6px 0 14px rgba(0, 0, 0, 0.24)); }
+                    .sheet.is-before:hover { --lift: -10px; --shadow: 0 -4px 18px rgba(0, 0, 0, 0.22); }
+                    .sheet.is-after:hover { translate: calc(100cqw - var(--sliver) - 16px) 0; --shadow: -6px 0 18px rgba(0, 0, 0, 0.22); }
                     .sheet:not(.is-front):hover .hint-arrow { transform: translateX(5px); }
                 }
                 .sheet.is-before:active { --lift: -4px; }
@@ -237,6 +236,18 @@ export default function About({ setIsMenuOpen, navigate }) {
                 @keyframes sheetIn {
                     from { opacity: 0; transform: translateX(-24px); }
                     to { opacity: 1; transform: translateX(0); }
+                }
+
+                /* Outer shadows never paint inside their own box, so the holes stay clean. */
+                .sheet::after {
+                    content: '';
+                    position: absolute;
+                    inset: 0;
+                    z-index: -2;
+                    border-radius: inherit;
+                    box-shadow: var(--shadow, 0 0 14px rgba(0, 0, 0, 0.14));
+                    transition: box-shadow 0.3s ease;
+                    pointer-events: none;
                 }
 
                 /* The paper itself: punched with real see-through binder holes. */
