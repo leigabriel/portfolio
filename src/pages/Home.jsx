@@ -17,7 +17,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                 <Hero />
                 <Suspense fallback={<div className={`w-full ${PAPER_CLASS}`} />}>
                 <AboutSection
-                    src="/images/1001.png"
+                    src="/images/1001.webp"
                     alt="leimxnsquare print to crumple"
                     width={2880}
                     height={2160}

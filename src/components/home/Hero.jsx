@@ -65,6 +65,8 @@ export default function Hero() {
         let wheelObserver
         let dragObserver
         let isVisible = true
+        let isCovered = false
+        let heroHeight = 0
 
         function pointOnRing(angle, radius) {
             const depth = Math.cos(angle)
@@ -177,8 +179,15 @@ export default function Hero() {
             ctx.restore()
         }
 
+        // The hero is sticky, so it keeps intersecting the viewport while the
+        // About and Featured sections scroll over it. Stop drawing once it is
+        // fully covered instead of repainting the ring behind opaque content.
+        function syncCoverage() {
+            isCovered = heroHeight > 0 && window.scrollY >= heroHeight - 1
+        }
+
         function tick() {
-            if (!isVisible) return
+            if (!isVisible || isCovered) return
 
             const delta = gsap.ticker.deltaRatio()
 
@@ -213,6 +222,8 @@ export default function Hero() {
                 return
             }
 
+            heroHeight = height
+            syncCoverage()
             viewport.width = width
             viewport.height = height
             viewport.dpr = dpr
@@ -234,6 +245,8 @@ export default function Hero() {
         intersectionObserver.observe(section)
 
         window.addEventListener('resize', resize)
+        window.addEventListener('scroll', syncCoverage, { passive: true })
+        syncCoverage()
 
         const gsapContext = gsap.context(() => {
             resize()
@@ -275,6 +288,7 @@ export default function Hero() {
             resizeObserver.disconnect()
             intersectionObserver.disconnect()
             window.removeEventListener('resize', resize)
+            window.removeEventListener('scroll', syncCoverage)
             gsap.ticker.remove(tick)
             gsapContext.revert()
         }

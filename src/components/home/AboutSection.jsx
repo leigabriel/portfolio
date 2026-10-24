@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
+const MAX_RENDER_DPR = 2;
+// The paper path is expensive to simulate, so keep the last result across page
+// remounts instead of recomputing it every time the home page is revisited.
+let paperPathCache = null;
 const spring = (value = 0) => ({ value, target: value, velocity: 0 });
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const finite = (value, fallback) => (Number.isFinite(value) ? value : fallback);
@@ -272,7 +276,6 @@ const AboutSection = ({
     className = '',
     style
 }) => {
-    const pathCache = useRef(null);
     const rootRef = useRef(null);
     const canvasRef = useRef(null);
     const hitRef = useRef(null);
@@ -376,13 +379,13 @@ const AboutSection = ({
             }
         }
         const pathKey = JSON.stringify([paperWidth, paperHeight, resolution, foldTotal, sharpness, depth, seed]);
-        if (pathCache.current?.key !== pathKey) {
-            pathCache.current = {
+        if (paperPathCache?.key !== pathKey) {
+            paperPathCache = {
                 key: pathKey,
                 value: createPaperPath(original, indices, shortSide, foldTotal, sharpness, depth, finite(seed, 7))
             };
         }
-        const paperPath = pathCache.current.value;
+        const paperPath = paperPathCache.value;
         const renderPositions = new Float32Array(indices.length * 3);
         const renderNormals = new Float32Array(indices.length * 3);
         const renderUvs = new Float32Array(indices.length * 2);
@@ -706,7 +709,7 @@ const AboutSection = ({
             camera.position.z = viewportHeight / (2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)));
             camera.updateProjectionMatrix();
             camera.updateMatrixWorld();
-            renderer.setPixelRatio(nativePixelRatio());
+            renderer.setPixelRatio(Math.min(nativePixelRatio(), MAX_RENDER_DPR));
             renderer.setSize(viewportWidth, viewportHeight, false);
             const reach = Math.max(viewportWidth, viewportHeight);
             const angle = THREE.MathUtils.degToRad(finite(lightAngle, -35));
