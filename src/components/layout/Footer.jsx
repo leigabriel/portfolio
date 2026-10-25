@@ -449,7 +449,7 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
                             href="https://www.wildyriftian.com"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="social-link !py-0.5 underline underline-offset-4"
+                            className="social-link !py-0.5 text-[#0034ff] no-underline"
                         >
                             wildyriftian.com
                         </a>
