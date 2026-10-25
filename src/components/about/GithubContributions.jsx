@@ -12,7 +12,7 @@ const GAP = 1
 const STEP = CELL + GAP
 const ROWS = 7
 
-const LEVEL_COLORS = ['#2f2f2f', '#14226b', '#0034ff', '#c8d600', '#ffff00']
+const LEVEL_COLORS = ['#333333', '#6b6b12', '#a6a600', '#dcdc00', '#ffff00']
 
 function readCache() {
     try {
