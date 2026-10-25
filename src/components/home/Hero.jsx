@@ -28,19 +28,13 @@ const BACK_FILL = '#d8d4ce'
 const SLICES_MAX = 120
 const SLICES_MIN = 48
 const SLICE_BUDGET = 960
-const SLICE_BUDGET_NARROW = 520
-const NARROW_BREAKPOINT = 640
 const LOAD_CONCURRENCY = 3
 
-// The ring divides its height between however many cards it carries, so the
-// card count sets how large each card reads. The reference uses eight; narrow
-// screens use fewer, larger cards (and download fewer of the ~2.5 MB posters).
+// The ring carries the same eight cards on every screen size.
 const CARD_LIMIT = 8
-const NARROW_CARD_LIMIT = 5
 
-function computeSlices(count, width) {
-    const budget = width < NARROW_BREAKPOINT ? SLICE_BUDGET_NARROW : SLICE_BUDGET
-    return Math.max(SLICES_MIN, Math.min(SLICES_MAX, Math.round(budget / count)))
+function computeSlices(count) {
+    return Math.max(SLICES_MIN, Math.min(SLICES_MAX, Math.round(SLICE_BUDGET / count)))
 }
 
 export default function Hero() {
@@ -89,8 +83,7 @@ export default function Hero() {
             return { src, canvas, ctx: canvas.getContext('2d'), ready: false }
         }
 
-        const cardCount = window.innerWidth < NARROW_BREAKPOINT ? NARROW_CARD_LIMIT : CARD_LIMIT
-        const cards = homeImages.slice(0, cardCount).map(createCard)
+        const cards = homeImages.slice(0, CARD_LIMIT).map(createCard)
         let nextCard = 0
 
         function paintCard(card, image) {
@@ -227,7 +220,7 @@ export default function Hero() {
             viewport.width = width
             viewport.height = height
             viewport.dpr = dpr
-            viewport.slices = computeSlices(cards.length, width)
+            viewport.slices = computeSlices(cards.length)
 
             canvas.width = Math.round(width * dpr)
             canvas.height = Math.round(height * dpr)

@@ -316,16 +316,6 @@ export default function About({ setIsMenuOpen, navigate }) {
                     height: 100%;
                 }
                 .is-front .bar-label { font-weight: 500; }
-                .bar-label::before, .bar-label::after {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    width: 6px; height: 6px;
-                    background: #212121;
-                    transform: translateY(-50%);
-                }
-                .bar-label::before { left: 14px; }
-                .bar-label::after { right: 14px; }
 
                 .sheet-title {
                     font-family: var(--font-title);
@@ -431,6 +421,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .sheet { width: auto !important; border-radius: 8px 8px 0 0; animation-name: sheetInUp; }
                     .sheet.is-before .sheet-body,
                     .sheet.is-before .sheet-body + .sheet-bar { display: none; }
+                    /* Closed sheets run on underneath the next ones, so the binder holes show the paper behind. */
+                    .sheet.is-before { min-height: calc((3 - var(--i, 0)) * var(--step)); }
                     .sheet-bar, .sheet--experiences .sheet-bar { grid-template-columns: 1fr; }
                     .bar-tabs { display: none; }
                     .sheet--experiences .sheet-bar > .bar-label { border-left: 0; }
