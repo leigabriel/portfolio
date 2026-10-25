@@ -127,10 +127,10 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                 /* Staggered folder tabs on large screens: each tab sits one step
                    further right, with the title centred inside its own tab. */
                 .folder-tab {
-                    --tab-step: min(22.5rem, 18.75vw);
+                    --tab-slant: 2.34375rem;
+                    --tab-step: clamp(18rem, 25.52vw, 42rem);
                     --tab-offset: 0rem;
-                    --tab-width: 29rem;
-                    --tab-slant: 4.6875rem;
+                    --tab-width: calc(var(--tab-step) - var(--tab-slant) - 0.625rem);
                 }
 
                 .folder-tab--2 {
@@ -142,6 +142,14 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                 }
 
                 @media (min-width: 1024px) {
+                    /* Each tab is exactly one slant tall and the next folder starts
+                       right under it, so the closed folders form a tight staircase. */
+                    .folder-tab .tab-btn { height: var(--tab-slant); }
+                    .folder-tab .tab-btn > div:first-child { padding-bottom: 0.25rem; }
+                    .folder-tab .folder-title { font-size: 1.75rem; }
+                    .folder-tab--2, .folder-tab--3 { margin-top: calc(var(--tab-slant) * -2); }
+                    .folder-tab > :last-child { height: calc(var(--tab-slant) * 2); }
+
                     .folder-tab {
                         clip-path: polygon(
                             var(--tab-offset) 0,

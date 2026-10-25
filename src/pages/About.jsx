@@ -209,10 +209,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .sheet--github     { width: calc(32px + 3 * var(--col)); --paper: #212121; --line: rgba(255, 255, 255, 0.5); --ink: #fff; color: #fff; animation-delay: 0.16s; }
 
                 /* Sheets after the open one slide to the right edge and leave a tab. */
-                .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; align-self: stretch; }
+                /* Their content stays laid out (just invisible), so the tab keeps the
+                   card's full height instead of being cut to the open card's. */
+                .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; }
                 .sheet.is-after .sheet-inner { visibility: hidden; }
-                .sheet.is-after .sheet-body,
-                .sheet.is-after .sheet-body + .sheet-bar { display: none; }
 
                 /* Whole closed sheet is one big click target. */
                 .sheet-hit {
