@@ -61,7 +61,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
                             className="nav-hover-btn text-xl tracking-widest uppercase cursor-pointer border-none bg-transparent px-1 py-1"
                             style={{ color: hovered === idx ? hoverText : 'inherit', transition: 'color 0.3s ease' }}
                         >
-                            <span className="relative isolate inline-block px-1 leading-[1.15]">
+                            <span className="relative isolate inline-block py-1.5 leading-[1.15]">
                                 <span
                                     className="absolute inset-0 -z-10 transition-transform duration-300 ease-out"
                                     style={{
@@ -70,7 +70,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
                                         transformOrigin: 'bottom',
                                     }}
                                 />
-                                {label}
+                                <span className="-mr-[0.1em] inline-block">{label}</span>
                             </span>
                         </button>
                     ))}
