@@ -167,9 +167,9 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         width: var(--tab-width);
                         max-width: var(--tab-width);
                         margin-left: var(--tab-offset);
-                        padding-left: 0;
+                        padding-left: 1.25rem;
                         padding-right: 0;
-                        text-align: center;
+                        text-align: left;
                     }
 
                     /* The keychain hangs in its own left gutter so it never
