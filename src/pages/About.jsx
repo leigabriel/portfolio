@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/layout/Header'
+import GithubContributions from '../components/about/GithubContributions'
 
 const skillGroups = [
     {
@@ -148,7 +149,7 @@ function ExperienceTable({ columns, rows, emptyText }) {
     )
 }
 
-const sheetOrder = ['experiences', 'skillsets', 'profile']
+const sheetOrder = ['experiences', 'skillsets', 'github', 'profile']
 
 export default function About({ setIsMenuOpen, navigate }) {
     const [front, setFront] = useState('profile')
@@ -205,7 +206,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                 }
                 .sheet--experiences { width: calc(100cqw - 32px); --paper: #f5f5f5; }
                 .sheet--skillsets  { width: calc(32px + 2 * var(--col)); --paper: #ffe430; animation-delay: 0.08s; }
-                .sheet--profile    { width: calc(32px + 3 * var(--col)); --paper: #fff; animation-delay: 0.16s; }
+                .sheet--profile    { width: calc(32px + 3 * var(--col)); --paper: #fff; animation-delay: 0.24s; }
+                .sheet--github     { width: calc(32px + 3 * var(--col)); --paper: #212121; --line: rgba(255, 255, 255, 0.5); --ink: #fff; color: #fff; animation-delay: 0.16s; }
 
                 /* Sheets after the open one slide to the right edge and leave a tab. */
                 .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; align-self: stretch; }
@@ -220,7 +222,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     background: transparent; border: 0; border-radius: inherit;
                     cursor: pointer; -webkit-tap-highlight-color: transparent;
                 }
-                .sheet-hit:focus-visible { outline: 2px solid #212121; outline-offset: -6px; }
+                .sheet-hit:focus-visible { outline: 2px solid var(--ink, #212121); outline-offset: -6px; }
 
                 /* Pop up on hover: tabs rise, side tabs slide out a little. */
                 @media (hover: hover) {
@@ -268,8 +270,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                 }
 
                 .sheet-inner {
-                    border-left: 1px dotted #212121;
-                    border-right: 1px dotted #212121;
+                    border-left: 1px dotted var(--line, #212121);
+                    border-right: 1px dotted var(--line, #212121);
                 }
 
                 .sheet-bar {
@@ -278,14 +280,14 @@ export default function About({ setIsMenuOpen, navigate }) {
                     height: 32px;
                     grid-template-columns: 1fr;
                     align-items: center;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                     font-size: 12px;
                     letter-spacing: 0.06em;
                     text-transform: uppercase;
                 }
-                .sheet-body + .sheet-bar { border-top: 1px dotted #212121; border-bottom: 0; }
+                .sheet-body + .sheet-bar { border-top: 1px dotted var(--line, #212121); border-bottom: 0; }
                 .sheet--experiences .sheet-bar { grid-template-columns: calc(var(--col) - 11px) 1fr; }
-                .sheet--experiences .sheet-bar > .bar-label { border-left: 1px dotted #212121; }
+                .sheet--experiences .sheet-bar > .bar-label { border-left: 1px dotted var(--line, #212121); }
                 .sheet--experiences .sheet-bar > .bar-tabs { border: 0; }
 
                 .bar-tabs {
@@ -299,7 +301,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     font: inherit;
                     letter-spacing: inherit;
                     text-transform: inherit;
-                    color: #212121;
+                    color: var(--ink, #212121);
                     background: none;
                     border: 0;
                     cursor: pointer;
@@ -324,7 +326,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     height: 80px;
                     display: flex;
                     align-items: center;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                     padding: 0 12px;
                     white-space: nowrap;
                 }
@@ -344,10 +346,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .xrow {
                     display: grid;
                     grid-template-columns: calc(var(--col) - 11px) 1fr;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                     min-height: 48px;
                 }
-                .xrow > .xcell { border-left: 1px dotted #212121; padding-left: 11px; display: flex; align-items: center; }
+                .xrow > .xcell { border-left: 1px dotted var(--line, #212121); padding-left: 11px; display: flex; align-items: center; }
                 .xrow > .xcell > .xcols { width: 100%; }
                 .xcols { display: grid; grid-template-columns: var(--col) var(--col) 1fr; }
                 .xdata { min-height: 72px; }
@@ -359,11 +361,11 @@ export default function About({ setIsMenuOpen, navigate }) {
                 .xbar {
                     display: grid;
                     grid-template-columns: calc(var(--col) - 11px) 1fr;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                     height: 32px;
                     font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
                 }
-                .xbar > span:last-child { display: flex; align-items: center; justify-content: center; border-left: 1px dotted #212121; }
+                .xbar > span:last-child { display: flex; align-items: center; justify-content: center; border-left: 1px dotted var(--line, #212121); }
 
                 /* ---- skillsets ---- */
                 .skill-row {
@@ -372,24 +374,24 @@ export default function About({ setIsMenuOpen, navigate }) {
                     align-items: center;
                     height: 80px;
                     padding-left: 12px;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                     font-family: var(--font-title);
                     font-size: clamp(1.9rem, 3.4vw, 3rem);
                     line-height: 1;
                 }
-                .skill-label { grid-column: 1 / -1; text-align: center; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; height: 32px; display: flex; align-items: center; justify-content: center; border-bottom: 1px dotted #212121; }
+                .skill-label { grid-column: 1 / -1; text-align: center; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; height: 32px; display: flex; align-items: center; justify-content: center; border-bottom: 1px dotted var(--line, #212121); }
                 .skill-grid { display: grid; grid-template-columns: 1fr 1fr; }
                 .skill-cell {
                     display: flex; align-items: center; gap: 10px;
                     min-height: 48px; padding: 0 12px;
                     font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                 }
-                .skill-cell:nth-child(odd) { border-right: 1px dotted #212121; }
+                .skill-cell:nth-child(odd) { border-right: 1px dotted var(--line, #212121); }
                 .skill-cell img { width: 20px; height: 20px; object-fit: contain; flex: none; }
 
                 /* ---- profile ---- */
-                .profile-top { display: grid; grid-template-columns: var(--col) 1fr; border-bottom: 1px dotted #212121; }
+                .profile-top { display: grid; grid-template-columns: var(--col) 1fr; border-bottom: 1px dotted var(--line, #212121); }
                 .profile-left { padding: 18px 0 24px 12px; }
                 .profile-name { font-family: var(--font-title); font-size: clamp(2.5rem, 4.4vw, 4rem); line-height: 1; }
                 .profile-photo { width: calc(var(--col) - 44px); aspect-ratio: 1 / 1; margin-top: 24px; object-fit: cover; object-position: center; filter: grayscale(1); display: block; }
@@ -406,13 +408,41 @@ export default function About({ setIsMenuOpen, navigate }) {
                     grid-template-columns: var(--col) 1fr;
                     align-items: center;
                     min-height: 80px;
-                    border-bottom: 1px dotted #212121;
+                    border-bottom: 1px dotted var(--line, #212121);
                 }
                 .prow:last-child { border-bottom: 0; }
                 .prow-label { padding-left: 12px; font-family: var(--font-body); font-size: clamp(1.1rem, 1.6vw, 1.5rem); line-height: 1; letter-spacing: 0.02em; }
                 .prow-value { font-family: var(--font-body); font-size: clamp(0.9rem, 1.2vw, 1.1rem); overflow-wrap: anywhere; }
                 .prow a:hover, button.prow:hover .prow-value { text-decoration: underline; text-underline-offset: 4px; }
                 button.prow { width: 100%; background: none; border: 0; text-align: left; cursor: pointer; color: inherit; font: inherit; border-bottom: 0; }
+
+                /* ---- github contributions (pixelated) ---- */
+                .gh-stats { display: grid; grid-template-columns: repeat(4, 1fr); border-bottom: 1px dotted var(--line); }
+                .gh-stat { display: flex; flex-direction: column; justify-content: center; gap: 10px; min-height: 120px; padding: 0 12px; border-right: 1px dotted var(--line); transition: background 0.2s steps(3); }
+                .gh-stat:last-child { border-right: 0; }
+                .gh-stat:hover { background: #0034ff; }
+                .gh-num { font-family: var(--font-title); font-size: clamp(2.4rem, 4vw, 3.6rem); line-height: 1; color: #ffff00; }
+                .gh-stat:nth-child(even) .gh-num { color: #fff; }
+                .gh-stat:hover .gh-num { color: #ffff00; }
+                .gh-cap { font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+                .gh-scroll { overflow-x: auto; padding: 18px 12px 14px; border-bottom: 1px dotted var(--line); scrollbar-width: thin; scrollbar-color: #0034ff transparent; }
+                .gh-scroll:focus-visible { outline: 2px solid #ffff00; outline-offset: -4px; }
+                .gh-chart { position: relative; min-width: 520px; }
+                .gh-months { position: relative; height: 18px; font-family: var(--font-body); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; }
+                .gh-months span { position: absolute; top: 0; }
+                .gh-canvas { display: block; width: 100%; height: auto; image-rendering: pixelated; cursor: crosshair; touch-action: pan-x pan-y; }
+                .gh-chart::after {
+                    content: ''; position: absolute; left: 0; right: 0; bottom: 0; top: 18px; pointer-events: none;
+                    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.16) 0 1px, transparent 1px 3px);
+                }
+                .gh-meta { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; padding: 14px 12px; border-bottom: 1px dotted var(--line); font-family: var(--font-body); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+                .gh-readout { color: #ffff00; min-height: 1.2em; }
+                .gh-legend { display: inline-flex; align-items: center; gap: 4px; }
+                .gh-legend i { display: inline-block; width: 12px; height: 12px; }
+                .gh-legend i:first-of-type { margin-left: 6px; }
+                .gh-legend i:last-of-type { margin-right: 6px; }
+                .sheet--github .gh-link:hover { background: #0034ff; }
+                .sheet--github .gh-link:hover .prow-value { text-decoration: none; color: #ffff00; }
 
                 /* ---- narrow screens: same stack, tighter, dotted rules edge to edge ---- */
                 @media (max-width: 1023px) {
@@ -422,7 +452,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .sheet.is-before .sheet-body,
                     .sheet.is-before .sheet-body + .sheet-bar { display: none; }
                     /* Closed sheets run on underneath the next ones, so the binder holes show the paper behind. */
-                    .sheet.is-before { min-height: calc((3 - var(--i, 0)) * var(--step)); }
+                    .sheet.is-before { min-height: calc(var(--step) * 4); }
                     .sheet-bar, .sheet--experiences .sheet-bar { grid-template-columns: 1fr; }
                     .bar-tabs { display: none; }
                     .sheet--experiences .sheet-bar > .bar-label { border-left: 0; }
@@ -430,6 +460,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .xtitle { min-height: 60px; height: 60px; }
                     .hint-touch { display: inline; }
                     .hint-pointer, .hint-arrow { display: none; }
+                    .gh-stats { grid-template-columns: 1fr 1fr; }
+                    .gh-stat { min-height: 96px; }
+                    .gh-stat:nth-child(2) { border-right: 0; }
+                    .gh-stat:nth-child(-n+2) { border-bottom: 1px dotted var(--line); }
                     .xhead { display: none; }
                     .xrow { grid-template-columns: 1fr; }
                     .xgutter { display: none; }
@@ -457,10 +491,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .sheet-bar::after, .sheet-title::after, .xrow::after, .xbar::after, .skill-row::after,
                     .skill-label::after, .skill-cell::after, .profile-top::after, .prow::after {
                         content: ''; position: absolute; left: -33px; right: -33px; bottom: 0;
-                        border-bottom: 1px dotted #212121; pointer-events: none;
+                        border-bottom: 1px dotted var(--line, #212121); pointer-events: none;
                     }
                     .sheet-body + .sheet-bar { border-top: 0; }
-                    .sheet-body + .sheet-bar::after { top: 0; bottom: auto; border-bottom: 0; border-top: 1px dotted #212121; }
+                    .sheet-body + .sheet-bar::after { top: 0; bottom: auto; border-bottom: 0; border-top: 1px dotted var(--line, #212121); }
                     .xtitle .sheet-title::after, .sheet-title--none::after, .prow:last-child::after { display: none; }
                 }
 
@@ -562,10 +596,22 @@ export default function About({ setIsMenuOpen, navigate }) {
                 </Sheet>
 
                 <Sheet
+                    id="github"
+                    label="GitHub"
+                    className="sheet--github"
+                    index={2}
+                    state={stateOf('github')}
+                    onOpen={() => bringToFront('github')}
+                    title={<div className="sheet-title">GitHub<TapHint /></div>}
+                >
+                    <GithubContributions active={front === 'github'} />
+                </Sheet>
+
+                <Sheet
                     id="profile"
                     label="Profile"
                     className="sheet--profile"
-                    index={2}
+                    index={3}
                     state={stateOf('profile')}
                     onOpen={() => bringToFront('profile')}
                     title={<div className="sheet-title sheet-title--none" aria-hidden="true" />}
