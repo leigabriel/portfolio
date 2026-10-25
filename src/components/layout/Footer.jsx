@@ -440,6 +440,21 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
                         ))}
                     </div>
 
+                    <p
+                        className="reveal font-mono-custom text-[11px] sm:text-xs tracking-[0.2em] uppercase text-black/70 pb-3 sm:pb-4"
+                        style={{ animationDelay: '0.42s' }}
+                    >
+                        Design inspired by{' '}
+                        <a
+                            href="https://www.wildyriftian.com"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="social-link !py-0.5 text-[#0034ff] no-underline"
+                        >
+                            wildyriftian.com
+                        </a>
+                    </p>
+
                     <div
                         className="reveal w-full overflow-hidden"
                         style={{ animationDelay: '0.45s' }}
