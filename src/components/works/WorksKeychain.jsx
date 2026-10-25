@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import { createGltfLoader } from '../../lib/gltf'
 
 // Every keychain model ships the same three authored clips: Mocha_Swing,
 // Mocha_Spin_360 and Mocha_Spin_Swing. Each is a LINEAR loop driving
@@ -10,6 +10,8 @@ const SPIN_CLIP = 'Mocha_Spin_360'
 // Half speed keeps the turn calm behind the folder copy. Scaling the mixer
 // action rather than the delta time keeps the clip's own loop boundaries.
 const PLAYBACK_RATE = 0.5
+// Decorative canvases don't need retina-level pixel density.
+const MAX_PIXEL_RATIO = 1.5
 
 export default function WorksKeychain({ src, targetSize = 3.4, className = '' }) {
     const canvasRef = useRef(null)
@@ -35,7 +37,8 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
             return undefined
         }
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO))
+        renderer.transmissionResolutionScale = 0.5
         renderer.setClearColor(0x000000, 0)
         renderer.outputColorSpace = THREE.SRGBColorSpace
         renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -72,7 +75,7 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
         let model = null
         let mixer = null
         let cancelled = false
-        const loader = new GLTFLoader()
+        const loader = createGltfLoader()
         loader.load(
             src,
             (gltf) => {
