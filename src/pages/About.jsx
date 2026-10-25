@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Header from '../components/layout/Header'
+import { playSfx } from '../lib/sfx'
 import GithubContributions from '../components/about/GithubContributions'
 
 const skillGroups = [
@@ -51,9 +52,7 @@ const bio = [
 ]
 
 function playFolderSound() {
-    const audio = new Audio('/sounds/folder_sfx.mp3')
-    audio.volume = 0.5
-    audio.play().catch(() => { })
+    playSfx({ volume: 0.5 })
 }
 
 const contactRows = [

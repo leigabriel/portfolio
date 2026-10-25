@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { playSfx, preloadSfx } from '../../lib/sfx'
 import useHoverHide from '../../hooks/useHoverHide'
 
 const navLinks = [
@@ -12,6 +13,8 @@ const navLinks = [
 // The header owns its fixed positioning and stays transparent (no backing bar
 // or blur). `variant` sets the text colour for both the desktop nav and the
 // mobile bar.
+preloadSfx()
+
 export default function Header({ setIsMenuOpen, navigate, variant = 'light', className = '', style = {} }) {
     const [hovered, setHovered] = useState(null)
     const headerVisible = useHoverHide()
@@ -22,10 +25,7 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
     const hoverText = isLight ? '#000' : '#fff'
 
     const handleOpen = useCallback(() => {
-        const menuSound = new Audio('/sounds/folder_sfx.mp3')
-        menuSound.volume = 0.7
-        menuSound.playbackRate = 1.15
-        menuSound.play().catch(() => {})
+        playSfx({ volume: 0.7, rate: 1.15 })
         setIsMenuOpen(true)
     }, [setIsMenuOpen])
 

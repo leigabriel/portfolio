@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import Header from '../components/layout/Header'
+import { playSfx } from '../lib/sfx'
 import { posterProjects, webProjects, motionProjects } from '../data'
 const WorksKeychain = lazy(() => import('../components/works/WorksKeychain'))
 
@@ -99,9 +100,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
     const handleTabClick = (index) => {
         const isOpening = activeTab !== index
         if (isOpening) {
-            const audio = new Audio('/sounds/folder_sfx.mp3')
-            audio.volume = 0.5
-            audio.play().catch(() => { })
+            playSfx({ volume: 0.5 })
         }
         setSettledTab(null)
         setActiveTab(activeTab === index ? null : index)
