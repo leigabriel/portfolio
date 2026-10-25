@@ -149,7 +149,7 @@ function ExperienceTable({ columns, rows, emptyText }) {
     )
 }
 
-const sheetOrder = ['experiences', 'skillsets', 'profile', 'github']
+const sheetOrder = ['experiences', 'skillsets', 'github', 'profile']
 
 export default function About({ setIsMenuOpen, navigate }) {
     const [front, setFront] = useState('profile')
@@ -206,8 +206,8 @@ export default function About({ setIsMenuOpen, navigate }) {
                 }
                 .sheet--experiences { width: calc(100cqw - 32px); --paper: #f5f5f5; }
                 .sheet--skillsets  { width: calc(32px + 2 * var(--col)); --paper: #ffe430; animation-delay: 0.08s; }
-                .sheet--profile    { width: calc(32px + 3 * var(--col)); --paper: #fff; animation-delay: 0.16s; }
-                .sheet--github     { width: calc(32px + 3 * var(--col)); --paper: #212121; --line: rgba(255, 255, 255, 0.5); --ink: #fff; color: #fff; animation-delay: 0.24s; }
+                .sheet--profile    { width: calc(32px + 3 * var(--col)); --paper: #fff; animation-delay: 0.24s; }
+                .sheet--github     { width: calc(32px + 3 * var(--col)); --paper: #212121; --line: rgba(255, 255, 255, 0.5); --ink: #fff; color: #fff; animation-delay: 0.16s; }
 
                 /* Sheets after the open one slide to the right edge and leave a tab. */
                 .sheet.is-after { translate: calc(100cqw - var(--sliver)) 0; align-self: stretch; }
@@ -596,10 +596,22 @@ export default function About({ setIsMenuOpen, navigate }) {
                 </Sheet>
 
                 <Sheet
+                    id="github"
+                    label="GitHub"
+                    className="sheet--github"
+                    index={2}
+                    state={stateOf('github')}
+                    onOpen={() => bringToFront('github')}
+                    title={<div className="sheet-title">GitHub<TapHint /></div>}
+                >
+                    <GithubContributions active={front === 'github'} />
+                </Sheet>
+
+                <Sheet
                     id="profile"
                     label="Profile"
                     className="sheet--profile"
-                    index={2}
+                    index={3}
                     state={stateOf('profile')}
                     onOpen={() => bringToFront('profile')}
                     title={<div className="sheet-title sheet-title--none" aria-hidden="true" />}
@@ -635,18 +647,6 @@ export default function About({ setIsMenuOpen, navigate }) {
                         <span className="prow-label">works</span>
                         <span className="prow-value">view portfolio →</span>
                     </button>
-                </Sheet>
-
-                <Sheet
-                    id="github"
-                    label="GitHub"
-                    className="sheet--github"
-                    index={3}
-                    state={stateOf('github')}
-                    onOpen={() => bringToFront('github')}
-                    title={<div className="sheet-title">GitHub<TapHint /></div>}
-                >
-                    <GithubContributions active={front === 'github'} />
                 </Sheet>
             </div>
         </main>
