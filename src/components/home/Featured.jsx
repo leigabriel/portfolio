@@ -107,7 +107,7 @@ export default function Featured({ navigate }) {
             </header>
 
             <div className="px-(--featured-pad) pb-[clamp(4rem,11vh,8rem)]">
-                <ol className="m-0 grid list-none grid-cols-3 gap-[clamp(0.5rem,1.8vw,1.5rem)] p-0">
+                <ol className="m-0 grid list-none grid-cols-2 gap-[clamp(0.75rem,1.8vw,1.5rem)] lg:grid-cols-3 p-0">
                     {featuredProjects.map((item, index) => (
                         <li key={item.key} className="featured-card m-0 p-0">
                             <a
@@ -132,19 +132,19 @@ export default function Featured({ navigate }) {
                                 </div>
 
                                 <div
-                                    className="mt-[clamp(0.3rem,0.8vw,0.6rem)] flex flex-col border border-black text-[9px] sm:flex-row sm:text-[11px] md:text-xs lg:text-sm uppercase"
+                                    className="mt-[clamp(0.3rem,0.8vw,0.6rem)] flex border border-black text-[10px] sm:text-[11px] md:text-xs lg:text-sm uppercase"
                                     data-reveal
                                 >
                                     <span className="min-w-0 flex-1 truncate px-1.5 py-1.5 tracking-[0.06em] sm:px-2.5 sm:py-2 sm:tracking-[0.16em] transition-colors duration-300 group-hover:bg-black group-hover:text-white">
                                         {item.title}
                                     </span>
-                                    <span className="shrink-0 border-t border-black px-1.5 py-1.5 tracking-wider sm:border-t-0 sm:border-l sm:px-2.5 sm:py-2 sm:tracking-widest text-black/75 transition-colors duration-300 group-hover:bg-black group-hover:text-white">
+                                    <span className="shrink-0 border-l border-black px-1.5 py-1.5 tracking-wider sm:px-2.5 sm:py-2 sm:tracking-widest text-black/75 transition-colors duration-300 group-hover:bg-black group-hover:text-white">
                                         {item.year}
                                     </span>
                                 </div>
 
                                 <span
-                                    className="mt-[clamp(0.35rem,1vw,0.75rem)] inline-block text-[8px] sm:text-[11px] lg:text-[13px] tracking-[0.1em] sm:tracking-[0.22em] text-black/60 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
+                                    className="mt-[clamp(0.35rem,1vw,0.75rem)] inline-block text-[10px] sm:text-[11px] lg:text-[13px] tracking-[0.14em] sm:tracking-[0.22em] text-black/60 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
                                     data-reveal
                                 >
                                     View Project
