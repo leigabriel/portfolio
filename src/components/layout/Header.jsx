@@ -58,18 +58,20 @@ export default function Header({ setIsMenuOpen, navigate, variant = 'light', cla
                             onMouseLeave={() => setHovered(null)}
                             onFocus={() => setHovered(idx)}
                             onBlur={() => setHovered(null)}
-                            className="nav-hover-btn text-xl tracking-widest uppercase cursor-pointer border-none px-2 py-2 relative isolate"
+                            className="nav-hover-btn text-xl tracking-widest uppercase cursor-pointer border-none bg-transparent px-1 py-1"
                             style={{ color: hovered === idx ? hoverText : 'inherit', transition: 'color 0.3s ease' }}
                         >
-                            <span
-                                className="absolute inset-0 w-full h-full transition-transform duration-300 ease-out -z-10"
-                                style={{
-                                    background: hoverBg,
-                                    transform: hovered === idx ? 'scaleY(1)' : 'scaleY(0)',
-                                    transformOrigin: 'bottom',
-                                }}
-                            />
-                            {label}
+                            <span className="relative isolate inline-block px-1 leading-[1.15]">
+                                <span
+                                    className="absolute inset-0 -z-10 transition-transform duration-300 ease-out"
+                                    style={{
+                                        background: hoverBg,
+                                        transform: hovered === idx ? 'scaleY(1)' : 'scaleY(0)',
+                                        transformOrigin: 'bottom',
+                                    }}
+                                />
+                                {label}
+                            </span>
                         </button>
                     ))}
                 </nav>
