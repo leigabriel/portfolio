@@ -118,64 +118,88 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
 
                 .works-keychain {
                     z-index: 0;
-                    top: clamp(0.5rem, 1.5vw, 1.25rem);
+                    top: calc(var(--head) + 0.5rem);
                     left: clamp(0.5rem, 1.5vw, 1.25rem);
                     width: min(34vw, 20rem);
                     height: min(34vw, 20rem);
                 }
 
-                /* Staggered folder tabs on large screens: each tab sits one step
-                   further right, with the title centred inside its own tab. */
+                /* Folder geometry. Every folder is one numbered tab plus a big title
+                   row (--head tall), and the next folder starts right under it, so
+                   closed folders form a staircase. The outline is a polygon with
+                   small chamfers standing in for rounded corners. */
                 .folder-tab {
-                    --tab-slant: 2.34375rem;
-                    --tab-step: clamp(18rem, 25.52vw, 42rem);
-                    --tab-offset: 0rem;
-                    --tab-width: calc(var(--tab-step) - var(--tab-slant) - 0.625rem);
+                    --tab-slant: 2.25rem;
+                    --head: 6.5rem;
+                    --spacer: 4.5rem;
+                    --edge: 1rem;
+                    --r: 0.5rem;
+                    --r-tab: 0px;
+                    --tab-offset: 0px;
+                    --tab-width: min(17.25rem, calc(100% - 4.5rem));
+                    clip-path: polygon(
+                        calc(var(--tab-offset) + var(--r-tab)) 0,
+                        min(calc(var(--tab-offset) + var(--tab-width)), calc(100% - var(--tab-slant))) 0,
+                        min(calc(var(--tab-offset) + var(--tab-width) + var(--tab-slant)), 100%) var(--tab-slant),
+                        calc(100% - var(--r)) var(--tab-slant),
+                        calc(100% - var(--r) * 0.293) calc(var(--tab-slant) + var(--r) * 0.293),
+                        100% calc(var(--tab-slant) + var(--r)),
+                        100% 100%,
+                        0 100%,
+                        0 var(--tab-slant),
+                        var(--tab-offset) var(--tab-slant),
+                        var(--tab-offset) var(--r-tab),
+                        calc(var(--tab-offset) + var(--r-tab) * 0.293) calc(var(--r-tab) * 0.293)
+                    );
                 }
 
-                .folder-tab--2 {
-                    --tab-offset: var(--tab-step);
+                .folder-tab--2, .folder-tab--3 { margin-top: calc(var(--spacer) * -1); }
+                .folder-spacer { height: var(--spacer); }
+
+                .folder-tab .tab-btn {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-start;
+                    width: 100%;
+                    height: var(--head);
+                    padding: 0 var(--edge) 0 calc(var(--tab-offset) + var(--edge));
+                    text-align: left;
                 }
 
-                .folder-tab--3 {
-                    --tab-offset: calc(var(--tab-step) * 2);
+                .folder-index {
+                    display: flex;
+                    align-items: center;
+                    height: var(--tab-slant);
+                    font-family: var(--font-body);
+                    font-size: 12px;
+                    letter-spacing: 0.06em;
+                }
+
+                .folder-tab .folder-title {
+                    max-width: none;
+                    padding: 0;
+                    margin-top: 0.15rem;
+                    font-size: clamp(2.5rem, 11vw, 3.5rem);
+                    line-height: 1;
+                    white-space: nowrap;
                 }
 
                 @media (min-width: 1024px) {
-                    /* Each tab is exactly one slant tall and the next folder starts
-                       right under it, so the closed folders form a tight staircase. */
-                    .folder-tab .tab-btn { height: var(--tab-slant); }
-                    .folder-tab .tab-btn > div:first-child { padding-bottom: 0.25rem; }
-                    .folder-tab .folder-title { font-size: 1.75rem; }
-                    .folder-tab--2, .folder-tab--3 { margin-top: calc(var(--tab-slant) * -2); }
-                    .folder-tab > :last-child { height: calc(var(--tab-slant) * 2); }
-
                     .folder-tab {
-                        clip-path: polygon(
-                            var(--tab-offset) 0,
-                            min(calc(var(--tab-offset) + var(--tab-width)), calc(100% - var(--tab-slant))) 0,
-                            min(calc(var(--tab-offset) + var(--tab-width) + var(--tab-slant)), 100%) var(--tab-slant),
-                            100% var(--tab-slant),
-                            100% 100%,
-                            0 100%,
-                            0 var(--tab-slant),
-                            var(--tab-offset) var(--tab-slant)
-                        );
+                        --tab-slant: 2.4375rem;
+                        --head: 8.125rem;
+                        --spacer: 6rem;
+                        --edge: 2rem;
+                        --tab-step: clamp(18rem, 25.52vw, 42rem);
+                        --tab-width: calc(var(--tab-step) - var(--tab-slant) - 0.625rem);
                     }
-
-                    .folder-title {
-                        width: var(--tab-width);
-                        max-width: var(--tab-width);
-                        margin-left: var(--tab-offset);
-                        padding-left: 1.25rem;
-                        padding-right: 0;
-                        text-align: left;
-                    }
+                    .folder-tab--2 { --tab-offset: var(--tab-step); --r-tab: 0.5rem; }
+                    .folder-tab--3 { --tab-offset: calc(var(--tab-step) * 2); --r-tab: 0.5rem; }
+                    .folder-tab .folder-title { font-size: clamp(4rem, 5.3vw, 6rem); }
 
                     /* The keychain hangs in its own left gutter so it never
                        sits behind the project rows. */
                     .works-keychain {
-                        top: var(--tab-slant);
                         left: 1rem;
                         width: 12rem;
                         height: 12rem;
@@ -223,13 +247,9 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
             <div className="w-full text-black mt-auto flex flex-col pt-6 sm:pt-12">
 
                 <div ref={(el) => { tabRefs.current[0] = el }} className="folder-tab bg-[#b3b3b3] w-full relative z-10">
-                    <button type="button" onClick={() => handleTabClick(0)} aria-expanded={activeTab === 0} aria-controls="works-folder-0" className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4 lg:pb-3">
-                            <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 text-black transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                01. Web Projects
-                            </h2>
-                        </div>
-                        <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
+                    <button type="button" onClick={() => handleTabClick(0)} aria-expanded={activeTab === 0} aria-controls="works-folder-0" className="tab-btn group">
+                        <span className="folder-index">01</span>
+                        <h2 className="folder-title projects-section-title font-title transition-transform duration-500 md:group-hover:translate-x-3">Web Projects</h2>
                     </button>
 
                     {showKeychain && readyTab === 0 && (
@@ -283,17 +303,13 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20 lg:h-37.5"></div>
+                    <div className="folder-spacer" aria-hidden="true"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[1] = el }} className="folder-tab folder-tab--2 bg-[#212121] text-white w-full relative z-20 -mt-18 md:-mt-20 lg:-mt-18.75">
-                    <button type="button" onClick={() => handleTabClick(1)} aria-expanded={activeTab === 1} aria-controls="works-folder-1" className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4 lg:pb-3">
-                            <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                02. Poster Design
-                            </h2>
-                        </div>
-                        <div className="dotted-line-white transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
+                <div ref={(el) => { tabRefs.current[1] = el }} className="folder-tab folder-tab--2 bg-[#212121] text-white w-full relative z-20">
+                    <button type="button" onClick={() => handleTabClick(1)} aria-expanded={activeTab === 1} aria-controls="works-folder-1" className="tab-btn group">
+                        <span className="folder-index">02</span>
+                        <h2 className="folder-title projects-section-title font-title transition-transform duration-500 md:group-hover:translate-x-3">Poster Design</h2>
                     </button>
 
                     {showKeychain && readyTab === 1 && (
@@ -351,17 +367,13 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20 lg:h-37.5"></div>
+                    <div className="folder-spacer" aria-hidden="true"></div>
                 </div>
 
-                <div ref={(el) => { tabRefs.current[2] = el }} className="folder-tab folder-tab--3 bg-[#ffff00] w-full relative z-30 -mt-18 md:-mt-20 lg:-mt-18.75">
-                    <button type="button" onClick={() => handleTabClick(2)} aria-expanded={activeTab === 2} aria-controls="works-folder-2" className="tab-btn w-full group h-18 md:h-20 lg:h-18.75 flex flex-col justify-end text-left">
-                        <div className="pb-3 md:pb-4 lg:pb-3">
-                            <h2 className="folder-title projects-section-title font-title pl-5 sm:pl-8 md:pl-12 transition-all duration-500 opacity-70 group-hover:opacity-100 md:group-hover:translate-x-3">
-                                03. Motion Design
-                            </h2>
-                        </div>
-                        <div className="dotted-line transition-all duration-500 opacity-60 group-hover:opacity-100"></div>
+                <div ref={(el) => { tabRefs.current[2] = el }} className="folder-tab folder-tab--3 bg-[#ffff00] w-full relative z-30">
+                    <button type="button" onClick={() => handleTabClick(2)} aria-expanded={activeTab === 2} aria-controls="works-folder-2" className="tab-btn group">
+                        <span className="folder-index">03</span>
+                        <h2 className="folder-title projects-section-title font-title transition-transform duration-500 md:group-hover:translate-x-3">Motion Design</h2>
                     </button>
 
                     {showKeychain && readyTab === 2 && (
@@ -421,7 +433,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                         </div>
                     </div>
 
-                    <div className="h-18 md:h-20 lg:h-37.5"></div>
+                    <div className="folder-spacer" aria-hidden="true"></div>
                 </div>
 
             </div>
