@@ -316,16 +316,6 @@ export default function About({ setIsMenuOpen, navigate }) {
                     height: 100%;
                 }
                 .is-front .bar-label { font-weight: 500; }
-                .bar-label::before, .bar-label::after {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    width: 6px; height: 6px;
-                    background: #212121;
-                    transform: translateY(-50%);
-                }
-                .bar-label::before { left: 14px; }
-                .bar-label::after { right: 14px; }
 
                 .sheet-title {
                     font-family: var(--font-title);
