@@ -50,4 +50,15 @@ export const posterProjects = [
 
         This personal design project explores the reinterpretation of manga artwork through modern poster composition, combining traditional black-and-white imagery with contemporary color manipulation and editorial-style typography while maintaining the character's visual identity.`
     },
+    {
+        id: '06',
+        title: 'New Jeans',
+        year: '2026',
+        img: '/images/archive/new_jeans.webp',
+        description: `A playful poster inspired by NewJeans, built around a nostalgic pixel-art world filled with Powerpuff-style characters, bright pastel color blocks, and scattered sparkles. A bold condensed display title anchors the top of the composition while a pale starburst adds a focal point.
+
+        The design focuses on a contrast between the heavy, structured lettering and the soft, cheerful pixel illustration below it. Short, conversational text snippets are placed around the characters to give the layout a lively, chat-like rhythm.
+
+        This personal design project explores how retro pixel graphics and modern editorial typography can be combined into a fun, colorful poster.`,
+    },
 ]

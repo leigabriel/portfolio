@@ -12,6 +12,9 @@ const archiveItems = [
     { title: 'Pusa', image: '/images/archive/pusa.webp' },
     { title: 'Rockstar', image: '/images/archive/rockstar.webp' },
     { title: 'Vintage', image: '/images/archive/vintage.webp' },
+    { title: 'Althea', image: '/images/archive/althea.webp' },
+    { title: 'Die For You', image: '/images/archive/die_for_you.webp' },
+    { title: 'Queen Yunjin', image: '/images/archive/queen_yunjin.webp' },
 ]
 
 export default function Archive({ setIsMenuOpen, navigate }) {

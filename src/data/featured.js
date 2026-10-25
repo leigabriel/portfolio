@@ -9,6 +9,9 @@ const REFS = [
     { type: 'poster', id: '03' },
     { type: 'poster', id: '04' },
     { type: 'poster', id: '05' },
+    { type: 'poster', id: '01' },
+    { type: 'poster', id: '02' },
+    { type: 'poster', id: '06' },
 ]
 
 export const featuredProjects = REFS.flatMap(({ type, id, label }) => {
