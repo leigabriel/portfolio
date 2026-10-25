@@ -1,18 +1,10 @@
 import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useLenis } from 'lenis/react'
-
-// Created lazily so the mp3 is not requested until the menu is first used.
-let menuSound = null
+import { playSfx } from '../../lib/sfx'
 
 function playMenuSound(type) {
-    if (!menuSound) menuSound = new Audio('/sounds/folder_sfx.mp3')
-    menuSound.pause()
-    menuSound.currentTime = 0
-    menuSound.volume = 0.7
-    menuSound.playbackRate = type === 'open' ? 1.15 : 0.8
-    menuSound.play().catch(() => {
-    })
+    playSfx({ volume: 0.7, rate: type === 'open' ? 1.15 : 0.8 })
 }
 
 function PreviewLink({ label, image, onClick }) {
