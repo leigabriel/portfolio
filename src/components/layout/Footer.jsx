@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js'
+import { createGltfLoader } from '../../lib/gltf'
 
 const navLinks = [
     { index: '01', label: 'Web Projects', tab: 0 },
@@ -15,6 +15,8 @@ const FOOTER_CLIP = 'Mocha_Swing'
 // Half speed stretches the 3.2s authored sway into a slow ~6.4s loop so the
 // chain drifts calmly behind the wordmark.
 const FOOTER_PLAYBACK_RATE = 0.5
+// Decorative canvas: capped below retina density to keep the frame rate up.
+const MAX_PIXEL_RATIO = 1.5
 
 // Wide screens keep the original framing. On portrait screens the horizontal
 // field of view is much narrower, so the camera pulls back until the chain fits
@@ -71,7 +73,10 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
             return undefined
         }
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, MAX_PIXEL_RATIO))
+        // Glass parts are drawn into an extra transmission buffer; half size is
+        // visually identical on blurred refraction and a quarter of the pixels.
+        renderer.transmissionResolutionScale = 0.5
         renderer.setClearColor(0x000000, 0)
         renderer.outputColorSpace = THREE.SRGBColorSpace
         renderer.toneMapping = THREE.ACESFilmicToneMapping
@@ -151,9 +156,9 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
             if (loadStarted) return
             loadStarted = true
 
-            const loader = new GLTFLoader()
+            const loader = createGltfLoader()
             loader.load(
-                '/models/workchain.gltf',
+                '/models/workchain.glb',
                 (gltf) => {
                     if (cancelled) {
                         gltf.scene.traverse((object) => {
@@ -213,12 +218,12 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
                         // Reduced motion: hold the first frame instead of spinning.
                         if (reduceMotion) action.paused = true
                     } else {
-                        console.warn(`Clip "${FOOTER_CLIP}" not found in workchain.gltf.`)
+                        console.warn(`Clip "${FOOTER_CLIP}" not found in workchain.glb.`)
                     }
                     if (!frameId) renderer.render(scene, camera)
                 },
                 undefined,
-                (err) => console.warn('Failed to load workchain.gltf:', err)
+                (err) => console.warn('Failed to load workchain.glb:', err)
             )
         }
 
