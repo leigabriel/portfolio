@@ -45,15 +45,15 @@ export default function Archive({ setIsMenuOpen, navigate }) {
                     <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">{archiveItems.length} records</span>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 sm:gap-x-7 gap-y-8 sm:gap-y-12">
+                <div className="grid grid-cols-3 gap-x-2 sm:gap-x-7 gap-y-5 sm:gap-y-12">
                     {archiveItems.map((item, index) => (
                         <button key={item.title} type="button" onClick={() => setSelected(item)} aria-label={`Open ${item.title}`} className="text-left group cursor-pointer">
                             <div className="aspect-4/5 overflow-hidden bg-black/10">
                                 <img src={item.image} alt={item.title} width="1080" height="1350" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
                             </div>
-                            <div className="grid grid-cols-[auto_1fr] gap-4 pt-3 border-b-2 border-dotted border-black/25 pb-3 text-[11px] sm:text-[11px] tracking-widest uppercase">
+                            <div className="grid grid-cols-[auto_1fr] gap-1.5 sm:gap-4 pt-2 sm:pt-3 border-b-2 border-dotted border-black/25 pb-2 sm:pb-3 text-[8px] sm:text-[11px] tracking-wide sm:tracking-widest uppercase">
                                 <span className="text-black/60">{String(index + 1).padStart(2, '0')}</span>
-                                <span>{item.title}</span>
+                                <span className="truncate">{item.title}</span>
                             </div>
                         </button>
                     ))}
