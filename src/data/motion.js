@@ -16,6 +16,7 @@ export const motionProjects = [
         title: 'Rukia in TYBW',
         year: '2026',
         video: '/images/motion_posters/rukia-motion-poster-01.mp4',
+        poster: '/images/poster_designs/rukia-01.webp',
         description: `A character poster inspired by Rukia Kuchiki from Bleach, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
 
         The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Rukia introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
@@ -27,6 +28,7 @@ export const motionProjects = [
         title: 'Reze in Chainsaw Man',
         year: '2026',
         video: '/images/motion_posters/reze-motion-poster.mp4',
+        poster: '/images/poster_designs/reze-01.webp',
         description: `A character poster inspired by Reze from Chainsaw Man, combining monochromatic manga imagery with vibrant color accents to create a strong visual contrast. The composition uses large-scale character artwork, expressive manga panels, Japanese typography, and structured editorial elements to establish a bold and dramatic visual identity.
 
         The design focuses on contrast, typography, composition, and selective color treatment. The predominantly black-and-white imagery creates a manga-inspired foundation, while the multicolored elements surrounding Reze introduce movement, depth, and visual emphasis. Large typography and numbered editorial details further reinforce the poster's graphic design structure.
