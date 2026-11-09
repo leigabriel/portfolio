@@ -75,8 +75,8 @@ export default function WebDetail({ setIsMenuOpen, navigate, project }) {
                         <img
                             src={project.img}
                             alt={`${project.title} website preview`}
-                            width="1515"
-                            height="1028"
+                            width="1000"
+                            height="678"
                             decoding="async"
                             className="w-full h-auto object-contain border border-[#212631]/50"
                         />
