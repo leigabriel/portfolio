@@ -38,7 +38,7 @@ function rowProps(onActivate) {
 // films are mounted after it completes so they cannot stall the animation.
 const FOLDER_SETTLE_MS = 520
 
-function MotionPreview({ src, title, className = '' }) {
+function MotionPreview({ src, poster, title, className = '' }) {
     const videoRef = useRef(null)
     const [inView, setInView] = useState(false)
 
@@ -65,6 +65,7 @@ function MotionPreview({ src, title, className = '' }) {
         <video
             ref={videoRef}
             src={inView ? src : undefined}
+            poster={poster}
             muted
             loop
             playsInline
@@ -407,6 +408,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
                                                 {readyTab === 2 ? (
                                                     <MotionPreview
                                                         src={project.video}
+                                                        poster={project.poster}
                                                         title={project.title}
                                                         className="w-full aspect-3/4 object-cover rounded bg-black/10"
                                                     />
