@@ -39,6 +39,8 @@ export default function MotionDetail({ setIsMenuOpen, navigate, project }) {
                     <div className="w-full lg:w-[55%] shrink-0 self-end lg:self-auto">
                         <video
                             src={project.video}
+                            poster={project.poster}
+                            preload="metadata"
                             autoPlay
                             muted
                             loop
