@@ -52,7 +52,7 @@ export default function Archive({ setIsMenuOpen, navigate }) {
                     {archiveItems.map((item, index) => (
                         <button key={item.title} type="button" onClick={() => setSelected(item)} aria-label={`Open ${item.title}`} className="text-left group cursor-pointer">
                             <div className="aspect-4/5 overflow-hidden bg-black/10">
-                                <img src={item.image} alt={item.title} width="1080" height="1350" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
+                                <img src={item.image} alt={item.title} width="800" height="1000" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
                             </div>
                             <div className="grid grid-cols-[auto_1fr] gap-1.5 sm:gap-4 pt-2 sm:pt-3 border-b-2 border-dotted border-black/25 pb-2 sm:pb-3 text-[8px] sm:text-[11px] tracking-wide sm:tracking-widest uppercase">
                                 <span className="text-black/60">{String(index + 1).padStart(2, '0')}</span>
