@@ -620,10 +620,11 @@ export default function About({ setIsMenuOpen, navigate }) {
                             <h2 className="profile-name">Lei Gabriel Malibiran</h2>
                             <p className="profile-role">Web Developer &amp; Graphic Designer</p>
                             <img
-                                src="/images/me.jpg"
+                                src="/images/me.webp"
                                 alt="Portrait of Lei Gabriel"
-                                width="1000"
-                                height="1000"
+                                width="700"
+                                height="700"
+                                loading="lazy"
                                 decoding="async"
                                 className="profile-photo"
                             />
