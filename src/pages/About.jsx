@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from '../components/layout/Header'
 import { playSfx } from '../lib/sfx'
+import { assetUrl } from '../lib/assets'
 import GithubContributions from '../components/about/GithubContributions'
 
 const skillGroups = [
@@ -620,7 +621,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                             <h2 className="profile-name">Lei Gabriel Malibiran</h2>
                             <p className="profile-role">Web Developer &amp; Graphic Designer</p>
                             <img
-                                src="/images/me.webp"
+                                src={assetUrl('images/me.webp')}
                                 alt="Portrait of Lei Gabriel"
                                 width="700"
                                 height="700"
