@@ -1,3 +1,5 @@
+import { assetUrl } from './assets'
+
 // Short interface sounds played through the Web Audio API.
 //
 // An <audio> element tells the phone "media is playing", so the system takes
@@ -5,7 +7,7 @@
 // running. Web Audio buffers don't claim that focus on Android, and on iOS the
 // audio session is set to "ambient", which mixes with other apps instead of
 // interrupting them.
-const SFX_URL = '/sounds/folder_sfx.mp3'
+const SFX_URL = assetUrl('sounds/folder_sfx.mp3')
 
 let context = null
 let rawBytes = null
