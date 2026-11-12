@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import Header from '../components/layout/Header'
 import { playSfx } from '../lib/sfx'
+import { assetUrl } from '../lib/assets'
 import { posterProjects, webProjects, motionProjects } from '../data'
 const WorksKeychain = lazy(() => import('../components/works/WorksKeychain'))
 
@@ -255,7 +256,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
 
                     {showKeychain && readyTab === 0 && (
                         <Suspense fallback={null}>
-                            <WorksKeychain src="/models/web-01.glb" />
+                            <WorksKeychain src={assetUrl('models/web-01.glb')} />
                         </Suspense>
                     )}
 
@@ -315,7 +316,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
 
                     {showKeychain && readyTab === 1 && (
                         <Suspense fallback={null}>
-                            <WorksKeychain src="/models/poster-02.glb" />
+                            <WorksKeychain src={assetUrl('models/poster-02.glb')} />
                         </Suspense>
                     )}
 
@@ -379,7 +380,7 @@ export default function Works({ setIsMenuOpen, navigate, activeTab, setActiveTab
 
                     {showKeychain && readyTab === 2 && (
                         <Suspense fallback={null}>
-                            <WorksKeychain src="/models/motion-03.glb" />
+                            <WorksKeychain src={assetUrl('models/motion-03.glb')} />
                         </Suspense>
                     )}
 
