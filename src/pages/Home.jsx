@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import Hero from '../components/home/Hero'
 import Featured from '../components/home/Featured'
 import Header from '../components/layout/Header'
+import { assetUrl } from '../lib/assets'
 
 // Both pull in three.js, so they load as a separate chunk after first paint.
 const AboutSection = lazy(() => import('../components/home/AboutSection'))
@@ -17,7 +18,7 @@ export default function Home({ setIsMenuOpen, contactRef, navigate }) {
                 <Hero />
                 <Suspense fallback={<div className={`w-full ${PAPER_CLASS}`} />}>
                 <AboutSection
-                    src="/images/1001.webp"
+                    src={assetUrl('images/1001.webp')}
                     alt="leimxnsquare print to crumple"
                     width={2880}
                     height={2160}
