@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/layout/Header'
+import { assetUrl } from '../lib/assets'
 
 const archiveItems = [
-    { title: 'Call Me', image: '/images/archive/call_me.webp' },
-    { title: 'Evil Jordan', image: '/images/archive/evil_jordan.webp' },
-    { title: 'Giselle', image: '/images/archive/giselle.webp' },
-    { title: 'Like Jennie', image: '/images/archive/jennie.webp' },
-    { title: 'New Jeans', image: '/images/archive/new_jeans.webp' },
-    { title: 'Heaven Sent', image: '/images/archive/ningning.webp' },
-    { title: 'Perception', image: '/images/archive/perception.webp' },
-    { title: 'Pusa', image: '/images/archive/pusa.webp' },
-    { title: 'Rockstar', image: '/images/archive/rockstar.webp' },
-    { title: 'Vintage', image: '/images/archive/vintage.webp' },
-    { title: 'Althea', image: '/images/archive/althea.webp' },
-    { title: 'Die For You', image: '/images/archive/die_for_you.webp' },
-    { title: 'Queen Yunjin', image: '/images/archive/queen_yunjin.webp' },
+    { title: 'Call Me', image: assetUrl('images/archive/call_me.webp') },
+    { title: 'Evil Jordan', image: assetUrl('images/archive/evil_jordan.webp') },
+    { title: 'Giselle', image: assetUrl('images/archive/giselle.webp') },
+    { title: 'Like Jennie', image: assetUrl('images/archive/jennie.webp') },
+    { title: 'New Jeans', image: assetUrl('images/archive/new_jeans.webp') },
+    { title: 'Heaven Sent', image: assetUrl('images/archive/ningning.webp') },
+    { title: 'Perception', image: assetUrl('images/archive/perception.webp') },
+    { title: 'Pusa', image: assetUrl('images/archive/pusa.webp') },
+    { title: 'Rockstar', image: assetUrl('images/archive/rockstar.webp') },
+    { title: 'Vintage', image: assetUrl('images/archive/vintage.webp') },
+    { title: 'Althea', image: assetUrl('images/archive/althea.webp') },
+    { title: 'Die For You', image: assetUrl('images/archive/die_for_you.webp') },
+    { title: 'Queen Yunjin', image: assetUrl('images/archive/queen_yunjin.webp') },
 ]
 
 export default function Archive({ setIsMenuOpen, navigate }) {
