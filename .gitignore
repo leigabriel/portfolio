@@ -12,6 +12,19 @@ dist
 dist-ssr
 *.local
 
+# Environment and local-only tooling. These stay on disk but are not committed.
+.env
+.env.*
+docs/
+scripts/
+supabase/
+
+# Media is hosted in Supabase Storage, not in Git. Keep these ignored so any
+# temporary local copy can never be committed by accident.
+public/images/
+public/models/
+public/sounds/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
