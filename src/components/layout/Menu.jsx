@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useLenis } from 'lenis/react'
 import { playSfx } from '../../lib/sfx'
+import { assetUrl } from '../../lib/assets'
 
 function playMenuSound(type) {
     playSfx({ volume: 0.7, rate: type === 'open' ? 1.15 : 0.8 })
@@ -162,11 +163,11 @@ export default function Menu({ setIsMenuOpen, navigate }) {
     }, [navigate])
 
     const links = [
-        { label: 'Home', dest: 'home', image: '/images/archive/queen_yunjin.webp' },
-        { label: 'About', dest: 'about', image: '/images/archive/giselle.webp' },
-        { label: 'Works', dest: 'projects', image: '/images/archive/call_me.webp' },
-        { label: 'Archive', dest: 'archive', image: '/images/archive/rockstar.webp' },
-        { label: 'Contact', dest: 'contact', image: '/images/archive/ningning.webp' },
+        { label: 'Home', dest: 'home', image: assetUrl('images/archive/queen_yunjin.webp') },
+        { label: 'About', dest: 'about', image: assetUrl('images/archive/giselle.webp') },
+        { label: 'Works', dest: 'projects', image: assetUrl('images/archive/call_me.webp') },
+        { label: 'Archive', dest: 'archive', image: assetUrl('images/archive/rockstar.webp') },
+        { label: 'Contact', dest: 'contact', image: assetUrl('images/archive/ningning.webp') },
     ]
 
     return (
