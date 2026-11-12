@@ -1,13 +1,17 @@
 {
   "name": "portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "admin": "node scripts/admin-server.mjs",
+    "assets:upload": "node scripts/upload-assets.mjs",
+    "assets:upload:dry": "node scripts/upload-assets.mjs --dry-run",
+    "assets:prune": "node scripts/upload-assets.mjs --prune"
   },
   "dependencies": {
     "gsap": "^3.15.0",
