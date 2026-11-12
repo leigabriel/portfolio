@@ -1,4 +1,4 @@
-const VERSION = 'v6'
+const VERSION = 'v7'
 const PRECACHE = `lei-precache-${VERSION}`
 const RUNTIME = `lei-runtime-${VERSION}`
 
@@ -24,12 +24,13 @@ const PRECACHE_URLS = [
     '/fonts/tritopani.woff2',
     '/fonts/jetbrains-mono-400.woff2',
     '/fonts/jetbrains-mono-500.woff2',
-
-    '/sounds/folder_sfx.mp3',
 ]
 
 const CACHEABLE_ASSET_RE = /\.(js|css|png|jpg|jpeg|gif|webp|avif|svg|ico|ttf|woff|woff2|otf|mp3|gltf|glb)$/i
 const MEDIA_RE = /\.(mp4|webm|mov)$/i
+// Public Supabase Storage objects. Checking the path also covers projects on
+// custom domains, which hostname checks alone would miss.
+const SUPABASE_OBJECT_RE = /^\/storage\/v1\/object\/public\//
 
 const shellResponse = () =>
     caches.match('/index.html').then((cached) => cached || fetch('/index.html'))
@@ -70,7 +71,11 @@ function staleWhileRevalidate(request) {
         cache.match(request).then((cached) => {
             const network = fetch(request)
                 .then((response) => {
-                    if (response.ok) cache.put(request, response.clone())
+                    // Opaque responses (cross-origin <img> requests) have
+                    // status 0 but are still valid cache entries.
+                    if (response.ok || response.type === 'opaque') {
+                        cache.put(request, response.clone()).catch(() => {})
+                    }
                     return response
                 })
                 .catch(() => cached)
@@ -105,7 +110,8 @@ self.addEventListener('fetch', (event) => {
         return
     }
 
-    if (!isSameOrigin) return
+    const isSupabaseAsset = SUPABASE_OBJECT_RE.test(url.pathname)
+    if (!isSameOrigin && !isSupabaseAsset) return
     // Range requests (video) and large media are left to the browser.
     if (MEDIA_RE.test(url.pathname) || request.headers.has('range')) return
 
