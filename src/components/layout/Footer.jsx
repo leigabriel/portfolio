@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
 import * as THREE from 'three'
 import { createGltfLoader } from '../../lib/gltf'
+import { assetUrl } from '../../lib/assets'
 
 const navLinks = [
     { index: '01', label: 'Web Projects', tab: 0 },
@@ -158,7 +159,7 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
 
             const loader = createGltfLoader()
             loader.load(
-                '/models/workchain.glb',
+                assetUrl('models/workchain.glb'),
                 (gltf) => {
                     if (cancelled) {
                         gltf.scene.traverse((object) => {
