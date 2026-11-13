@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Header from '../components/layout/Header'
+import ImageSpiral from '../components/archive/ImageSpiral'
 import { assetUrl } from '../lib/assets'
 
 const archiveItems = [
@@ -18,8 +19,29 @@ const archiveItems = [
     { title: 'Queen Yunjin', image: assetUrl('images/archive/queen_yunjin.webp') },
 ]
 
+function ArchiveGrid({ items, onSelect }) {
+    return (
+        <div className="grid grid-cols-3 gap-x-2 sm:gap-x-7 gap-y-5 sm:gap-y-12">
+            {items.map((item, index) => (
+                <button key={item.title} type="button" onClick={() => onSelect(item)} aria-label={`Open ${item.title}`} className="text-left group cursor-pointer">
+                    <div className="aspect-4/5 overflow-hidden bg-black/10">
+                        <img src={item.image} alt={item.title} width="800" height="1000" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
+                    </div>
+                    <div className="grid grid-cols-[auto_1fr] gap-1.5 sm:gap-4 pt-2 sm:pt-3 border-b-2 border-dotted border-black/25 pb-2 sm:pb-3 text-[8px] sm:text-[11px] tracking-wide sm:tracking-widest uppercase">
+                        <span className="text-black/60">{String(index + 1).padStart(2, '0')}</span>
+                        <span className="truncate">{item.title}</span>
+                    </div>
+                </button>
+            ))}
+        </div>
+    )
+}
+
 export default function Archive({ setIsMenuOpen, navigate }) {
     const [selected, setSelected] = useState(null)
+    const [webglFailed, setWebglFailed] = useState(false)
+
+    const handleUnsupported = useCallback(() => setWebglFailed(true), [])
 
     useEffect(() => {
         if (!selected) return undefined
@@ -32,37 +54,58 @@ export default function Archive({ setIsMenuOpen, navigate }) {
     }, [selected])
 
     return (
-        <main className="bg-white min-h-screen text-black overflow-x-hidden">
+        <main
+            className={webglFailed
+                ? 'bg-white min-h-screen text-black overflow-x-hidden'
+                : 'relative h-dvh w-full overflow-hidden bg-white text-black'}
+            data-lenis-prevent={webglFailed ? undefined : ''}
+        >
             <style>{`
                 .archive-number { font-size: clamp(2rem, 4vw, 4rem); line-height: .95; }
+                .archive-spiral-frame {
+                    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%);
+                    mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%);
+                }
             `}</style>
 
             <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" />
 
-            <header className="px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-10 sm:pb-12">
-                <h1 className="archive-title font-title leading-none">Archive</h1>
-            </header>
+            {webglFailed ? (
+                <>
+                    <header className="px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-10 sm:pb-12">
+                        <h1 className="archive-title font-title leading-none">Archive</h1>
+                    </header>
 
-            <section className="bg-[#f2f2f2] border-t-2 border-dotted border-black/30 px-5 sm:px-8 md:px-12 py-6 sm:py-10">
-                <div className="flex justify-between items-end border-b-2 border-dotted border-black/30 pb-4 mb-6">
-                    <h2 className="archive-number font-title">2026</h2>
-                    <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">{archiveItems.length} records</span>
-                </div>
+                    <section className="bg-[#f2f2f2] border-t-2 border-dotted border-black/30 px-5 sm:px-8 md:px-12 py-6 sm:py-10">
+                        <div className="flex justify-between items-end border-b-2 border-dotted border-black/30 pb-4 mb-6">
+                            <h2 className="archive-number font-title">2026</h2>
+                            <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">{archiveItems.length} records</span>
+                        </div>
+                        <ArchiveGrid items={archiveItems} onSelect={setSelected} />
+                    </section>
+                </>
+            ) : (
+                <>
+                    <div className="archive-spiral-frame absolute inset-x-0 top-20 sm:top-24 bottom-0">
+                        <ImageSpiral items={archiveItems} onSelect={setSelected} onUnsupported={handleUnsupported} />
+                    </div>
 
-                <div className="grid grid-cols-3 gap-x-2 sm:gap-x-7 gap-y-5 sm:gap-y-12">
-                    {archiveItems.map((item, index) => (
-                        <button key={item.title} type="button" onClick={() => setSelected(item)} aria-label={`Open ${item.title}`} className="text-left group cursor-pointer">
-                            <div className="aspect-4/5 overflow-hidden bg-black/10">
-                                <img src={item.image} alt={item.title} width="800" height="1000" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
+                    <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between px-5 sm:px-8 md:px-12 pt-24 sm:pt-28 pb-5 sm:pb-8">
+                        <div className="flex items-start justify-between gap-6">
+                            <h1 className="archive-title font-title leading-none">Archive</h1>
+                            <div className="hidden sm:flex flex-col items-end gap-1 pt-1 text-[11px] tracking-[0.2em] uppercase text-black/60">
+                                <span>2026</span>
+                                <span>{archiveItems.length} records</span>
                             </div>
-                            <div className="grid grid-cols-[auto_1fr] gap-1.5 sm:gap-4 pt-2 sm:pt-3 border-b-2 border-dotted border-black/25 pb-2 sm:pb-3 text-[8px] sm:text-[11px] tracking-wide sm:tracking-widest uppercase">
-                                <span className="text-black/60">{String(index + 1).padStart(2, '0')}</span>
-                                <span className="truncate">{item.title}</span>
-                            </div>
-                        </button>
-                    ))}
-                </div>
-            </section>
+                        </div>
+
+                        <div className="flex items-end justify-between gap-6 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
+                            <span aria-hidden="true">Scroll / swipe to spin</span>
+                            <span aria-hidden="true">Click / tap to view</span>
+                        </div>
+                    </div>
+                </>
+            )}
 
             {selected && (
                 <div className="fixed inset-0 z-80 flex items-center justify-center bg-black/80 backdrop-blur-xl p-5" onClick={() => setSelected(null)} role="dialog" aria-modal="true" aria-label={`${selected.title} preview`}>
