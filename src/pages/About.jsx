@@ -200,9 +200,10 @@ export default function About({ setIsMenuOpen, navigate }) {
                     margin-top: calc(var(--i, 0) * var(--step));
                     padding: 0 32px;
                     border-radius: 12px 12px 0 0;
-                                        translate: 0 var(--lift, 0px);
+                    --sheet-drop: 30px;
+                    translate: 0 var(--lift, 0px);
                     transition: translate 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-                    animation: sheetIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+                    animation: sheetInBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
                 }
                 .sheet--experiences { width: calc(100cqw - 32px); --paper: #f5f5f5; }
                 .sheet--skillsets  { width: calc(32px + 2 * var(--col)); --paper: #ffe430; animation-delay: 0.08s; }
@@ -235,9 +236,20 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .sheet { transition: none; animation: none; }
                 }
 
-                @keyframes sheetIn {
-                    from { opacity: 0; transform: translateX(-24px); }
-                    to { opacity: 1; transform: translateX(0); }
+                @keyframes sheetInBounce {
+                    0% {
+                        transform: translateY(var(--sheet-drop));
+                        animation-timing-function: cubic-bezier(0.22, 0.9, 0.3, 1);
+                    }
+                    58% {
+                        transform: translateY(calc(var(--sheet-drop) * -0.24));
+                        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                    82% {
+                        transform: translateY(calc(var(--sheet-drop) * 0.08));
+                        animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+                    }
+                    100% { transform: translateY(0); }
                 }
 
                 /* Outer shadows never paint inside their own box, so the holes stay clean. */
@@ -448,7 +460,7 @@ export default function About({ setIsMenuOpen, navigate }) {
                 @media (max-width: 1023px) {
                     .about-head { padding: 6rem 16px 0; }
                     .about-stack { --step: 92px; --sliver: 45px; --col: 100cqw; padding-bottom: 5rem; }
-                    .sheet { width: auto !important; border-radius: 8px 8px 0 0; animation-name: sheetInUp; }
+                    .sheet { width: auto !important; border-radius: 8px 8px 0 0; --sheet-drop: 20px; }
                     .sheet.is-before .sheet-body,
                     .sheet.is-before .sheet-body + .sheet-bar { display: none; }
                     /* Closed sheets run on underneath the next ones, so the binder holes show the paper behind. */
@@ -498,10 +510,6 @@ export default function About({ setIsMenuOpen, navigate }) {
                     .xtitle .sheet-title::after, .sheet-title--none::after, .prow:last-child::after { display: none; }
                 }
 
-                @keyframes sheetInUp {
-                    from { opacity: 0; transform: translateY(16px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
             `}</style>
 
             <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" />
