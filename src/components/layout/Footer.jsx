@@ -345,15 +345,32 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
 
     .social-link {
         position: relative;
+        isolation: isolate;
         display: inline-block;
         padding-block: 0.4rem;
-        transition: background-color 0.3s ease, color 0.3s ease;
+        transition: color 0.3s ease;
         cursor: url('/cursors/link.svg') 12 0, pointer !important;
+    }
+
+    .social-link::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background-color: black;
+        transform: scaleY(0);
+        transform-origin: bottom;
+        transition: transform 0.3s ease-out;
+        pointer-events: none;
+    }
+
+    .social-link:hover::before,
+    .social-link:focus-visible::before {
+        transform: scaleY(1);
     }
 
     .social-link:hover,
     .social-link:focus-visible {
-        background-color: black;
         color: white !important;
     }
 
@@ -385,10 +402,11 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
 
 `}</style>
 
-            {/* 3D Asterisk Backdrop */}
+            {/* 3D workchain backdrop — grayscale so it reads as part of the
+                black-on-yellow footer instead of introducing its own palette. */}
             <canvas
                 ref={canvasRef}
-                className="absolute inset-0 w-full h-full z-1 pointer-events-none"
+                className="absolute inset-0 w-full h-full z-1 pointer-events-none grayscale"
                 aria-hidden="true"
             />
 
