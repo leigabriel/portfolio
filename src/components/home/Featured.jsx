@@ -21,17 +21,17 @@ export default function Featured({ navigate }) {
         if (reduceMotion) return undefined
 
         const ctx = gsap.context(() => {
-            const head = section.querySelector('[data-featured-head]')
-            if (head) {
+            const quote = section.querySelector('[data-featured-quote]')
+            if (quote) {
                 gsap.fromTo(
-                    head,
+                    quote,
                     { y: 70, opacity: 0 },
                     {
                         y: 0,
                         opacity: 1,
                         ease: 'none',
                         scrollTrigger: {
-                            trigger: head,
+                            trigger: quote,
                             start: 'top 97%',
                             end: 'top 62%',
                             scrub: 0.5,
@@ -88,6 +88,7 @@ export default function Featured({ navigate }) {
     }
 
     const total = featuredProjects.length
+    const index = String(total).padStart(2, '0')
 
     return (
         <section
@@ -95,64 +96,72 @@ export default function Featured({ navigate }) {
             className="featured relative isolate bg-white text-black"
             style={{ '--featured-pad': 'clamp(1rem, 4vw, 3rem)' }}
         >
-            <header className="px-(--featured-pad) pt-[clamp(5rem,13vh,8.5rem)] pb-[clamp(1.25rem,3vh,2.25rem)]">
-                <div data-featured-head>
-                    <h2 className="font-title text-[clamp(2.25rem,7.5vw,5.75rem)] leading-[0.92] tracking-[-0.03em] uppercase">
-                        Selected Projects
-                        <sup className="ml-[0.12em] align-super text-[0.3em] tracking-[-0.01em]">
-                            ({total})
-                        </sup>
-                    </h2>
+            <h2 className="sr-only">Selected Projects</h2>
+
+            <div className="px-(--featured-pad) pt-[clamp(4.5rem,10vh,7.5rem)] pb-[clamp(4rem,11vh,8rem)]">
+                <div className="grid gap-x-[clamp(1.5rem,3.5vw,3.5rem)] gap-y-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+                    <blockquote
+                        data-featured-quote
+                        className="m-0 [text-indent:-0.42em] font-title font-bold uppercase text-[clamp(2.5rem,10.5vw,4.25rem)] leading-[0.84] tracking-[-0.025em] lg:text-[clamp(2.5rem,6.2vw,6.75rem)]"
+                    >
+                        <span aria-hidden="true">&ldquo;</span>
+                        I enjoy working on designs that not only look good, but also make sense
+                        to the people who use them.
+                        <span aria-hidden="true">&rdquo;</span>
+                    </blockquote>
+
+                    <div className="lg:pt-[0.15rem]">
+                        <div className="flex items-baseline justify-between gap-4 border-b border-black/15 pb-1.5 font-mono-custom text-[9px] tracking-[0.22em] uppercase text-black/60 sm:text-[10px]">
+                            <span>Selected Projects</span>
+                            <span>
+                                ({index}) &mdash; Posters / 2026
+                            </span>
+                        </div>
+
+                        <ol className="m-0 mt-[clamp(0.5rem,1.2vw,0.9rem)] grid list-none grid-cols-2 gap-[clamp(0.4rem,1vw,0.85rem)] p-0 sm:grid-cols-3">
+                            {featuredProjects.map((item, position) => (
+                                <li key={item.key} className="featured-card m-0 p-0">
+                                    <a
+                                        className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+                                        href={`#/works/${item.type}/${item.projectId}`}
+                                        onClick={(event) => {
+                                            event.preventDefault()
+                                            openProject(item)
+                                        }}
+                                        aria-label={`Open ${item.title}, ${item.year}`}
+                                    >
+                                        <div className="relative aspect-3/4 overflow-hidden bg-[#f0f0f0]">
+                                            <img
+                                                data-parallax
+                                                src={item.img}
+                                                alt={item.alt}
+                                                loading={position === 0 ? 'eager' : 'lazy'}
+                                                decoding="async"
+                                                draggable={false}
+                                                className="absolute inset-0 h-full w-full object-cover object-center select-none will-change-transform"
+                                            />
+                                        </div>
+
+                                        <div
+                                            className="mt-[clamp(0.35rem,0.7vw,0.55rem)] flex items-baseline gap-2 font-mono-custom text-[9px] leading-none tracking-[0.14em] uppercase sm:text-[10px]"
+                                            data-reveal
+                                        >
+                                            <span className="shrink-0 text-black/40">
+                                                {String(position + 1).padStart(2, '0')}
+                                            </span>
+                                            <span className="min-w-0 flex-1 truncate underline-offset-2 group-hover:underline">
+                                                {item.title}
+                                            </span>
+                                            <span className="shrink-0 text-black/50 transition-colors duration-300 group-hover:text-black">
+                                                {item.year}
+                                            </span>
+                                        </div>
+                                    </a>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
                 </div>
-            </header>
-
-            <div className="px-(--featured-pad) pb-[clamp(4rem,11vh,8rem)]">
-                <ol className="m-0 grid list-none grid-cols-2 gap-[clamp(0.75rem,1.8vw,1.5rem)] lg:grid-cols-3 p-0">
-                    {featuredProjects.map((item, index) => (
-                        <li key={item.key} className="featured-card m-0 p-0">
-                            <a
-                                className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
-                                href={`#/works/${item.type}/${item.projectId}`}
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    openProject(item)
-                                }}
-                                aria-label={`Open ${item.title}`}
-                            >
-                                <div className="relative aspect-3/4 overflow-hidden bg-[#f0f0f0]">
-                                    <img
-                                        data-parallax
-                                        src={item.img}
-                                        alt={item.alt}
-                                        loading={index === 0 ? 'eager' : 'lazy'}
-                                        decoding="async"
-                                        draggable={false}
-                                        className="absolute inset-0 h-full w-full object-cover object-center select-none will-change-transform"
-                                    />
-                                </div>
-
-                                <div
-                                    className="mt-[clamp(0.3rem,0.8vw,0.6rem)] flex border border-black text-[10px] sm:text-[11px] md:text-xs lg:text-sm uppercase"
-                                    data-reveal
-                                >
-                                    <span className="min-w-0 flex-1 truncate px-1.5 py-1.5 tracking-[0.06em] sm:px-2.5 sm:py-2 sm:tracking-[0.16em] transition-colors duration-300 group-hover:bg-black group-hover:text-white">
-                                        {item.title}
-                                    </span>
-                                    <span className="shrink-0 border-l border-black px-1.5 py-1.5 tracking-wider sm:px-2.5 sm:py-2 sm:tracking-widest text-black/75 transition-colors duration-300 group-hover:bg-black group-hover:text-white">
-                                        {item.year}
-                                    </span>
-                                </div>
-
-                                <span
-                                    className="mt-[clamp(0.35rem,1vw,0.75rem)] inline-block text-[10px] sm:text-[11px] lg:text-[13px] tracking-[0.14em] sm:tracking-[0.22em] text-black/60 uppercase transition-all duration-300 group-hover:tracking-[0.32em] group-hover:text-black"
-                                    data-reveal
-                                >
-                                    View Project
-                                </span>
-                            </a>
-                        </li>
-                    ))}
-                </ol>
             </div>
         </section>
     )
