@@ -2,11 +2,9 @@ import { useLayoutEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLenis } from 'lenis/react'
-import { featuredProjects } from '../../data'
+import { featuredGallery } from '../../data'
 
 gsap.registerPlugin(ScrollTrigger)
-
-const DETAIL_PAGE = { web: 'web-detail', poster: 'poster-detail', motion: 'motion-detail' }
 
 export default function Featured({ navigate }) {
     const sectionRef = useRef(null)
@@ -21,145 +19,196 @@ export default function Featured({ navigate }) {
         if (reduceMotion) return undefined
 
         const ctx = gsap.context(() => {
-            const quote = section.querySelector('[data-featured-quote]')
-            if (quote) {
-                gsap.fromTo(
-                    quote,
-                    { y: 70, opacity: 0 },
-                    {
-                        y: 0,
-                        opacity: 1,
-                        ease: 'none',
-                        scrollTrigger: {
-                            trigger: quote,
-                            start: 'top 97%',
-                            end: 'top 62%',
-                            scrub: 0.5,
-                        },
-                    }
-                )
-            }
+            gsap.fromTo(
+                section.querySelectorAll('[data-featured-meta]'),
+                { y: 28, opacity: 0 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    ease: 'none',
+                    stagger: 0.12,
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top 96%',
+                        end: 'top 72%',
+                        scrub: 0.5,
+                    },
+                }
+            )
 
-            gsap.utils.toArray('.featured-card', section).forEach((card) => {
-                const reveal = card.querySelectorAll('[data-reveal]')
+            const grid = section.querySelector('[data-featured-grid]')
+            if (grid) {
                 gsap.fromTo(
-                    reveal,
-                    { y: 46, opacity: 0 },
+                    grid.querySelectorAll('[data-featured-tile]'),
+                    { opacity: 0 },
                     {
-                        y: 0,
                         opacity: 1,
                         ease: 'none',
-                        stagger: 0.07,
+                        stagger: 0.04,
                         scrollTrigger: {
-                            trigger: card,
-                            start: 'top 93%',
-                            end: 'top 66%',
+                            trigger: grid,
+                            start: 'top 95%',
+                            end: 'top 55%',
                             scrub: 0.55,
                         },
                     }
                 )
 
-                const img = card.querySelector('[data-parallax]')
-                if (img) {
-                    gsap.fromTo(
-                        img,
-                        { yPercent: -4, scale: 1.1 },
-                        {
-                            yPercent: 4,
-                            scale: 1.1,
-                            ease: 'none',
-                            scrollTrigger: {
-                                trigger: card,
-                                start: 'top bottom',
-                                end: 'bottom top',
-                                scrub: 0.6,
-                            },
-                        }
-                    )
-                }
-            })
+                gsap.fromTo(
+                    grid.querySelectorAll('img'),
+                    { scale: 1.045 },
+                    {
+                        scale: 1,
+                        ease: 'none',
+                        stagger: 0.04,
+                        scrollTrigger: {
+                            trigger: grid,
+                            start: 'top 95%',
+                            end: 'top 55%',
+                            scrub: 0.55,
+                        },
+                    }
+                )
+            }
+
+            const task = section.querySelector('[data-featured-task]')
+            if (task) {
+                gsap.fromTo(
+                    task,
+                    { y: 30, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        ease: 'none',
+                        scrollTrigger: {
+                            trigger: task,
+                            start: 'top 96%',
+                            end: 'top 72%',
+                            scrub: 0.5,
+                        },
+                    }
+                )
+            }
         }, section)
 
         return () => ctx.revert()
     }, [])
 
-    const openProject = (item) => {
-        navigate(DETAIL_PAGE[item.type], { ...item.source, type: item.type })
-    }
-
-    const total = featuredProjects.length
-    const index = String(total).padStart(2, '0')
-
     return (
         <section
             ref={sectionRef}
             className="featured relative isolate bg-white text-black"
-            style={{ '--featured-pad': 'clamp(1rem, 4vw, 3rem)' }}
+            style={{ '--featured-pad': 'clamp(1.25rem, 3vw, 2.5rem)' }}
         >
-            <h2 className="sr-only">Selected Projects</h2>
+            <h2 className="sr-only">Selected poster work</h2>
 
-            <div className="px-(--featured-pad) pt-[clamp(4.5rem,10vh,7.5rem)] pb-[clamp(4rem,11vh,8rem)]">
-                <div className="grid gap-x-[clamp(1.5rem,3.5vw,3.5rem)] gap-y-[clamp(2.5rem,5vw,4rem)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
-                    <blockquote
-                        data-featured-quote
-                        className="m-0 [text-indent:-0.42em] font-title font-bold uppercase text-[clamp(2.5rem,10.5vw,4.25rem)] leading-[0.84] tracking-[-0.025em] lg:text-[clamp(2.5rem,6.2vw,6.75rem)]"
-                    >
-                        <span aria-hidden="true">&ldquo;</span>
-                        I enjoy working on designs that not only look good, but also make sense
-                        to the people who use them.
-                        <span aria-hidden="true">&rdquo;</span>
-                    </blockquote>
+            <div className="pt-[clamp(4rem,9vw,7rem)]">
+                <div className="px-(--featured-pad)">
+                    <div className="flex items-baseline justify-between gap-6" data-featured-meta>
+                        <p className="m-0 font-mono-custom text-[9px] uppercase tracking-[0.22em] sm:text-[10px]">
+                            01. Posters
+                        </p>
+                        <p className="m-0 font-mono-custom text-[11px] font-medium tracking-[0.01em] sm:text-[12px]">
+                            Selected Posters
+                        </p>
+                    </div>
 
-                    <div className="lg:pt-[0.15rem]">
-                        <div className="flex items-baseline justify-between gap-4 border-b border-black/15 pb-1.5 font-mono-custom text-[9px] tracking-[0.22em] uppercase text-black/60 sm:text-[10px]">
-                            <span>Selected Projects</span>
-                            <span>
-                                ({index}) &mdash; Posters / 2026
-                            </span>
+                    <div className="mt-8 sm:mt-10" data-featured-meta>
+                        <p className="m-0 font-mono-custom text-[10px] text-black/45">
+                            Discipline
+                        </p>
+                        <p className="m-0 mt-1 font-mono-custom text-[10px] sm:text-[11px]">
+                            Graphic Design
+                        </p>
+                    </div>
+                </div>
+
+                <ol
+                    className="m-0 mt-[clamp(3rem,7vw,6rem)] grid list-none grid-cols-3 gap-0 p-0"
+                    data-featured-grid
+                >
+                    {featuredGallery.map((item, index) => (
+                        <li
+                            key={item.title}
+                            className="m-0 overflow-hidden bg-[#efefef] p-0"
+                            data-featured-tile
+                        >
+                            <img
+                                src={item.src}
+                                alt={item.alt}
+                                loading={index < 3 ? 'eager' : 'lazy'}
+                                decoding="async"
+                                draggable={false}
+                                className="block aspect-[4/5] w-full select-none object-cover object-center"
+                            />
+                        </li>
+                    ))}
+                </ol>
+
+                <div
+                    className="mt-[clamp(3.5rem,7vw,6rem)] px-(--featured-pad) pb-[clamp(4rem,10vw,7.5rem)]"
+                    data-featured-task
+                >
+                    <p className="m-0 font-mono-custom text-[9px] uppercase tracking-[0.22em] text-black/40 sm:text-[10px]">
+                        .Task
+                    </p>
+
+                    <div className="mt-5 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-12">
+                        <p className="m-0 max-w-[52ch] font-mono-custom text-[clamp(0.72rem,1.1vw,0.875rem)] leading-[1.7] text-black/75">
+                            A selection of poster work exploring typographic hierarchy, image
+                            treatment, and editorial composition across manga, music, and personal
+                            projects.
+                        </p>
+
+                        <div className="flex items-end justify-between gap-6 md:justify-end">
+                            <dl className="m-0 grid grid-cols-3 gap-x-5 sm:gap-x-10">
+                                <div>
+                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                        Project
+                                    </dt>
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                        Poster Series
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                        Focus
+                                    </dt>
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                        Typography
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                        Year
+                                    </dt>
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                        2026
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            <a
+                                href="#/works"
+                                onClick={(event) => {
+                                    event.preventDefault()
+                                    navigate?.('projects', { tab: 1 })
+                                }}
+                                aria-label="View all poster designs"
+                                className="group -mr-1 inline-flex h-12 w-12 shrink-0 items-center justify-center text-black transition-transform duration-300 hover:translate-x-0.5 hover:translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.25"
+                                    aria-hidden="true"
+                                    className="h-9 w-9"
+                                >
+                                    <path d="m7 7 10 10M17 8v9H8" />
+                                </svg>
+                            </a>
                         </div>
-
-                        <ol className="m-0 mt-[clamp(0.5rem,1.2vw,0.9rem)] grid list-none grid-cols-2 gap-[clamp(0.4rem,1vw,0.85rem)] p-0 sm:grid-cols-3">
-                            {featuredProjects.map((item, position) => (
-                                <li key={item.key} className="featured-card m-0 p-0">
-                                    <a
-                                        className="group block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
-                                        href={`#/works/${item.type}/${item.projectId}`}
-                                        onClick={(event) => {
-                                            event.preventDefault()
-                                            openProject(item)
-                                        }}
-                                        aria-label={`Open ${item.title}, ${item.year}`}
-                                    >
-                                        <div className="relative aspect-3/4 overflow-hidden bg-[#f0f0f0]">
-                                            <img
-                                                data-parallax
-                                                src={item.img}
-                                                alt={item.alt}
-                                                loading={position === 0 ? 'eager' : 'lazy'}
-                                                decoding="async"
-                                                draggable={false}
-                                                className="absolute inset-0 h-full w-full object-cover object-center select-none will-change-transform"
-                                            />
-                                        </div>
-
-                                        <div
-                                            className="mt-[clamp(0.35rem,0.7vw,0.55rem)] flex items-baseline gap-2 font-mono-custom text-[9px] leading-none tracking-[0.14em] uppercase sm:text-[10px]"
-                                            data-reveal
-                                        >
-                                            <span className="shrink-0 text-black/40">
-                                                {String(position + 1).padStart(2, '0')}
-                                            </span>
-                                            <span className="min-w-0 flex-1 truncate underline-offset-2 group-hover:underline">
-                                                {item.title}
-                                            </span>
-                                            <span className="shrink-0 text-black/50 transition-colors duration-300 group-hover:text-black">
-                                                {item.year}
-                                            </span>
-                                        </div>
-                                    </a>
-                                </li>
-                            ))}
-                        </ol>
                     </div>
                 </div>
             </div>
