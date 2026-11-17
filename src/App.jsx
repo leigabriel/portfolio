@@ -183,7 +183,7 @@ export default function App() {
             {page === 'poster-detail' && selectedProject && <PosterDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} poster={selectedProject} />}
             {page === 'web-detail' && selectedProject && <WebDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} project={selectedProject} />}
             {page === 'motion-detail' && selectedProject && <MotionDetail setIsMenuOpen={setIsMenuOpen} navigate={navigate} project={selectedProject} />}
-            {page === 'notfound' && <NotFound navigate={navigate} />}
+            {page === 'notfound' && <NotFound navigate={navigate} setIsMenuOpen={setIsMenuOpen} />}
             </Suspense>
             {isMenuOpen && (
                 <Suspense fallback={null}>
