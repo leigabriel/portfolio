@@ -13,7 +13,7 @@ const PLAYBACK_RATE = 0.5
 // Decorative canvases don't need retina-level pixel density.
 const MAX_PIXEL_RATIO = 1.5
 
-export default function WorksKeychain({ src, targetSize = 3.4, className = '' }) {
+export default function WorksKeychain({ src, targetSize = 3.4, className = '', onLoad, zoom = 1 }) {
     const canvasRef = useRef(null)
     const containerRef = useRef(null)
 
@@ -64,7 +64,8 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
             const limitingFov = Math.min(verticalFov, horizontalFov)
             // The bounding sphere covers every orientation during the spin, so
             // the camera only has to clear that sphere plus a small margin.
-            const cameraDistance = (modelRadius / Math.tan(limitingFov / 2)) * 1.06
+            // `zoom` tightens that framing for inline uses such as a glyph.
+            const cameraDistance = (modelRadius / Math.tan(limitingFov / 2)) * 1.06 / zoom
             camera.position.set(0, 0, cameraDistance)
             camera.lookAt(0, 0, 0)
             camera.far = Math.max(100, cameraDistance + modelRadius * 4)
@@ -126,6 +127,8 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
                 } else {
                     console.warn(`Clip "${SPIN_CLIP}" not found in ${src}.`)
                 }
+
+                onLoad?.()
             },
             undefined,
             (error) => {
@@ -186,7 +189,7 @@ export default function WorksKeychain({ src, targetSize = 3.4, className = '' })
                 else object.material?.dispose()
             })
         }
-    }, [src, targetSize])
+    }, [src, targetSize, onLoad, zoom])
 
     return (
         <div
