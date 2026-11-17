@@ -454,7 +454,7 @@ export default function Footer({ navigate, modelOpacity = 1, watchRef }) {
                                     letterSpacing: '0.05em',
                                 }}
                             >
-                                [{label}]
+                                {label}
                             </a>
                         ))}
                     </div>
