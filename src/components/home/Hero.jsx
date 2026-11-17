@@ -23,7 +23,7 @@ const SPIN_DECAY = 0.94
 // notch accelerates the ring smoothly instead of kicking it.
 const SPIN_EASE = 0.2
 const MAX_DPR = 2
-const BACK_FILL = '#d8d4ce'
+const BACK_FILL = '#212121'
 
 const SLICES_MAX = 120
 const SLICES_MIN = 48
