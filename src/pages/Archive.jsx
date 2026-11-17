@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import Header from '../components/layout/Header'
-import ImageSpiral from '../components/archive/ImageSpiral'
 import { assetUrl } from '../lib/assets'
+
+const Footer = lazy(() => import('../components/layout/Footer'))
 
 const archiveItems = [
     { title: 'Call Me', image: assetUrl('images/archive/call_me.webp') },
@@ -19,29 +20,9 @@ const archiveItems = [
     { title: 'Queen Yunjin', image: assetUrl('images/archive/queen_yunjin.webp') },
 ]
 
-function ArchiveGrid({ items, onSelect }) {
-    return (
-        <div className="grid grid-cols-3 gap-x-2 sm:gap-x-7 gap-y-5 sm:gap-y-12">
-            {items.map((item, index) => (
-                <button key={item.title} type="button" onClick={() => onSelect(item)} aria-label={`Open ${item.title}`} className="text-left group cursor-pointer">
-                    <div className="aspect-4/5 overflow-hidden bg-black/10">
-                        <img src={item.image} alt={item.title} width="800" height="1000" loading={index < 4 ? 'eager' : 'lazy'} decoding="async" className="w-full h-full object-cover group-hover:scale-[1.025] transition-transform duration-500" />
-                    </div>
-                    <div className="grid grid-cols-[auto_1fr] gap-1.5 sm:gap-4 pt-2 sm:pt-3 border-b-2 border-dotted border-black/25 pb-2 sm:pb-3 text-[8px] sm:text-[11px] tracking-wide sm:tracking-widest uppercase">
-                        <span className="text-black/60">{String(index + 1).padStart(2, '0')}</span>
-                        <span className="truncate">{item.title}</span>
-                    </div>
-                </button>
-            ))}
-        </div>
-    )
-}
-
 export default function Archive({ setIsMenuOpen, navigate }) {
     const [selected, setSelected] = useState(null)
-    const [webglFailed, setWebglFailed] = useState(false)
-
-    const handleUnsupported = useCallback(() => setWebglFailed(true), [])
+    const contactRef = useRef(null)
 
     useEffect(() => {
         if (!selected) return undefined
@@ -54,58 +35,61 @@ export default function Archive({ setIsMenuOpen, navigate }) {
     }, [selected])
 
     return (
-        <main
-            className={webglFailed
-                ? 'bg-white min-h-screen text-black overflow-x-hidden'
-                : 'relative h-dvh w-full overflow-hidden bg-white text-black'}
-            data-lenis-prevent={webglFailed ? undefined : ''}
-        >
+        <main className="relative min-h-screen bg-white text-black overflow-x-hidden">
             <style>{`
-                .archive-number { font-size: clamp(2rem, 4vw, 4rem); line-height: .95; }
-                .archive-spiral-frame {
-                    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%);
-                    mask-image: linear-gradient(to bottom, transparent 0%, #000 9%, #000 88%, transparent 100%);
+                @keyframes archiveCellIn {
+                    from { opacity: 0; transform: translateY(10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+
+                .archive-cell {
+                    animation: archiveCellIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
                 }
             `}</style>
 
-            <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" />
+            <div className="relative z-1 bg-white">
+                <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" />
 
-            {webglFailed ? (
-                <>
-                    <header className="px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-10 sm:pb-12">
-                        <h1 className="archive-title font-title leading-none">Archive</h1>
-                    </header>
+                <header className="flex items-end justify-between px-5 sm:px-8 md:px-12 pt-20 sm:pt-24 pb-10 sm:pb-12">
+                    <h1 className="archive-title font-title leading-none">Archive</h1>
+                </header>
 
-                    <section className="bg-[#f2f2f2] border-t-2 border-dotted border-black/30 px-5 sm:px-8 md:px-12 py-6 sm:py-10">
-                        <div className="flex justify-between items-end border-b-2 border-dotted border-black/30 pb-4 mb-6">
-                            <h2 className="archive-number font-title">2026</h2>
-                            <span className="text-[11px] tracking-[0.2em] uppercase text-black/60">{archiveItems.length} records</span>
-                        </div>
-                        <ArchiveGrid items={archiveItems} onSelect={setSelected} />
-                    </section>
-                </>
-            ) : (
-                <>
-                    <div className="archive-spiral-frame absolute inset-x-0 top-20 sm:top-24 bottom-0">
-                        <ImageSpiral items={archiveItems} onSelect={setSelected} onUnsupported={handleUnsupported} />
-                    </div>
+                <section className="px-5 sm:px-8 md:px-12 pb-16 sm:pb-24">
+                    <ol className="m-0 grid list-none grid-cols-2 gap-x-[clamp(0.75rem,1.6vw,1.25rem)] gap-y-[clamp(1.25rem,3vw,2.5rem)] p-0 sm:grid-cols-3 lg:grid-cols-5">
+                        {archiveItems.map((item, index) => (
+                            <li key={item.title} className="m-0 p-0">
+                                <button
+                                    type="button"
+                                    onClick={() => setSelected(item)}
+                                    aria-label={`Open ${item.title}`}
+                                    title={item.title}
+                                    className="archive-cell group block w-full cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+                                    style={{ animationDelay: `${index * 30}ms` }}
+                                >
+                                    <img
+                                        src={item.image}
+                                        alt={item.title}
+                                        width="800"
+                                        height="1000"
+                                        loading={index < 8 ? 'eager' : 'lazy'}
+                                        decoding="async"
+                                        draggable="false"
+                                        className="block h-auto w-full select-none object-contain opacity-95 transition-opacity duration-300 group-hover:opacity-100"
+                                    />
+                                </button>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+            </div>
 
-                    <div className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-between px-5 sm:px-8 md:px-12 pt-24 sm:pt-28 pb-5 sm:pb-8">
-                        <div className="flex items-start justify-between gap-6">
-                            <h1 className="archive-title font-title leading-none">Archive</h1>
-                            <div className="hidden sm:flex flex-col items-end gap-1 pt-1 text-[11px] tracking-[0.2em] uppercase text-black/60">
-                                <span>2026</span>
-                                <span>{archiveItems.length} records</span>
-                            </div>
-                        </div>
-
-                        <div className="flex items-end justify-between gap-6 text-[10px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
-                            <span aria-hidden="true">Scroll / swipe to spin</span>
-                            <span aria-hidden="true">Click / tap to view</span>
-                        </div>
-                    </div>
-                </>
-            )}
+            <div ref={contactRef} className="relative z-0 h-dvh min-h-125">
+                <div className="fixed inset-x-0 bottom-0 z-0 h-dvh min-h-125">
+                    <Suspense fallback={<div className="h-dvh min-h-125 w-full bg-[#ffea00]" />}>
+                        <Footer navigate={navigate} watchRef={contactRef} />
+                    </Suspense>
+                </div>
+            </div>
 
             {selected && (
                 <div className="fixed inset-0 z-80 flex items-center justify-center bg-black/80 backdrop-blur-xl p-5" onClick={() => setSelected(null)} role="dialog" aria-modal="true" aria-label={`${selected.title} preview`}>
