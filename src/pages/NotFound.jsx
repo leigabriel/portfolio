@@ -1,6 +1,12 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import Header from '../components/layout/Header'
+import WorksKeychain from '../components/works/WorksKeychain'
+import { assetUrl } from '../lib/assets'
 
-export default function NotFound({ navigate }) {
+export default function NotFound({ navigate, setIsMenuOpen }) {
+    const [workchainReady, setWorkchainReady] = useState(false)
+    const handleWorkchainLoad = useCallback(() => setWorkchainReady(true), [])
+
     useEffect(() => {
         const previous = document.title
         document.title = '404 Not Found | Lei Gabriel'
@@ -10,57 +16,51 @@ export default function NotFound({ navigate }) {
     }, [])
 
     return (
-        <main className="bg-[#ffea00] min-h-dvh text-black flex flex-col overflow-x-hidden">
+        <main className="relative flex min-h-dvh flex-col bg-white text-black overflow-hidden">
             <style>{`
                 .notfound-code {
-                    font-size: clamp(3.5rem, 24vw, 22rem);
-                    line-height: 0.85;
+                    font-size: clamp(6.5rem, 30vw, 24rem);
+                    line-height: 0.8;
                     letter-spacing: -0.04em;
                 }
 
-                .notfound-word {
-                    font-size: clamp(0.8rem, 3.6vw, 2.2rem);
-                    letter-spacing: 0.35em;
-                    line-height: 1;
+                .notfound-zero {
+                    width: 0.78em;
+                    height: 1.05em;
                 }
             `}</style>
 
-            <div className="flex flex-1 flex-col justify-between px-5 sm:px-8 md:px-12 lg:px-16 py-5 sm:py-8 md:py-12">
-                <div className="flex items-center justify-between">
-                    <button
-                        type="button"
-                        onClick={() => navigate('home')}
-                        className="text-xs sm:text-sm tracking-widest uppercase text-black/60 hover:text-black transition-colors duration-300 cursor-pointer"
-                    >
-                        Lei Gabriel
-                    </button>
-                    <span className="font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
-                        Error 404
-                    </span>
-                </div>
+            <Header setIsMenuOpen={setIsMenuOpen} navigate={navigate} variant="dark" />
 
-                <div className="py-10 sm:py-14">
-                    <h1 className="notfound-code font-mono-custom font-normal">404</h1>
-                    <p className="notfound-word font-mono-custom uppercase mt-4 sm:mt-6">Not Found</p>
+            <div className="flex flex-1 flex-col items-center justify-center gap-[clamp(2rem,5vh,3.5rem)] px-5 sm:px-8">
+                <h1 className="sr-only">404 &mdash; Page not found</h1>
 
-                    <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-4">
-                        <button
-                            type="button"
-                            onClick={() => navigate('home')}
-                            className="font-mono-custom text-[11px] sm:text-xs tracking-[0.2em] uppercase px-5 py-3 bg-black text-white hover:bg-black/80 transition-colors duration-300 cursor-pointer"
+                <div
+                    aria-hidden="true"
+                    className="notfound-code font-mono-custom flex items-center justify-center"
+                >
+                    <span>4</span>
+                    <span className="notfound-zero relative inline-block shrink-0">
+                        <span
+                            className={`absolute inset-0 flex items-center justify-center leading-none transition-opacity duration-300 ${
+                                workchainReady ? 'opacity-0' : 'opacity-100'
+                            }`}
                         >
-                            Back to home
-                        </button>
-                        <span className="font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
-                            The page you are looking for does not exist.
+                            0
                         </span>
-                    </div>
+                        <WorksKeychain
+                            src={assetUrl('models/workchain.glb')}
+                            onLoad={handleWorkchainLoad}
+                            zoom={1.38}
+                            className="inset-0 h-full w-full"
+                        />
+                    </span>
+                    <span>4</span>
                 </div>
 
-                <div className="flex items-center justify-between border-t border-dotted border-black/20 pt-4 font-mono-custom text-[11px] sm:text-[11px] tracking-[0.2em] uppercase text-black/60">
-                    <span>leigabriel.vercel.app</span>
-                    <span>404</span>
-                </div>
+                <p className="max-w-[36ch] text-balance text-center font-mono-custom text-[11px] leading-relaxed tracking-[0.12em] text-black/55 sm:text-xs">
+                    This page doesn&rsquo;t exist. Let&rsquo;s take you somewhere that does.
+                </p>
             </div>
         </main>
     )
