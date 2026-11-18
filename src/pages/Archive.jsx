@@ -18,6 +18,78 @@ const archiveItems = [
     { title: 'Althea', image: assetUrl('images/archive/althea.webp') },
     { title: 'Die For You', image: assetUrl('images/archive/die_for_you.webp') },
     { title: 'Queen Yunjin', image: assetUrl('images/archive/queen_yunjin.webp') },
+    {
+        title: 'Aeri',
+        image: assetUrl('images/archive/aeri.webp'),
+        width: 1131,
+        height: 1600,
+    },
+    {
+        title: 'Chromurai',
+        image: assetUrl('images/archive/chromurai.webp'),
+        width: 1131,
+        height: 1600,
+    },
+    {
+        title: 'Ferrari F50',
+        image: assetUrl('images/archive/ferrari-f50.webp'),
+        width: 1131,
+        height: 1600,
+    },
+    {
+        title: 'Koenigsegg',
+        image: assetUrl('images/archive/koenigsegg.webp'),
+        width: 1131,
+        height: 1600,
+    },
+    {
+        title: 'Kundiman',
+        image: assetUrl('images/archive/kundiman.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'One Piece: Garp',
+        image: assetUrl('images/archive/one-piece-garp.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'One Piece: Nami',
+        image: assetUrl('images/archive/one-piece-nami.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'One Piece: Robin',
+        image: assetUrl('images/archive/one-piece-robin.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'Run',
+        image: assetUrl('images/archive/run.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'Solace',
+        image: assetUrl('images/archive/solace.webp'),
+        width: 1080,
+        height: 1350,
+    },
+    {
+        title: 'Vampire Heart',
+        image: assetUrl('images/archive/vampire-heart.webp'),
+        width: 1600,
+        height: 1600,
+    },
+    {
+        title: 'Void',
+        image: assetUrl('images/archive/void.webp'),
+        width: 1131,
+        height: 1600,
+    },
 ]
 
 export default function Archive({ setIsMenuOpen, navigate }) {
@@ -69,8 +141,8 @@ export default function Archive({ setIsMenuOpen, navigate }) {
                                     <img
                                         src={item.image}
                                         alt={item.title}
-                                        width="800"
-                                        height="1000"
+                                        width={item.width || 800}
+                                        height={item.height || 1000}
                                         loading={index < 8 ? 'eager' : 'lazy'}
                                         decoding="async"
                                         draggable="false"
