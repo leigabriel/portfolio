@@ -105,19 +105,19 @@ export default function Featured({ navigate }) {
             <div className="pt-[clamp(4rem,9vw,7rem)]">
                 <div className="px-(--featured-pad)">
                     <div className="flex items-baseline justify-between gap-6" data-featured-meta>
-                        <p className="m-0 font-mono-custom text-[9px] uppercase tracking-[0.22em] sm:text-[10px]">
+                        <p className="m-0 font-mono-custom text-[11px] uppercase tracking-[0.22em] sm:text-xs">
                             01. Posters
                         </p>
-                        <p className="m-0 font-mono-custom text-[11px] font-medium tracking-[0.01em] sm:text-[12px]">
+                        <p className="m-0 font-mono-custom text-xs font-medium tracking-[0.01em] sm:text-[13px]">
                             Selected Posters
                         </p>
                     </div>
 
                     <div className="mt-8 sm:mt-10" data-featured-meta>
-                        <p className="m-0 font-mono-custom text-[10px] text-black/45">
+                        <p className="m-0 font-mono-custom text-[11px] text-black/45 sm:text-xs">
                             Discipline
                         </p>
-                        <p className="m-0 mt-1 font-mono-custom text-[10px] sm:text-[11px]">
+                        <p className="m-0 mt-1 font-mono-custom text-[11px] sm:text-xs">
                             Graphic Design
                         </p>
                     </div>
@@ -149,12 +149,12 @@ export default function Featured({ navigate }) {
                     className="mt-[clamp(3.5rem,7vw,6rem)] px-(--featured-pad) pb-[clamp(4rem,10vw,7.5rem)]"
                     data-featured-task
                 >
-                    <p className="m-0 font-mono-custom text-[9px] uppercase tracking-[0.22em] text-black/40 sm:text-[10px]">
+                    <p className="m-0 font-mono-custom text-[11px] uppercase tracking-[0.22em] text-black/40 sm:text-xs">
                         .Task
                     </p>
 
                     <div className="mt-5 grid gap-8 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-12">
-                        <p className="m-0 max-w-[52ch] font-mono-custom text-[clamp(0.72rem,1.1vw,0.875rem)] leading-[1.7] text-black/75">
+                        <p className="m-0 max-w-[52ch] font-mono-custom text-[13px] leading-[1.7] text-black/75 sm:text-sm">
                             A selection of poster work exploring typographic hierarchy, image
                             treatment, and editorial composition across manga, music, and personal
                             projects.
@@ -163,26 +163,26 @@ export default function Featured({ navigate }) {
                         <div className="flex items-end justify-between gap-6 md:justify-end">
                             <dl className="m-0 grid grid-cols-3 gap-x-5 sm:gap-x-10">
                                 <div>
-                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                    <dt className="font-mono-custom text-[11px] text-black/45 sm:text-xs">
                                         Project
                                     </dt>
-                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[11px] leading-[1.4] tracking-[0.02em] sm:text-xs">
                                         Poster Series
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                    <dt className="font-mono-custom text-[11px] text-black/45 sm:text-xs">
                                         Focus
                                     </dt>
-                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[11px] leading-[1.4] tracking-[0.02em] sm:text-xs">
                                         Typography
                                     </dd>
                                 </div>
                                 <div>
-                                    <dt className="font-mono-custom text-[9px] text-black/45">
+                                    <dt className="font-mono-custom text-[11px] text-black/45 sm:text-xs">
                                         Year
                                     </dt>
-                                    <dd className="m-0 mt-1.5 font-mono-custom text-[9px] leading-[1.4] tracking-[0.02em] sm:text-[10px]">
+                                    <dd className="m-0 mt-1.5 font-mono-custom text-[11px] leading-[1.4] tracking-[0.02em] sm:text-xs">
                                         2026
                                     </dd>
                                 </div>
